@@ -32,9 +32,10 @@ import type { Event, EventType } from "@/types/event";
 
 /**
  * Single home for every event-related Firestore operation.
- * Path: users/{uid}/events/{eventId} (same tree as tasks, so the existing
- * owner-only rules apply unchanged). Components and hooks must not import
- * firebase/firestore for events; they call this module instead.
+ * Path: users/{uid}/events/{eventId}. Individual events stay in the owner's
+ * collection; shared events are mirrored to partner collections, matching
+ * the Tasks service. Components and hooks must not import firebase/firestore
+ * for events; they call this module instead.
  *
  * Errors: every function rejects/throws a plain `Error`. Validation problems
  * carry the first form message; Firestore failures keep their `code`, so the
@@ -94,6 +95,28 @@ function eventDocument(userId: string, eventId: string) {
   return doc(eventsCollection(userId), eventId);
 }
 
+/**
+ * Resolve the other app users that should receive a copy of a shared event.
+ * This intentionally mirrors the partner lookup used by the Tasks service:
+ * registered user documents plus explicitly configured partner UIDs.
+ */
+async function getPartnerUserIds(currentUserId: string): Promise<string[]> {
+  const ids = new Set<string>();
+  const configured = process.env.NEXT_PUBLIC_PARTNER_UID ?? "";
+
+  for (const raw of configured.split(",")) {
+    const id = raw.trim();
+    if (id && id !== currentUserId) ids.add(id);
+  }
+
+  const snapshot = await getDocs(collection(requireFirestore(), "users"));
+  for (const userDoc of snapshot.docs) {
+    if (userDoc.id !== currentUserId) ids.add(userDoc.id);
+  }
+
+  return Array.from(ids);
+}
+
 function requireIds(userId: string, eventId?: string): void {
   if (!userId) throw new Error("You must be signed in to manage events.");
   if (eventId !== undefined && !eventId) throw new Error("Missing event id.");
@@ -126,7 +149,7 @@ export function selectEventsByType(
   return type ? events.filter((event) => event.type === type) : [...events];
 }
 
-/** Events that have not started yet: later day, or today at/after the current minute. */
+/** Events that have not started yet: later day, or a strictly future time today. */
 export function selectUpcomingEvents(
   events: readonly Event[],
   now = new Date(),
@@ -135,7 +158,7 @@ export function selectUpcomingEvents(
   const nowTime = getLocalTime(now);
   return events.filter(
     (event) =>
-      event.date > today || (event.date === today && event.time >= nowTime),
+      event.date > today || (event.date === today && event.time > nowTime),
   );
 }
 
@@ -166,6 +189,16 @@ async function fetchEvents(
 export interface EventListOptions {
   /** Only events of this visibility. Omit for both. */
   type?: EventType;
+}
+
+/** Reads `displayName` from the user's document in the `users` collection. */
+export async function getUserCollectionDisplayName(
+  userId: string,
+): Promise<string | null> {
+  if (!userId) return null;
+  const snapshot = await getDoc(doc(requireFirestore(), "users", userId));
+  const data = snapshot.data();
+  return typeof data?.displayName === "string" ? data.displayName : null;
 }
 
 /** One event, or `null` when it does not exist. */
@@ -204,7 +237,7 @@ export async function getUpcomingEvents(
     throw new Error("The limit must be a positive whole number.");
   }
   // The query keeps today and later; selectUpcomingEvents then drops today's
-  // events whose time has already passed.
+  // events whose time is no longer in the future.
   const events = await fetchEvents(
     userId,
     [where("date", ">=", getLocalDate(now))],
@@ -294,6 +327,16 @@ export async function createEvent(
   const event = buildNewEvent(userId, result.data, context.now);
   const { id, ...data } = event;
   await setDoc(eventDocument(userId, id), data);
+
+  if (event.type === "shared") {
+    const partnerIds = await getPartnerUserIds(userId);
+    await Promise.all(
+      partnerIds.map((partnerId) =>
+        setDoc(eventDocument(partnerId, id), data),
+      ),
+    );
+  }
+
   return event;
 }
 
@@ -342,8 +385,34 @@ export async function updateEvent(
     updatedAt: (context.now ?? new Date()).toISOString(),
     updatedBy: userId,
   };
+  const updated: Event = { ...current, ...changes };
   await updateDoc(reference, changes);
-  return { ...current, ...changes };
+
+  const wasShared = current.type === "shared";
+  const isShared = updated.type === "shared";
+  if (wasShared || isShared) {
+    const partnerIds = await getPartnerUserIds(userId);
+
+    if (isShared) {
+      // Write the complete current record so a missing/stale partner copy is
+      // repaired as well as updating copies that already exist.
+      const { id: _eventId, ...partnerData } = updated;
+      await Promise.all(
+        partnerIds.map((partnerId) =>
+          setDoc(eventDocument(partnerId, eventId), partnerData),
+        ),
+      );
+    } else {
+      // Switching from shared to individual removes every mirrored copy.
+      await Promise.all(
+        partnerIds.map((partnerId) =>
+          deleteDoc(eventDocument(partnerId, eventId)),
+        ),
+      );
+    }
+  }
+
+  return updated;
 }
 
 /** Deletes an event. Deleting one that is already gone is not an error. */
@@ -352,5 +421,18 @@ export async function deleteEvent(
   eventId: string,
 ): Promise<void> {
   requireIds(userId, eventId);
-  await deleteDoc(eventDocument(userId, eventId));
+  const reference = eventDocument(userId, eventId);
+  const snapshot = await getDoc(reference);
+  const wasShared = snapshot.exists() && snapshot.data()?.type === "shared";
+
+  await deleteDoc(reference);
+
+  if (wasShared) {
+    const partnerIds = await getPartnerUserIds(userId);
+    await Promise.all(
+      partnerIds.map((partnerId) =>
+        deleteDoc(eventDocument(partnerId, eventId)),
+      ),
+    );
+  }
 }

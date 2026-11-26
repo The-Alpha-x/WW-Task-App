@@ -33,14 +33,6 @@ export function AddSelection() {
             Choose what you would like to create.
           </p>
         </div>
-
-        <Link
-          href={EVENTS_HREF}
-          className="inline-flex h-10 items-center gap-2 rounded-full bg-surface px-4 text-xs font-semibold text-on-dark ring-1 ring-glass-border/10 transition-colors duration-fast ease-standard hover:bg-surface-raised"
-        >
-          <CalendarDays aria-hidden="true" size={16} className="text-lime" />
-          <span>View your events</span>
-        </Link>
       </header>
 
       <motion.section

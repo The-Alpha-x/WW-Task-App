@@ -82,7 +82,8 @@ task-03a-core-ui/
 - **Firestore Persistence**:
   - `users/{uid}`: User profile metadata synced by `AuthProvider` on sign-in (`uid`, `email`, `displayName`, `photoURL`, `updatedAt`).
   - `users/{uid}/tasks/{taskId}`: Individual and shared tasks. When `type === "shared"`, `services/tasks.ts` (`saveTask`, `updateTask`, `deleteTask`) mirrors writes/updates/deletes to partner users' `tasks` subcollections (resolved from `users` + `NEXT_PUBLIC_PARTNER_UID`).
-  - `users/{uid}/events/{eventId}` and `users/{uid}/memories/{memoryId}`: Owner-only subcollections.
+  - `users/{uid}/events/{eventId}`: Individual events stay in the owner's collection; shared events are mirrored to partner collections by `services/events.ts`, using the same partner lookup as Tasks.
+  - `users/{uid}/memories/{memoryId}`: Owner-only subcollection.
   - `budgets/{userId}_{month}`: Top-level `budgets` collection storing one document per user and month (`userId`, `month`, `expenses[]`).
 - **Snapshot Watchers**: `watchCollection` in `src/lib/firebase.ts` centralizes `onSnapshot` parsing across `watchTasks`, `watchEvents`, and `watchMemories`; `services/budget.ts` uses `onSnapshot` directly for `watchBudgetExpenses` (query by `userId`) and `watchMonthBudget` (single doc).
 - **Task & Dashboard UI**: Both `TasksOverview` (full-width month calendar filter on desktop) and `DashboardTasks` render `ActiveTaskCard` (with collapsible subtasks, hold-to-complete, delete, and dark glass `Modal` + `TaskEditForm` editing).

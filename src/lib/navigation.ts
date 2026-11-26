@@ -4,6 +4,7 @@ import {
   LayoutDashboard,
   CalendarRange,
   Logs,
+  BookHeart,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -32,6 +33,7 @@ export const NAV_ITEMS: readonly NavItem[] = [
     icon: CalendarRange,
     bottomIcon: CalendarRange,
   },
+  { href: "/memories", label: "Memories", icon: BookHeart, bottomIcon: BookHeart },
 ];
 
 export const ADD_HREF = "/add";
@@ -39,6 +41,7 @@ export const ADD_TASK_HREF = "/tasks/add";
 export const ADD_EVENT_HREF = "/events/add";
 export const ADD_MEMORY_HREF = "/memories/add";
 export const EVENTS_HREF = "/events";
+export const MEMORIES_HREF = "/memories";
 
 /** Selection page plus every creation route, so the Add button reads as active on all of them. */
 const ADD_PATHS = [
@@ -59,6 +62,10 @@ export function isActivePath(pathname: string, href: string): boolean {
 
 export function getEventHref(eventId: string): string {
   return `${EVENTS_HREF}?event=${encodeURIComponent(eventId)}`;
+}
+
+export function getMemoryHref(memoryId: string): string {
+  return `${MEMORIES_HREF}?memory=${encodeURIComponent(memoryId)}`;
 }
 
 export type AddOptionId = "task" | "event" | "memory";

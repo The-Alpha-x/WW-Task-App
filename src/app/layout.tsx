@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Nunito } from "next/font/google";
 import { AuthProvider } from "@/components/auth/AuthProvider";
 import { AppShell } from "@/components/layout/AppShell";
+import { Toaster } from "@/components/ui/Toaster";
 import "./globals.css";
 
 const nunito = Nunito({
@@ -31,6 +32,7 @@ export default function RootLayout({
       <body>
         <AuthProvider>
           <AppShell>{children}</AppShell>
+          <Toaster />
         </AuthProvider>
       </body>
     </html>

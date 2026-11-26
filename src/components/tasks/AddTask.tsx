@@ -10,6 +10,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { useAuth } from "@/components/auth/AuthProvider";
+import { toast } from "@/components/ui/Toaster";
 import { useAction } from "@/hooks/useAction";
 import {
   createEmptyTaskForm,
@@ -39,7 +40,12 @@ export function AddTask() {
       if (!user) throw new Error("Sign in to save tasks.");
       await createTask(user.uid, buildNewTask(user.uid, input));
     });
-    if (saved) router.push("/tasks");
+    if (saved) {
+      toast.success("Task added", input.title.trim());
+      router.push("/tasks");
+    } else {
+      toast.error("Could not save task", "Please check your details and try again.");
+    }
   });
 
   return (

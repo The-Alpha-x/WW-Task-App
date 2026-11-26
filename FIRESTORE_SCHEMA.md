@@ -26,6 +26,10 @@ Events are implemented at **`users/{uid}/events/{eventId}`** (not the `couples/.
 
 ---
 
+## 0e. Update after Events shared-sync implementation — read with section 0b
+
+Events remain at `users/{uid}/events/{eventId}`. Individual events are stored only in the current user's collection. Shared events are mirrored to each other registered user collection (plus any configured `NEXT_PUBLIC_PARTNER_UID`) on create/update/delete. Switching a shared event to individual removes the mirrored copies. `firestore.rules` now has an explicit `/events/{eventId}` match following the existing shared-task authorization pattern. Deploy the current `firestore.rules` before testing shared events. This pattern intentionally mirrors the existing Tasks implementation and has the same broad shared-write trust model.
+
 ## 0c. Update after Task 05A (memory services) - read with sections 0 and 0b
 
 Memories are implemented at **`users/{uid}/memories/{memoryId}`** (not the `couples/...` path of section 3.4), for the same reasons as events; the existing owner-only rule covers them and `firestore.rules` is unchanged. Fields as in section 3.4 **except**: no `visibleTo`, `description`/`notes` are always written (`""` when empty), `time` is always written (`null` when not given), and `type` stays editable for now. `date`/`time` = when it happened (local strings); `createdAt`/`updatedAt` = when it was saved (ISO-8601 UTC). No index needed. See `MEMORY_SERVICE_REFERENCE.md`.
@@ -457,3 +461,15 @@ Until step 4, the new parser must also tolerate documents lacking `type`/`visibl
 ## 10. Setup documentation to update (`FIREBASE_SETUP.md`)
 
 Add: the `couples/{coupleId}` structure; how to create the couple document (uids from Authentication → Users); publishing the new rules; the migration procedure; a reminder that the couple document is **not** writable from the client.
+
+
+## Memories (shared top-level collection)
+
+Memories are stored once at `memories/{memoryId}` rather than duplicated under each user.
+
+Fields: `title`, `description`, `date` (`YYYY-MM-DD`, today or earlier), `time` (`HH:mm` or `null`), `type` (`shared` or `individual`), `notes`, `createdAt`, `createdBy`, `updatedAt`, and `updatedBy`.
+
+- Shared memories are readable and editable by either signed-in partner. Both clients subscribe to the same document, so edits and deletions appear immediately without mirrored copies.
+- Individual memories are readable only by the user in `createdBy`.
+- The creator and creation timestamp are immutable. The user making an edit updates `updatedBy` and `updatedAt`.
+- Memories describe when an event happened (`date`/optional `time`); audit timestamps describe when the memory was saved or edited.

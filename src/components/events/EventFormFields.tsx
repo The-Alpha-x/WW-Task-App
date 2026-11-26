@@ -26,9 +26,8 @@ export interface EventFormFieldsProps {
 }
 
 /**
- * Every field of the event form, in the same sheet layout as the task form:
- * title on the dark page, a lime description sheet, a light schedule sheet
- * and a light notes sheet. Used by both Add and Edit so they cannot drift.
+ * Shared event form fields in dark glassmorphic cards, matching TaskFormFields
+ * so Add/Edit Event and Add/Edit Task share the exact same visual language.
  */
 export function EventFormFields({
   form,
@@ -44,27 +43,33 @@ export function EventFormFields({
   const scheduleError = errors.date?.message ?? errors.time?.message;
 
   return (
-    <fieldset disabled={disabled} className="m-0 flex min-w-0 flex-col gap-5 border-0 p-0">
-      <section>
+    <fieldset
+      disabled={disabled}
+      className="m-0 flex min-w-0 flex-col gap-4 border-0 p-0 sm:gap-5"
+    >
+      <section
+        aria-label="Event details"
+        className="flex flex-col gap-4 rounded-xl bg-glass/80 p-4 ring-1 ring-glass-border/10 backdrop-blur-md sm:gap-5 sm:p-5 md:p-6"
+      >
+        <h2 className="text-xs font-semibold uppercase tracking-wider text-on-dark-muted/70">
+          Details
+        </h2>
+
         <Input
           label="Event title"
+          tone="dark"
           {...register("title")}
           error={errors.title?.message}
           placeholder="e.g. Dinner at the harbour"
           maxLength={EVENT_TITLE_MAX}
           autoComplete="off"
         />
-      </section>
 
-      <section
-        aria-label="Event description"
-        className="rounded-2xl bg-lime p-5 text-ink md:p-6"
-      >
         <Textarea
           label="Description (optional)"
-          tone="light"
+          tone="dark"
           resize="none"
-          rows={4}
+          rows={3}
           {...register("description")}
           error={errors.description?.message}
           maxLength={EVENT_DESCRIPTION_MAX}
@@ -74,28 +79,35 @@ export function EventFormFields({
 
       <section
         aria-labelledby="event-schedule-heading"
-        className="flex flex-col gap-5 rounded-2xl bg-card p-5 text-ink md:p-6"
+        className="flex flex-col gap-4 rounded-xl bg-glass/80 p-4 ring-1 ring-glass-border/10 backdrop-blur-md sm:gap-5 sm:p-5 md:p-6"
       >
-        <h2 id="event-schedule-heading" className="text-xl font-bold">
+        <h2
+          id="event-schedule-heading"
+          className="text-xs font-semibold uppercase tracking-wider text-on-dark-muted/70"
+        >
           Schedule
         </h2>
+
         <div className="grid gap-4 sm:grid-cols-2">
           <Input
             label="Date"
             type="date"
-            tone="light"
+            tone="dark"
             min={minDate}
+            style={{ colorScheme: "dark" }}
             {...register("date")}
             error={errors.date?.message}
           />
           <Input
             label="Time"
             type="time"
-            tone="light"
+            tone="dark"
+            style={{ colorScheme: "dark" }}
             {...register("time")}
             error={errors.time?.message}
           />
         </div>
+
         <AnimatePresence initial={false}>
           {!scheduleError && (
             <motion.p
@@ -103,12 +115,13 @@ export function EventFormFields({
               animate={{ opacity: 1 }}
               exit={reduce ? undefined : { opacity: 0 }}
               transition={{ duration: 0.15 }}
-              className="-mt-2 text-sm font-medium text-ink-muted"
+              className="-mt-1 text-xs font-medium text-on-dark-muted"
             >
               Pick today or a later day. Today needs a time that has not passed.
             </motion.p>
           )}
         </AnimatePresence>
+
         <Controller
           control={control}
           name="type"
@@ -122,12 +135,19 @@ export function EventFormFields({
         />
       </section>
 
-      <section aria-label="Event notes" className="rounded-2xl bg-card p-5 text-ink md:p-6">
+      <section
+        aria-label="Event notes"
+        className="flex flex-col gap-4 rounded-xl bg-glass/80 p-4 ring-1 ring-glass-border/10 backdrop-blur-md sm:gap-5 sm:p-5 md:p-6"
+      >
+        <h2 className="text-xs font-semibold uppercase tracking-wider text-on-dark-muted/70">
+          Notes
+        </h2>
+
         <Textarea
           label="Notes (optional)"
-          tone="light"
+          tone="dark"
           resize="none"
-          rows={4}
+          rows={3}
           {...register("notes")}
           error={errors.notes?.message}
           maxLength={EVENT_NOTES_MAX}

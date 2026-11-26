@@ -18,7 +18,8 @@
   --color-orange: 242 138 30;          /* due-time badge */        
   --color-sage: 163 166 151;   
   --color-blue: 112 167 255;  
-  --color-teal: 99 214 197;         /* tertiary accent: subtask checkmark, completed stat */
+  --color-teal: 99 214 197; 
+  --color-pink: 255 117 181;       /* tertiary accent: subtask checkmark, completed stat */
 
   --color-danger: 229 72 77;           /* error borders, icons and messages on form fields */
 

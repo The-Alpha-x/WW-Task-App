@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useAction } from "@/hooks/useAction";
 import { Modal } from "@/components/ui/Modal";
+import { toast } from "@/components/ui/Toaster";
 import {
   buildEditedTask,
   deleteTask,
@@ -130,8 +131,14 @@ export function TasksOverview({
     );
   };
 
-  const handleDeleteTask = (taskId: string) => {
-    void run(() => deleteTask(userId, taskId));
+  const handleDeleteTask = async (taskId: string) => {
+    const taskTitle = tasks.find((task) => task.id === taskId)?.title;
+    const ok = await run(() => deleteTask(userId, taskId));
+    if (ok) {
+      toast.success("Task deleted", taskTitle);
+    } else {
+      toast.error("Could not delete task", "Please try again.");
+    }
   };
 
   const handleSaveEdit = async (values: TaskFormSubmission) => {
@@ -139,7 +146,12 @@ export function TasksOverview({
     const saved = await run(() =>
       saveTask(userId, buildEditedTask(editingTask, values, userId)),
     );
-    if (saved) setEditingTask(null);
+    if (saved) {
+      setEditingTask(null);
+      toast.success("Task updated", values.title.trim() || editingTask.title);
+    } else {
+      toast.error("Could not update task", "Please check your details and try again.");
+    }
   };
 
   return (

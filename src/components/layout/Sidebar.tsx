@@ -51,7 +51,9 @@ export function Sidebar() {
                     <motion.span
                       layoutId="sidebar-active-pill"
                       aria-hidden="true"
-                      transition={prefersReducedMotion ? { duration: 0 } : pillTransition}
+                      transition={
+                        prefersReducedMotion ? { duration: 0 } : pillTransition
+                      }
                       className="absolute inset-0 -z-10 rounded-md bg-on-dark/[0.1] ring-1 ring-glass-border/10"
                     />
                   )}
@@ -81,19 +83,6 @@ export function Sidebar() {
             </button>
           </li>
         </ul>
-
-        {/* Desktop entry to the add selection page */}
-        <Link
-          href={ADD_HREF}
-          aria-current={addActive ? "page" : undefined}
-          className={cn(
-            "mt-6 flex h-12 items-center justify-center gap-2 rounded-full bg-lime px-5 text-base font-bold text-ink shadow-lime-pill transition-all duration-fast ease-standard hover:brightness-95 active:scale-[0.98]",
-            addActive && "ring-2 ring-lime/40",
-          )}
-        >
-          <Plus aria-hidden="true" size={20} strokeWidth={2.25} />
-          <span>Add new</span>
-        </Link>
       </nav>
 
       {/* Account Footer */}
