@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { CloudOff } from "lucide-react";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { Button } from "@/components/ui/Button";
@@ -14,20 +14,18 @@ import { getUserCollectionDisplayName } from "@/services/events";
 
 const NOTICE_MS = 5000;
 
-export interface EventsPageClientProps {
-  /** Optional `?event=<id>` opens that event's glassy details modal. */
-  requestedEventId: string | null;
-  /** `?notice=deleted` is set if navigated with a notice query param. */
-  notice: string | null;
-}
-
 /**
  * Client side of `/events`: renders the calendar & timeline overview and
  * opens the glassy `EventDetailsModal` when an event is clicked (or linked
  * via `?event=<id>`).
  */
-export function EventsPageClient({ requestedEventId, notice }: EventsPageClientProps) {
+export function EventsPageClient() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const requestedEventId = searchParams.get("event");
+  const notice = searchParams.get("notice");
+
   const [attempt, setAttempt] = useState(0);
   const [message, setMessage] = useState("");
 
@@ -107,7 +105,9 @@ function EventsData({
             <CloudOff size={30} strokeWidth={1.75} />
           </span>
           <div className="flex flex-col gap-2">
-            <h1 className="text-xl font-bold text-on-dark">Could not load your events</h1>
+            <h1 className="text-xl font-bold text-on-dark">
+              Could not load your events
+            </h1>
             <p className="max-w-[48ch] text-base text-on-dark-muted">{error}</p>
           </div>
           <Button onClick={onRetry}>Try again</Button>
