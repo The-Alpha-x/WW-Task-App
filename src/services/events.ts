@@ -322,7 +322,9 @@ export async function createEvent(
   requireIds(userId);
   const result = createEventFormSchema({ now: context.now }).safeParse(values);
   if (!result.success) {
-    throw new Error(result.error.issues[0]?.message ?? "This event is not valid.");
+    throw new Error(
+      result.error.issues[0]?.message ?? "This event is not valid.",
+    );
   }
   const event = buildNewEvent(userId, result.data, context.now);
   const { id, ...data } = event;
@@ -331,9 +333,7 @@ export async function createEvent(
   if (event.type === "shared") {
     const partnerIds = await getPartnerUserIds(userId);
     await Promise.all(
-      partnerIds.map((partnerId) =>
-        setDoc(eventDocument(partnerId, id), data),
-      ),
+      partnerIds.map((partnerId) => setDoc(eventDocument(partnerId, id), data)),
     );
   }
 
@@ -377,7 +377,9 @@ export async function updateEvent(
     notes: updates.notes ?? stored.notes,
   });
   if (!result.success) {
-    throw new Error(result.error.issues[0]?.message ?? "This event is not valid.");
+    throw new Error(
+      result.error.issues[0]?.message ?? "This event is not valid.",
+    );
   }
 
   const changes = {
@@ -396,7 +398,7 @@ export async function updateEvent(
     if (isShared) {
       // Write the complete current record so a missing/stale partner copy is
       // repaired as well as updating copies that already exist.
-      const { id: _eventId, ...partnerData } = updated;
+      const { ...partnerData } = updated;
       await Promise.all(
         partnerIds.map((partnerId) =>
           setDoc(eventDocument(partnerId, eventId), partnerData),

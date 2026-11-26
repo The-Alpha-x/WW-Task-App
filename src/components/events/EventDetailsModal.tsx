@@ -10,7 +10,6 @@ import {
   Users,
 } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
 import { toast } from "@/components/ui/Toaster";
@@ -20,7 +19,6 @@ import {
   formatEventTime,
   formatEventTimestamp,
   formatEventWhen,
-  getEventTypeBadgeVariant,
   getEventTypeLabel,
   getRelativeDayLabel,
 } from "@/lib/events/display";

@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Bell, Plus } from "lucide-react";
+import { Bell } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
-import { ADD_HREF, NAV_ITEMS, isActivePath, isAddPath } from "@/lib/navigation";
+import { NAV_ITEMS, isActivePath } from "@/lib/navigation";
 import { SignOutButton } from "@/components/auth/SignOutButton";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { Avatar } from "@/components/ui/Avatar";
@@ -23,7 +23,6 @@ export function Sidebar() {
   const { user } = useAuth();
   const userName = getUserDisplayName(user);
   const prefersReducedMotion = useReducedMotion();
-  const addActive = isAddPath(pathname);
 
   return (
     <aside className="app-sidebar hidden flex-col lg:flex" aria-label="Sidebar">

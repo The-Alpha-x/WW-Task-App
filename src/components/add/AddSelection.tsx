@@ -1,10 +1,8 @@
 "use client";
 
-import Link from "next/link";
-import { CalendarDays } from "lucide-react";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { PageContainer } from "@/components/layout/PageContainer";
-import { ADD_OPTIONS, EVENTS_HREF } from "@/lib/navigation";
+import { ADD_OPTIONS } from "@/lib/navigation";
 import { AddOptionCard } from "./AddOptionCard";
 
 /**
