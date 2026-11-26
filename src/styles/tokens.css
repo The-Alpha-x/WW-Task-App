@@ -1,0 +1,108 @@
+/*
+ * DESIGN TOKENS - single source of truth.
+ * Derived from the reference mockup (dark mobile task manager).
+ * Tailwind (tailwind.config.ts) maps to these variables; components must
+ * use Tailwind token classes or var(--token), never raw hex values.
+ */
+
+:root {
+  /* ---- Color (space-separated RGB channels) ---- */
+  --color-background: 18 18 18;        /* near-black app background */
+  --color-surface: 42 42 42;           /* icon buttons, dark chips on black */
+  --color-surface-raised: 58 58 58;    /* pressed / elevated dark controls */
+  --color-glass: 30 30 34;             /* translucent Apple-style dark glass base */
+  --color-glass-border: 255 255 255;   /* specular hairline border base */
+
+  --color-lime: 221 243 95;            /* primary accent: planned stat, add button, description */
+  --color-purple: 178 92 245;          /* secondary accent: completed stat */
+  --color-orange: 242 138 30;          /* due-time badge */        
+  --color-sage: 163 166 151;   
+  --color-blue: 112 167 255;  
+  --color-teal: 99 214 197;         /* tertiary accent: subtask checkmark, completed stat */
+
+  --color-danger: 229 72 77;           /* error borders, icons and messages on form fields */
+
+  --color-card: 230 230 230;           /* white/light task surfaces */
+  --color-card-muted: 233 235 240;     /* add-subtask bar, subtle fills on light */
+  --color-border: 220 223 230;         /* outlines on light surfaces */
+
+  --color-ink: 21 21 21;               /* dark text on light/lime/purple */
+  --color-ink-muted: 107 111 120;      /* completed subtask text, secondary text on light */
+  --color-on-dark: 255 255 255;        /* primary text on black */
+  --color-on-dark-muted: 189 189 189;  /* secondary text on black */
+
+  /* ---- Typography ---- */
+  --text-2xs: 0.6875rem;  /* 11px - iOS tab bar labels, sidebar section headers */
+  --text-xs: 0.75rem;     /* 12px - badges, hints */
+  --text-sm: 0.875rem;    /* 14px - subtitles, descriptions */
+  --text-base: 1rem;      /* 16px - body, list items */
+  --text-lg: 1.125rem;    /* 18px - section headings, card titles */
+  --text-xl: 1.375rem;    /* 22px - sub-headings */
+  --text-2xl: 1.75rem;    /* 28px - greeting */
+  --text-3xl: 2rem;       /* 32px - task detail title */
+  --text-stat: 4rem;      /* 64px - big stat numbers */
+
+  --leading-tight: 1.15;
+  --leading-snug: 1.3;
+  --leading-normal: 1.5;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* ---- Spacing (4px base) ---- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+
+  /* ---- Radius ---- */
+  --radius-sm: 0.75rem;    /* 12px - small badges */
+  --radius-md: 1.25rem;    /* 20px - subtask rows, inputs */
+  --radius-lg: 1.75rem;    /* 28px - task cards */
+  --radius-xl: 2rem;       /* 32px - stat tiles */
+  --radius-2xl: 2.5rem;    /* 40px - description / subtasks sheets, nav bar */
+  --radius-full: 9999px;   /* pills, circular buttons, checkboxes */
+
+  /* ---- Shadow ---- */
+  --shadow-glow: 0 0 24px rgb(var(--color-lime) / 0.35);
+  --shadow-glass: 0 16px 40px rgb(0 0 0 / 0.45), inset 0 1px 0 rgb(255 255 255 / 0.09);
+  --shadow-lime-pill: 0 4px 16px rgb(var(--color-lime) / 0.25);
+
+  /* ---- Motion ---- */
+  --duration-fast: 120ms;
+  --duration-base: 220ms;
+  --duration-slow: 400ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-emphasized: cubic-bezier(0.3, 0, 0, 1.2);
+
+  /* ---- Component sizing ---- */
+  --size-icon-button: 3rem;     /* 48px circular avatar/notification/back buttons */
+  --size-add-button: 3.25rem;   /* 52px central bottom-nav add button */
+
+  /* ---- Stat card notch (Task 03B) ---- */
+  --size-stat-notch-x: calc(var(--size-icon-button) + var(--space-4)); /* 64px: arrow button + 8px each side */
+  --size-stat-notch-y: calc(var(--size-icon-button) + var(--space-3)); /* 60px: button flush with top + 12px below */
+  --radius-stat-fillet: var(--radius-md);                              /* 20px: rounding where the notch meets the tile edges */
+
+  /* ---- Modal widths (desktop; mobile is a full-width bottom sheet) ---- */
+  --size-modal-sm: 24rem;       /* 384px */
+  --size-modal-md: 32rem;       /* 512px */
+  --size-modal-lg: 44rem;       /* 704px */
+
+  /* ---- App shell ---- */
+  --size-sidebar: 16rem;        /* 256px desktop sidebar */
+  --size-bottom-nav: 4.5rem;    /* 72px floating glass bottom navigation height */
+  --size-bottom-nav-max: 28rem; /* 448px: keeps bottom nav phone-proportioned on tablets */
+  --size-content-max: 72rem;    /* 1152px max page content width */
+
+  /* ---- Homepage (Task 04B) ---- */
+  --size-dashboard-column: 28rem; /* 448px: phone-proportioned column for header + statistics from xl */
+}

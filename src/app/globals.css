@@ -1,0 +1,393 @@
+@import "../styles/tokens.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    background-color: rgb(var(--color-background));
+  }
+
+  body {
+    min-height: 100dvh;
+    background-color: rgb(var(--color-background));
+    color: rgb(var(--color-on-dark));
+    font-family: var(--font-nunito), ui-rounded, system-ui, sans-serif;
+    font-weight: var(--weight-medium);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  :focus-visible {
+    outline: 2px solid rgb(var(--color-lime));
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* Shared base for Button and IconButton; variants are Tailwind utilities in the components. */
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 font-semibold transition-colors duration-base ease-standard disabled:opacity-50;
+  }
+}
+
+/*
+ * App shell layout. Breakpoint `lg` (1024px) switches from the mobile
+ * bottom navigation to the desktop sidebar.
+ */
+@layer components {
+  .app-shell {
+    min-height: 100dvh;
+    overflow-x: clip;
+  }
+
+  .app-main {
+    min-height: 100dvh;
+    padding-top: env(safe-area-inset-top, 0px);
+    /* nav height + gap above it + gap below it + home-indicator inset */
+    padding-bottom: calc(
+      var(--size-bottom-nav) + var(--space-3) + var(--space-4) +
+        env(safe-area-inset-bottom, 0px)
+    );
+  }
+
+  .app-sidebar {
+    display: none;
+  }
+
+  .app-bottom-nav {
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 40;
+    display: flex;
+    justify-content: center;
+    padding-inline: var(--space-4);
+    padding-bottom: calc(var(--space-3) + env(safe-area-inset-bottom, 0px));
+    pointer-events: none;
+  }
+
+  .app-bottom-nav__bar {
+    pointer-events: auto;
+    width: 100%;
+    max-width: var(--size-bottom-nav-max);
+    height: var(--size-bottom-nav);
+    padding-inline: var(--space-2);
+    border-radius: var(--radius-full);
+    background-color: rgb(var(--color-glass) / 0.76);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid rgb(var(--color-glass-border) / 0.1);
+    box-shadow: var(--shadow-glass);
+  }
+
+  @screen lg {
+    .app-main {
+      padding-top: 0;
+      padding-bottom: 0;
+      padding-left: var(--size-sidebar);
+    }
+
+    .app-sidebar {
+      display: block;
+      position: fixed;
+      inset-block: 0;
+      left: 0;
+      z-index: 30;
+      width: var(--size-sidebar);
+      padding: var(--space-8) var(--space-4);
+      background-color: rgb(var(--color-glass) / 0.78);
+      -webkit-backdrop-filter: blur(28px) saturate(180%);
+      backdrop-filter: blur(28px) saturate(180%);
+      border-right: 1px solid rgb(var(--color-glass-border) / 0.08);
+    }
+
+    .app-bottom-nav {
+      display: none;
+    }
+  }
+
+  .app-shell:has(.login-screen) .app-sidebar,
+  .app-shell:has(.login-screen) .app-bottom-nav {
+    display: none;
+  }
+
+  .app-shell:has(.login-screen) .app-main {
+    min-height: 100dvh;
+    padding: 0;
+  }
+}
+
+/*
+ * StatCard (Task 03B). The notched silhouette is built from three solid
+ * pieces painted in the tile colour, so the notch is genuinely transparent
+ * (no page-coloured cut-out) and works on any background:
+ *   ::before        left column, rounded top-right where the notch starts
+ *   ::after         bottom band, rounded top-right where the notch ends
+ *   __fillet        concave corner where the two meet
+ * Geometry comes from --size-stat-notch-x/y and --radius-stat-fillet.
+ */
+@layer components {
+  .stat-card {
+    --stat-bg: var(--color-lime);
+    --stat-notch-x: var(--size-stat-notch-x);
+    --stat-notch-y: var(--size-stat-notch-y);
+    --stat-fillet: var(--radius-stat-fillet);
+
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    container-type: inline-size;
+  }
+
+  /*
+   * Height: the sizer holds the 1 : 1.05 reference proportion as a minimum;
+   * the body can grow past it, and a sibling tile in the same grid row
+   * stretches to match. Both share one grid cell.
+   */
+  .stat-card__sizer {
+    grid-area: 1 / 1;
+    aspect-ratio: 1 / 1.05;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .stat-card__body {
+    grid-area: 1 / 1;
+    position: relative;
+    z-index: 10; /* above the dashed trail, below the action button */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding: var(--space-4);
+  }
+
+  /* Big number: the 64px token, scaled down on narrow tiles so it never reaches the arrow. */
+  .stat-card__value {
+    font-size: min(var(--text-stat), 37cqw);
+    line-height: 1;
+  }
+
+  @screen md {
+    .stat-card__body {
+      padding: var(--space-5);
+    }
+  }
+
+  .stat-card--completed {
+    --stat-bg: var(--color-purple);
+  }
+
+  .stat-card--planned {
+    --stat-bg: var(--color-lime);
+  }
+
+  .stat-card::before,
+  .stat-card::after,
+  .stat-card__fillet {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    background-color: rgb(var(--stat-bg));
+    pointer-events: none;
+  }
+
+  .stat-card::before {
+    inset-block: 0;
+    left: 0;
+    width: calc(100% - var(--stat-notch-x));
+    border-radius: var(--radius-xl) var(--stat-fillet) 0 var(--radius-xl);
+  }
+
+  .stat-card::after {
+    inset-inline: calc(100% - var(--stat-notch-x) - var(--space-4)) 0;
+    top: var(--stat-notch-y);
+    bottom: 0;
+    border-radius: 0 var(--stat-fillet) var(--radius-xl) 0;
+  }
+
+  /* Concave corner. Extends 1px left and down so it overlaps its neighbours. */
+  .stat-card__fillet {
+    left: calc(100% - var(--stat-notch-x) - 1px);
+    top: calc(var(--stat-notch-y) - var(--stat-fillet));
+    width: calc(var(--stat-fillet) + 1px);
+    height: calc(var(--stat-fillet) + 1px);
+    background-color: transparent;
+    background-image: radial-gradient(
+      circle at 100% 0,
+      transparent calc(var(--stat-fillet) - 0.5px),
+      rgb(var(--stat-bg)) var(--stat-fillet)
+    );
+  }
+
+  .stat-card__action {
+    position: absolute;
+    z-index: 20; /* above the text block, which spans the full width */
+    top: 0;
+    right: var(--space-2);
+  }
+
+  /* Dotted route lines behind the check on the completed tile. Starts below the notch so it can never intrude into it. */
+  .stat-card__trail {
+    position: absolute;
+    z-index: 0;
+    inset-inline: 0;
+    bottom: 0;
+    top: var(--stat-notch-y);
+    overflow: hidden;
+    border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+    pointer-events: none;
+  }
+
+  .stat-card__trail::before,
+  .stat-card__trail::after {
+    content: "";
+    position: absolute;
+    border-radius: var(--radius-full);
+    border: 2px dashed rgb(var(--color-ink) / 0.35);
+    /* centred on the 40px check badge: 16px padding + 20px radius */
+    --ring: 7rem;
+    width: var(--ring);
+    height: var(--ring);
+    right: calc(var(--space-4) + var(--space-5) - var(--ring) / 2);
+    bottom: calc(var(--space-4) + var(--space-5) - var(--ring) / 2);
+  }
+
+  .stat-card__trail::after {
+    --ring: 9.5rem;
+  }
+}
+
+/*
+ * Modal / bottom sheet (Task 03B). Native <dialog> gives focus trapping,
+ * inert background and top-layer stacking. Below `md` it is a bottom sheet;
+ * from `md` up it is a centred dialog. Width comes from data-size.
+ */
+@layer base {
+  html:has(.modal[open]) {
+    overflow: hidden;
+  }
+}
+
+@layer components {
+  .modal {
+    --modal-width: var(--size-modal-md);
+
+    display: none;
+    width: 100%;
+    max-width: none;
+    max-height: calc(100dvh - var(--space-12));
+    margin: auto 0 0;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+    background-color: rgb(var(--color-glass));
+    color: rgb(var(--color-on-dark));
+    overscroll-behavior: contain;
+    box-shadow: 0 -4px 48px rgb(0 0 0 / 0.55), inset 0 1px 0 rgb(255 255 255 / 0.07);
+  }
+
+  .modal[open] {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .modal[data-size="sm"] {
+    --modal-width: var(--size-modal-sm);
+  }
+
+  .modal[data-size="lg"] {
+    --modal-width: var(--size-modal-lg);
+  }
+
+  .modal::backdrop {
+    background-color: rgb(var(--color-background) / 0.72);
+  }
+
+  .modal[data-state="open"] {
+    animation: modal-sheet-in var(--duration-slow) var(--ease-standard) both;
+  }
+
+  .modal[data-state="open"]::backdrop {
+    animation: modal-fade-in var(--duration-base) var(--ease-standard) both;
+  }
+
+  .modal[data-state="closing"] {
+    pointer-events: none;
+    animation: modal-sheet-out var(--duration-base) var(--ease-standard) both;
+  }
+
+  .modal[data-state="closing"]::backdrop {
+    animation: modal-fade-out var(--duration-base) var(--ease-standard) both;
+  }
+
+  @screen md {
+    .modal {
+      width: min(calc(100% - var(--space-8)), var(--modal-width));
+      max-height: calc(100dvh - var(--space-16));
+      margin: auto;
+      border-radius: var(--radius-2xl);
+      box-shadow: 0 24px 80px rgb(0 0 0 / 0.6), inset 0 1px 0 rgb(255 255 255 / 0.07);
+    }
+
+    .modal[data-state="open"] {
+      animation-name: modal-center-in;
+      animation-duration: var(--duration-base);
+    }
+
+    .modal[data-state="closing"] {
+      animation-name: modal-center-out;
+    }
+  }
+}
+
+@keyframes modal-sheet-in {
+  from {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes modal-sheet-out {
+  to {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes modal-center-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--space-2)) scale(0.98);
+  }
+}
+
+@keyframes modal-center-out {
+  to {
+    opacity: 0;
+    transform: translateY(var(--space-2)) scale(0.98);
+  }
+}
+
+@keyframes modal-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes modal-fade-out {
+  to {
+    opacity: 0;
+  }
+}
