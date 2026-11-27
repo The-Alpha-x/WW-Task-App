@@ -126,7 +126,7 @@ export function Modal({
     >
       <div
         className={cn(
-          "flex min-h-0 flex-1 flex-col px-5 pb-6 pt-3 md:p-6",
+          "flex min-h-0 flex-1 flex-col px-5 pb-[calc(1.5rem+env(safe-area-inset-bottom,0px))] pt-3 md:p-6",
           className,
         )}
       >
@@ -157,7 +157,7 @@ export function Modal({
         </div>
 
         {children && (
-          <div className="-mx-1 mt-5 min-h-0 flex-1 overflow-y-auto px-1 py-1">
+          <div className="-mx-1 mt-5 min-h-0 flex-1 overflow-y-auto overscroll-contain px-1 py-1">
             {children}
           </div>
         )}

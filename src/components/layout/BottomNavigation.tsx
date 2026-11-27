@@ -75,8 +75,8 @@ export function BottomNavigation() {
               <Plus aria-hidden="true" size={26} strokeWidth={3} />
             </Link>
           </li>
-          <li>{activities && linkItem(activities)}</li>
           <li>{events && linkItem(events)}</li>
+          <li>{activities && linkItem(activities)}</li>
         </ul>
       </nav>
     </div>

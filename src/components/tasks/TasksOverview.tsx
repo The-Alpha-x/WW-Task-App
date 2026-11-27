@@ -521,6 +521,7 @@ export function TasksOverview({
 function TaskBucketSection({
   title,
   tasks,
+  userDisplayName,
   emptyMessage,
   gridClassName = "md:grid-cols-2 xl:grid-cols-3",
   onCompletedChange,
@@ -530,6 +531,7 @@ function TaskBucketSection({
 }: {
   title: string;
   tasks: readonly Task[];
+  userDisplayName?: string | null;
   emptyMessage: string;
   gridClassName?: string;
   onCompletedChange: (taskId: string, completed: boolean) => void;
@@ -568,6 +570,7 @@ function TaskBucketSection({
               >
                 <ActiveTaskCard
                   task={task}
+                  userDisplayName={userDisplayName}
                   onCompletedChange={onCompletedChange}
                   onSubtaskChange={onSubtaskChange}
                   onEdit={onEdit}

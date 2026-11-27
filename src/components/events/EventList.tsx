@@ -7,6 +7,7 @@ import { EventCard } from "./EventCard";
 export interface EventListProps {
   events: readonly Event[];
   now: Date;
+  userDisplayName?: string | null;
   /** Past list: no featured card, quieter cards. */
   past?: boolean;
   /** Accessible name of the list. */
@@ -18,7 +19,13 @@ export interface EventListProps {
  * list the first event is the featured lime card and spans the full row.
  * The list staggers its cards in once when it mounts.
  */
-export function EventList({ events, now, past = false, label }: EventListProps) {
+export function EventList({
+  events,
+  now,
+  userDisplayName = null,
+  past = false,
+  label,
+}: EventListProps) {
   const reduce = useReducedMotion();
 
   const container: Variants = {
@@ -41,6 +48,7 @@ export function EventList({ events, now, past = false, label }: EventListProps) 
             key={event.id}
             event={event}
             now={now}
+            userDisplayName={userDisplayName}
             featured={featured}
             past={past}
             className={featured ? "md:col-span-2" : undefined}

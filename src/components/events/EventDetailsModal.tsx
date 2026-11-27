@@ -138,14 +138,13 @@ export function EventDetailsModal({
         ) : undefined
       }
     >
-      <AnimatePresence mode="wait" initial={false}>
+      <AnimatePresence initial={false}>
         {editing ? (
           <motion.div
             key="edit"
-            initial={reduce ? { opacity: 0 } : { opacity: 0, y: 8 }}
+            initial={reduce ? { opacity: 0 } : { opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: reduce ? 0.15 : 0.25, ease: EASE_OUT }}
+            transition={{ duration: reduce ? 0.15 : 0.22, ease: EASE_OUT }}
           >
             <EventForm
               initialValues={eventToFormValues(event)}

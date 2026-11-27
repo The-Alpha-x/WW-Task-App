@@ -57,7 +57,7 @@ export function LoaderScreen({ messages = ["Loading your workspace"] }: Props) {
       animate={{ opacity: 1 }}
       exit={reduce ? { opacity: 0 } : { opacity: 0, scale: 1.06 }}
       transition={{ duration: 0.5, ease: EASE_OUT }}
-      className="fixed inset-0 z-50 flex min-h-dvh flex-col items-center justify-center overflow-hidden bg-ww-bg font-brand text-white"
+      className="loader-text fixed inset-0 z-50 flex min-h-dvh flex-col items-center justify-center overflow-hidden bg-ww-bg font-brand text-on-dark"
     >
       {/* faint background arcs, same as the login screen */}
       <svg
@@ -410,7 +410,7 @@ export function LoaderScreen({ messages = ["Loading your workspace"] }: Props) {
         <p className="text-[28px] font-semibold tracking-tight">Witch-Woofie</p>
       </div>
 
-      <div className="mt-2 h-6 text-base text-ww-muted">
+      <div className="loader-text-muted mt-2 h-6 text-base text-on-dark-muted">
         <AnimatePresence mode="wait" initial={false}>
           <motion.span
             key={messages[i]}

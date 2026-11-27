@@ -195,6 +195,34 @@
     --stat-bg: var(--color-lime);
   }
 
+  .stat-card--events {
+    --stat-bg: var(--color-blue);
+  }
+
+  .stat-card--week {
+    --stat-bg: var(--color-teal);
+  }
+
+  .stat-card--wide .stat-card__sizer {
+    aspect-ratio: auto;
+    min-height: 8.5rem;
+  }
+
+  .stat-card--wide .stat-card__value {
+    font-size: var(--text-stat);
+  }
+
+  @screen md {
+    .stat-card--wide .stat-card__sizer {
+      aspect-ratio: 1 / 1.05;
+      min-height: 0;
+    }
+
+    .stat-card--wide .stat-card__value {
+      font-size: min(var(--text-stat), 37cqw);
+    }
+  }
+
   .stat-card::before,
   .stat-card::after,
   .stat-card__fillet {
@@ -280,6 +308,51 @@
   html:has(.modal[open]) {
     overflow: hidden;
   }
+
+  /* iOS WebKit date/time inputs have an intrinsic min-width that overflows flex/grid cards. */
+  input[type="date"],
+  input[type="time"] {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    inline-size: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    appearance: none;
+    text-align: left;
+  }
+
+  input[type="date"]::-webkit-date-and-time-value,
+  input[type="time"]::-webkit-date-and-time-value {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: left;
+  }
+
+  [data-theme="light"] .loader-text {
+    color: rgb(var(--color-ink));
+  }
+
+  [data-theme="light"] .loader-text-muted {
+    color: rgb(var(--color-ink-muted));
+  }
+
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) .loader-text {
+      color: rgb(var(--color-ink));
+    }
+
+    :root:not([data-theme="dark"]) .loader-text-muted {
+      color: rgb(var(--color-ink-muted));
+    }
+  }
 }
 
 @layer components {
@@ -289,7 +362,9 @@
     display: none;
     width: 100%;
     max-width: none;
-    max-height: calc(100dvh - var(--space-12));
+    max-height: calc(
+      100dvh - max(var(--space-12), env(safe-area-inset-top, 0px) + var(--space-4))
+    );
     margin: auto 0 0;
     padding: 0;
     border: 1px solid rgb(var(--color-glass-border) / 0.12);
@@ -343,6 +418,7 @@
       margin: auto;
       border-radius: var(--radius-2xl);
       box-shadow: 0 24px 80px rgb(0 0 0 / 0.6), inset 0 1px 0 rgb(255 255 255 / 0.07);
+      transition: width var(--duration-base) var(--ease-standard);
     }
 
     .modal[data-state="open"] {

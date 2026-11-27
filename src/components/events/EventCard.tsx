@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Clock3, User, Users } from "lucide-react";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { Badge } from "@/components/ui/Badge";
+import { ParticipantBadges } from "@/components/ui/ParticipantBadges";
 import { cn } from "@/lib/cn";
 import {
   formatEventTime,
@@ -22,6 +23,8 @@ export interface EventCardProps {
   event: Event;
   /** The current minute, for the "Today" / "In 3 days" label. */
   now: Date;
+  /** Current user's display name for participant accent color. */
+  userDisplayName?: string | null;
   /** The next event: a lime sheet instead of the white card. */
   featured?: boolean;
   /** Past events read quieter and show "3 days ago". */
@@ -38,6 +41,7 @@ export interface EventCardProps {
 export function EventCard({
   event,
   now,
+  userDisplayName = null,
   featured = false,
   past = false,
   className,
@@ -81,11 +85,11 @@ export function EventCard({
         <div
           aria-hidden="true"
           className={cn(
-            "flex shrink-0 flex-col items-center justify-center rounded-md bg-ink text-on-dark",
+            "flex shrink-0 flex-col items-center justify-center rounded-md bg-ink text-on-accent",
             featured ? "h-24 w-20 md:h-28 md:w-24" : "h-20 w-16",
           )}
         >
-          <span className="text-xs font-semibold text-on-dark-muted">{parts.weekday}</span>
+          <span className="text-xs font-semibold text-on-accent-muted">{parts.weekday}</span>
           <span
             className={cn(
               "font-bold leading-none",
@@ -117,6 +121,12 @@ export function EventCard({
               <Clock3 aria-hidden="true" size={14} />
               {formatEventTime(event.time)}
             </Badge>
+            <span className="inline-flex items-center rounded-full bg-ink px-1.5 py-0.5">
+              <ParticipantBadges
+                type={event.type}
+                userDisplayName={userDisplayName}
+              />
+            </span>
             {typeBadge}
             {!featured && relative && (
               <Badge variant="outline">{relative}</Badge>

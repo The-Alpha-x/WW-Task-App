@@ -70,7 +70,7 @@ export function MobileTopBar() {
     <div
       ref={containerRef}
       aria-label="Quick actions"
-      className="fixed right-4 top-4 z-50 flex items-center gap-2 lg:hidden"
+      className="fixed right-[calc(1rem+env(safe-area-inset-right,0px))] top-[calc(1rem+env(safe-area-inset-top,0px))] z-50 flex items-center gap-2 lg:hidden"
     >
       <NotificationButton className="h-10 w-10" />
 

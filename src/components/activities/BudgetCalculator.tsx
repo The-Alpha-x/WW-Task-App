@@ -498,7 +498,7 @@ export function BudgetCalculator() {
 
       <section
         aria-labelledby="add-expense-heading"
-        className="rounded-2xl bg-ink p-5 text-white md:p-6"
+        className="rounded-2xl bg-ink p-5 text-on-accent md:p-6"
       >
         <h2 id="add-expense-heading" className="text-xl font-bold">
           Add an expense to {activeMonth ? formatMonth(activeMonth) : "this month"}

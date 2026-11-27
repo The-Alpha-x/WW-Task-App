@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
-import { BookHeart } from "lucide-react";
-import { AddPlaceholder } from "@/components/add/AddPlaceholder";
+import { AddMemory } from "@/components/memories/AddMemory";
 
 export const metadata: Metadata = { title: "Add Memory" };
 
-/** Placeholder route. The real memory form is built in Task 03. */
 export default function AddMemoryPage() {
-  return <AddPlaceholder title="Add Memory" feature="Memory creation" icon={BookHeart} />;
+  return <AddMemory />;
 }

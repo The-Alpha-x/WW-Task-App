@@ -2,8 +2,16 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { PointerEvent } from "react";
-import { Calendar, Check, ChevronDown, Clock, Pencil, Trash2 } from "lucide-react";
+import {
+  Calendar,
+  Check,
+  ChevronDown,
+  Clock,
+  Pencil,
+  Trash2,
+} from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { ParticipantBadges } from "@/components/ui/ParticipantBadges";
 import { cn } from "@/lib/cn";
 import { formatShortDate, formatTime } from "@/lib/date-time";
 import { countDoneSubtasks } from "@/lib/tasks/display";
@@ -11,10 +19,11 @@ import type { Task } from "@/types/task";
 
 export interface ActiveTaskCardProps {
   task: Task;
+  userDisplayName?: string | null;
   onCompletedChange: (taskId: string, completed: boolean) => void;
   onSubtaskChange: (taskId: string, subtaskId: string, done: boolean) => void;
-  onEdit: (task: Task) => void;
-  onDelete: (taskId: string) => void;
+  onEdit?: (task: Task) => void;
+  onDelete?: (taskId: string) => void;
 }
 
 const LONG_PRESS_MS = 650;
@@ -30,6 +39,7 @@ type HoldPhase = "idle" | "pressing" | "success";
  */
 export function ActiveTaskCard({
   task,
+  userDisplayName = null,
   onCompletedChange,
   onSubtaskChange,
   onEdit,
@@ -86,12 +96,15 @@ export function ActiveTaskCard({
         rafRef.current = null;
         setHoldPhase("success");
         const nextCompleted = !task.completed;
-        successTimerRef.current = window.setTimeout(() => {
-          successTimerRef.current = null;
-          onCompletedChange(task.id, nextCompleted);
-          setHoldPhase("idle");
-          setHoldProgress(0);
-        }, reduceMotion ? 150 : SUCCESS_HOLD_MS);
+        successTimerRef.current = window.setTimeout(
+          () => {
+            successTimerRef.current = null;
+            onCompletedChange(task.id, nextCompleted);
+            setHoldPhase("idle");
+            setHoldProgress(0);
+          },
+          reduceMotion ? 150 : SUCCESS_HOLD_MS,
+        );
         return;
       }
 
@@ -119,18 +132,17 @@ export function ActiveTaskCard({
   const subtitle =
     task.description.trim() ||
     (task.type === "shared" ? "Shared Task" : "Personal Task");
-  const dueBadge = task.time
-    ?  (<span className="flex items-center gap-1">
-         <Clock aria-hidden="true" className="text-lime" size={14} />
-         {formatTime(task.time)}
-       </span>)
-    : task.date
-      ? 
-      (<span className="flex items-center gap-1">
-         <Calendar aria-hidden="true" className="text-lime" size={14} />
-         {formatShortDate(task.date)}
-       </span>)
-      : null;
+  const dueBadge = task.time ? (
+    <span className="flex items-center gap-1">
+      <Clock aria-hidden="true" className="text-lime" size={14} />
+      {formatTime(task.time)}
+    </span>
+  ) : task.date ? (
+    <span className="flex items-center gap-1">
+      <Calendar aria-hidden="true" className="text-lime" size={14} />
+      {formatShortDate(task.date)}
+    </span>
+  ) : null;
 
   const isHoldingOrSuccess = holdPhase !== "idle";
   const ringOffset =
@@ -162,51 +174,57 @@ export function ActiveTaskCard({
             {subtitle}
           </p>
 
-          <div
-            className="relative z-10 flex shrink-0 items-center gap-2"
-            onPointerDown={stopCardPress}
-          >
-            {confirmingDelete ? (
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setConfirmingDelete(false);
-                    onDelete(task.id);
-                  }}
-                  className="rounded-full bg-danger px-4 py-2 text-xs font-bold text-on-dark transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-danger"
-                >
-                  Delete
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setConfirmingDelete(false)}
-                  className="rounded-full bg-surface-raised px-4 py-2 text-xs font-bold text-on-dark-muted transition-colors hover:text-on-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime"
-                >
-                  Cancel
-                </button>
-              </div>
-            ) : (
-              <>
-                <button
-                  type="button"
-                  onClick={() => onEdit(task)}
-                  aria-label={`Edit ${task.title}`}
-                  className="grid h-9 w-9 p-2 place-items-center rounded-full bg-surface-raised/70 text-on-dark-muted transition-colors hover:bg-surface-raised hover:text-on-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime"
-                >
-                  <Pencil aria-hidden="true" size={18} />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setConfirmingDelete(true)}
-                  aria-label={`Delete ${task.title}`}
-                  className="grid h-9 w-9 p-2 place-items-center rounded-full bg-danger/70 text-on-dark-muted transition-colors hover:bg-danger/20 hover:text-danger focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-danger"
-                >
-                  <Trash2 aria-hidden="true" size={18} />
-                </button>
-              </>
-            )}
-          </div>
+          {(onEdit || onDelete) && (
+            <div
+              className="relative z-10 flex shrink-0 items-center gap-2"
+              onPointerDown={stopCardPress}
+            >
+              {confirmingDelete && onDelete ? (
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setConfirmingDelete(false);
+                      onDelete(task.id);
+                    }}
+                    className="rounded-full bg-danger px-4 py-2 text-xs font-bold text-on-dark transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-danger"
+                  >
+                    Delete
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setConfirmingDelete(false)}
+                    className="rounded-full bg-surface-raised px-4 py-2 text-xs font-bold text-on-dark-muted transition-colors hover:text-on-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              ) : (
+                <>
+                  {onEdit && (
+                    <button
+                      type="button"
+                      onClick={() => onEdit(task)}
+                      aria-label={`Edit ${task.title}`}
+                      className="grid h-9 w-9 p-2 place-items-center rounded-full bg-surface-raised/70 text-on-dark-muted transition-colors hover:bg-surface-raised hover:text-on-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime"
+                    >
+                      <Pencil aria-hidden="true" size={18} />
+                    </button>
+                  )}
+                  {onDelete && (
+                    <button
+                      type="button"
+                      onClick={() => setConfirmingDelete(true)}
+                      aria-label={`Delete ${task.title}`}
+                      className="grid h-9 w-9 p-2 place-items-center rounded-full bg-danger/70 text-on-dark-muted transition-colors hover:bg-danger/20 hover:text-danger focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-danger"
+                    >
+                      <Trash2 aria-hidden="true" size={18} />
+                    </button>
+                  )}
+                </>
+              )}
+            </div>
+          )}
         </div>
 
         <h3
@@ -220,6 +238,10 @@ export function ActiveTaskCard({
 
         <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
           <div className="flex flex-wrap items-center gap-2">
+            <ParticipantBadges
+              type={task.type}
+              userDisplayName={userDisplayName}
+            />
             <span className="inline-flex items-center rounded-full px-3 py-1 text-xs bg-surface-raised/70 font-medium text-sage">
               {task.type === "shared" ? "Shared" : "Personal"}
             </span>
@@ -231,11 +253,11 @@ export function ActiveTaskCard({
           </div>
 
           <span className="text-2xs font-medium text-on-dark-muted/80">
-            {totalSubtasks > 0
+            {/* {totalSubtasks > 0
               ? `${doneSubtasks}/${totalSubtasks} sub ${totalSubtasks === 1 ? "task" : "tasks"}`
               : task.completed
                 ? "Hold to reopen"
-                : "Hold to complete"}
+                : "Hold to complete"} */}
           </span>
         </div>
 

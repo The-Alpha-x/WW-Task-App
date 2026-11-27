@@ -71,7 +71,7 @@ export function TaskFormFields({
 
       <section
         aria-labelledby="schedule-heading"
-        className="flex flex-col gap-4 rounded-xl bg-glass/80 p-4 ring-1 ring-glass-border/10 backdrop-blur-md sm:gap-5 sm:p-5 md:p-6"
+        className="flex min-w-0 flex-col gap-4 overflow-hidden rounded-xl bg-glass/80 p-4 ring-1 ring-glass-border/10 backdrop-blur-md sm:gap-5 sm:p-5 md:p-6"
       >
         <h2
           id="schedule-heading"
@@ -80,13 +80,12 @@ export function TaskFormFields({
           Schedule
         </h2>
 
-        <div className="flex flex-col gap-2">
+        <div className="flex min-w-0 flex-col gap-2">
           <Input
             label="Date"
             type="date"
             tone="dark"
             min={editing ? undefined : minDate}
-            style={{ colorScheme: "dark" }}
             {...register("date")}
             error={errors.date?.message}
           />
