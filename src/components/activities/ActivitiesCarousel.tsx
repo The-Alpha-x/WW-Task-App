@@ -99,7 +99,7 @@ export function ActivitiesCarousel({
               </Link>
             ) : item.title === "Memory Lane" ? (
               <Link
-                href="/activities/memories"
+                href="/memories"
                 aria-label="Open Memories"
                 className="absolute inset-0 z-20 flex items-end p-5"
               >
