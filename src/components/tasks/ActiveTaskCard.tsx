@@ -206,7 +206,7 @@ export function ActiveTaskCard({
                       type="button"
                       onClick={() => onEdit(task)}
                       aria-label={`Edit ${task.title}`}
-                      className="grid h-9 w-9 p-2 place-items-center rounded-full bg-surface-raised/70 text-on-dark-muted transition-colors hover:bg-surface-raised hover:text-on-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime"
+                      className="grid h-9 w-9 p-2 place-items-center rounded-full bg-surface-raised/70 text-on-light-muted transition-colors hover:bg-surface-raised hover:text-on-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime"
                     >
                       <Pencil aria-hidden="true" size={18} />
                     </button>
@@ -216,7 +216,7 @@ export function ActiveTaskCard({
                       type="button"
                       onClick={() => setConfirmingDelete(true)}
                       aria-label={`Delete ${task.title}`}
-                      className="grid h-9 w-9 p-2 place-items-center rounded-full bg-danger/70 text-on-dark-muted transition-colors hover:bg-danger/20 hover:text-danger focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-danger"
+                      className="grid h-9 w-9 p-2 place-items-center rounded-full bg-danger/70 text-on-light-muted transition-colors hover:bg-danger/20 hover:text-danger focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-danger"
                     >
                       <Trash2 aria-hidden="true" size={18} />
                     </button>
