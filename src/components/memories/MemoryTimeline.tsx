@@ -2,12 +2,10 @@
 
 import { ChevronRight, Heart, Users } from "lucide-react";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
-import { cn } from "@/lib/cn";
-import { formatCompactDate, formatLocalDate, getRelativeDayLabel } from "@/lib/date-time";
+import { formatLocalDate, getRelativeDayLabel } from "@/lib/date-time";
 import {
   formatMemoryWhen,
   getMemoryAriaLabel,
-  getMemoryTypeLabel,
   groupMemoriesByMonth,
 } from "@/lib/memories/display";
 import type { Memory } from "@/types/memory";
@@ -105,9 +103,18 @@ interface MemoryCardProps {
   onSelect: (memory: Memory) => void;
 }
 
-function MemoryCard({ memory, now, variants, reduce, onSelect }: MemoryCardProps) {
+function MemoryCard({
+  memory,
+  now,
+  variants,
+  reduce,
+  onSelect,
+}: MemoryCardProps) {
   const relative = getRelativeDayLabel(memory.date, now);
-  const subtitle = memory.description.trim() || memory.notes.trim() || formatMemoryWhen(memory);
+  const subtitle =
+    memory.description.trim() ||
+    memory.notes.trim() ||
+    formatMemoryWhen(memory);
 
   // Date tile parts
   const day = formatLocalDate(memory.date, { day: "numeric" });
