@@ -223,7 +223,7 @@ export function MemoryDetailsModal({
                   {relative}
                 </span>
               )}
-              <span className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold text-card ring-1 ring-lime/25">
+              <span className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold text-accent-foreground ring-on-accent-muted ring-1 ring-lime/25">
                 <TypeIcon aria-hidden="true" size={12} />
                 {getMemoryTypeLabel(memory.type)}
               </span>
