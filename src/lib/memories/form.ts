@@ -17,7 +17,10 @@ export const MEMORY_TITLE_MAX = 100;
 export const MEMORY_DESCRIPTION_MAX = 1000;
 export const MEMORY_NOTES_MAX = 2000;
 
-export const MEMORY_TYPE_VALUES: readonly MemoryType[] = ["individual", "shared"];
+export const MEMORY_TYPE_VALUES: readonly MemoryType[] = [
+  "individual",
+  "shared",
+];
 
 /**
  * Whether a memory may be dated today. `true`: it may (a memory from this
@@ -86,12 +89,14 @@ export function createMemoryFormSchema(context: MemoryFormContext = {}) {
         .min(1, "Please choose the date it happened.")
         .refine(isValidDateString, "Enter a valid date."),
       time: z
-        .string()
-        .trim()
+        .union([z.string(), z.null(), z.undefined()])
+        .transform((val) => (val ?? "").trim())
         .refine((val) => !val || isValidTimeString(val), "Enter a valid time."),
-      type: z.enum(["individual", "shared"], {
-        message: "Choose shared or individual.",
-      }),
+      type: z
+        .enum(["individual", "shared"], {
+          message: "Choose shared or individual.",
+        })
+        .default("shared"),
       notes: z
         .string()
         .trim()
@@ -129,10 +134,12 @@ export function createMemoryFormSchema(context: MemoryFormContext = {}) {
         });
       }
     })
-    .transform((data): MemoryFormSubmission => ({
-      ...data,
-      time: data.time || null,
-    }));
+    .transform(
+      (data): MemoryFormSubmission => ({
+        ...data,
+        time: data.time || null,
+      }),
+    );
 }
 
 /** Latest date a memory may have (for the date input's `max`). */
@@ -142,7 +149,14 @@ export function getMaxMemoryDate(now = new Date()): string {
 }
 
 export function createEmptyMemoryForm(): MemoryFormValues {
-  return { title: "", description: "", date: getLocalDate(), time: "", type: "individual", notes: "" };
+  return {
+    title: "",
+    description: "",
+    date: getLocalDate(),
+    time: "",
+    type: "shared",
+    notes: "",
+  };
 }
 
 export function memoryToFormValues(memory: Memory): MemoryFormValues {

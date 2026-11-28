@@ -1,21 +1,22 @@
 "use client";
 
 import { ArrowUpRight, Check } from "lucide-react";
+import { AnimatedCounter } from "@/components/dashboard/AnimatedCounter";
 import { cn } from "@/lib/cn";
 import { Button } from "./Button";
 import { IconButton } from "./IconButton";
 
-export type StatCardVariant = "completed" | "planned";
+export type StatCardVariant = "completed" | "planned" | "events" | "week";
 
 export interface StatCardProps {
-  /** `completed` is the purple tile, `planned` the lime tile. */
+  /** `completed` is the purple tile, `planned` the lime tile, `events` the blue tile. */
   variant: StatCardVariant;
   /** The large number. Designed for 1 to 3 digits. */
   value: number;
   /** Descriptive label under the number, e.g. "Tasks Completed". */
   label: string;
   /**
-   * Date pill shown at the bottom of the `planned` tile, e.g. "TUE.13.JAN".
+   * Date pill shown at the bottom of the `planned` or `events` tile, e.g. "TUE.13.JAN".
    * Ignored by the `completed` tile, which shows a check badge instead.
    */
   date?: string;
@@ -25,8 +26,17 @@ export interface StatCardProps {
   actionLabel?: string;
   /** Called when the date pill is pressed. Without it the pill is display-only. */
   onDateClick?: () => void;
+  /** Whether to animate the number from 0 on first load. */
+  animateValue?: boolean;
   className?: string;
 }
+
+const VARIANT_CLASS: Record<StatCardVariant, string> = {
+  completed: "stat-card--completed",
+  planned: "stat-card--planned",
+  events: "stat-card--events",
+  week: "stat-card--week",
+};
 
 /**
  * Notched statistics tile from the reference. The silhouette is pure CSS
@@ -41,6 +51,7 @@ export function StatCard({
   onAction,
   actionLabel,
   onDateClick,
+  animateValue = false,
   className,
 }: StatCardProps) {
   const isCompleted = variant === "completed";
@@ -49,11 +60,7 @@ export function StatCard({
     <div
       role="group"
       aria-label={`${value} ${label}`}
-      className={cn(
-        "stat-card",
-        isCompleted ? "stat-card--completed" : "stat-card--planned",
-        className,
-      )}
+      className={cn("stat-card", VARIANT_CLASS[variant], className)}
     >
       <span aria-hidden="true" className="stat-card__sizer" />
       <span aria-hidden="true" className="stat-card__fillet" />
@@ -74,10 +81,10 @@ export function StatCard({
         <p
           className={cn(
             "stat-card__value font-semibold tabular-nums",
-            isCompleted ? "text-on-dark" : "text-ink",
+            isCompleted ? "text-on-accent" : "text-ink",
           )}
         >
-          {value}
+          {animateValue ? <AnimatedCounter value={value} /> : value}
         </p>
 
         {isCompleted ? (

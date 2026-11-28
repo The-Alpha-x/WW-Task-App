@@ -97,6 +97,14 @@ export function ActivitiesCarousel({
               >
                 <h2 className="text-xl font-bold text-on-dark">{item.title}</h2>
               </Link>
+            ) : item.title === "Memory Lane" ? (
+              <Link
+                href="/memories"
+                aria-label="Open Memories"
+                className="absolute inset-0 z-20 flex items-end p-5"
+              >
+                <h2 className="text-xl font-bold text-on-dark">{item.title}</h2>
+              </Link>
             ) : item.title === "Watch Movies" && moviesDomain ? (
               <a
                 href={moviesDomain}

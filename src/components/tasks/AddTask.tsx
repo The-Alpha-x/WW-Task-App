@@ -4,8 +4,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
 import { PageContainer } from "@/components/layout/PageContainer";
@@ -25,10 +23,14 @@ export function AddTask() {
   const router = useRouter();
   const { user } = useAuth();
   const reduce = useReducedMotion();
-  const { run, pending: isSaving, error: saveError } = useAction(
-    "Could not save this task.",
+  const {
+    run,
+    pending: isSaving,
+    error: saveError,
+  } = useAction("Could not save this task.");
+  const [defaultValues] = useState(() =>
+    createEmptyTaskForm(generateId("subtask")),
   );
-  const [defaultValues] = useState(() => createEmptyTaskForm(generateId("subtask")));
   const form = useForm<TaskFormValues>({
     resolver: zodResolver(createTaskFormSchema()),
     defaultValues,
@@ -44,20 +46,16 @@ export function AddTask() {
       toast.success("Task added", input.title.trim());
       router.push("/tasks");
     } else {
-      toast.error("Could not save task", "Please check your details and try again.");
+      toast.error(
+        "Could not save task",
+        "Please check your details and try again.",
+      );
     }
   });
 
   return (
     <PageContainer className="flex flex-col gap-5 sm:gap-6">
       <header className="mx-auto flex w-full max-w-2xl items-center gap-4 lg:max-w-none">
-        <Link
-          href="/add"
-          aria-label="Back to add options"
-          className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-surface/80 text-on-dark ring-1 ring-glass-border/10 transition-colors duration-fast ease-standard hover:bg-surface-raised"
-        >
-          <ArrowLeft aria-hidden="true" size={18} />
-        </Link>
         <div className="flex flex-col gap-1">
           <h1 className="text-2xl font-bold text-on-dark">Add Task</h1>
           <p className="text-sm font-medium text-on-dark-muted">

@@ -8,10 +8,7 @@ import {
   CalendarPlus,
   ChevronLeft,
   ChevronRight,
-  Plus,
 } from "lucide-react";
-import { Button } from "@/components/ui/Button";
-import { ButtonLink } from "@/components/ui/ButtonLink";
 import { cn } from "@/lib/cn";
 import { formatCompactDate, getLocalDate } from "@/lib/date-time";
 import {
@@ -319,7 +316,7 @@ export function EventsOverview({
           className={cn(
             "rounded-full px-4 py-2 text-xs font-semibold ring-1 transition-colors duration-base ease-standard",
             activeSelectedDate === null
-              ? "bg-lime/20 text-lime ring-lime/40"
+              ? "bg-lime/10 text-lime ring-lime/40"
               : "bg-glass/80 text-on-dark-muted ring-glass-border/10 hover:bg-surface-raised hover:text-on-dark",
           )}
         >
@@ -345,7 +342,7 @@ export function EventsOverview({
                     scrollToWeek(currentWeekIndex);
                     setSelectedDate(today);
                   }}
-                  className="rounded-full bg-lime/15 px-3 py-1 text-2xs font-semibold text-lime ring-1 ring-lime/30 transition-colors hover:bg-lime/25"
+                  className="rounded-full bg-lime/10 px-3 py-1 text-2xs font-semibold text-lime ring-1 ring-lime/30 transition-colors hover:bg-lime/25"
                 >
                   This week
                 </button>

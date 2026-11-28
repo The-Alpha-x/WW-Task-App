@@ -1,149 +1,126 @@
 "use client";
+
 import { useEffect, useRef } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
-import { Textarea } from "@/components/ui/Textarea";
-import { TaskTypeField } from "@/components/tasks/TaskTypeField";
 import {
   createMemoryFormSchema,
-  getMaxMemoryDate,
-  MEMORY_TITLE_MAX,
-  MEMORY_DESCRIPTION_MAX,
-  MEMORY_NOTES_MAX,
   type MemoryFormValues,
-  type MemoryFormSubmission,
 } from "@/lib/memories/form";
+import { MemoryFormFields } from "./MemoryFormFields";
 
+export interface MemoryFormProps {
+  /** Starting values: empty for a new memory, the stored memory when editing. */
+  initialValues: MemoryFormValues;
+  /** Edit mode: the stored schedule, so saving it unchanged is always allowed. */
+  original?: { date: string; time: string | null } | null;
+  /** Latest selectable date; see `MemoryFormFields`. */
+  maxDate?: string;
+  saving?: boolean;
+  /** Save failure from the service, shown above the form. */
+  error?: string;
+  submitLabel: string;
+  savingLabel: string;
+  /** Called with validated, trimmed values. Persisting is the caller's job. */
+  onSubmit: (values: MemoryFormValues) => void;
+  /** Optional cancel handler (used in edit mode). */
+  onCancel?: () => void;
+}
+
+/**
+ * Memory form shared by Add and Edit, matching the event and task form
+ * layout: dark glassmorphic cards, alert styling, full-width lime submit.
+ */
 export function MemoryForm({
   initialValues,
   original = null,
+  maxDate,
   saving = false,
   error,
-  submitLabel = "Save Memory",
+  submitLabel,
+  savingLabel,
   onSubmit,
   onCancel,
-}: {
-  initialValues: MemoryFormValues;
-  original?: { date: string; time: string | null } | null;
-  saving?: boolean;
-  error?: string;
-  submitLabel?: string;
-  onSubmit: (values: MemoryFormSubmission) => void;
-  onCancel: () => void;
-}) {
-  const form = useForm<MemoryFormValues, unknown, MemoryFormSubmission>({
-    resolver: zodResolver(createMemoryFormSchema({ original })),
+}: MemoryFormProps) {
+  const reduce = useReducedMotion();
+  const form = useForm<MemoryFormValues>({
+    resolver: zodResolver(createMemoryFormSchema({ original })) as never,
     defaultValues: initialValues,
   });
-  const {
-    register,
-    control,
-    formState: { errors },
-  } = form;
   const noticeRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    if (error)
-      noticeRef.current?.scrollIntoView({
-        block: "nearest",
-        behavior: "smooth",
-      });
-  }, [error]);
+    if (!error) return;
+    noticeRef.current?.scrollIntoView({
+      block: "nearest",
+      behavior: reduce ? "auto" : "smooth",
+    });
+  }, [error, reduce]);
+
+  const handleSubmit = form.handleSubmit((values: MemoryFormValues) => {
+    if (!saving) onSubmit(values);
+  });
+
   return (
     <form
       noValidate
-      onSubmit={form.handleSubmit((values) => !saving && onSubmit(values))}
-      className="flex flex-col gap-5"
+      onSubmit={handleSubmit}
+      className="mx-auto flex w-full max-w-2xl flex-col gap-4 sm:gap-5 lg:max-w-none"
     >
-      <div
-        ref={noticeRef}
-        role={error ? "alert" : undefined}
-        className="empty:hidden rounded-xl bg-danger/10 p-3 text-sm text-danger"
-      >
-        {error}
-      </div>
-      <Input
-        label="Memory title"
-        placeholder="e.g. Our first beach trip"
-        autoComplete="off"
-        maxLength={MEMORY_TITLE_MAX}
-        {...register("title")}
-        error={errors.title?.message}
-      />
-      <section className="rounded-2xl bg-lime p-5 text-ink md:p-6">
-        <Textarea
-          label="Description (optional)"
-          tone="light"
-          rows={4}
-          resize="none"
-          placeholder="What happened? What made it special?"
-          maxLength={MEMORY_DESCRIPTION_MAX}
-          {...register("description")}
-          error={errors.description?.message}
-        />
-      </section>
-      <section className="flex flex-col gap-5 rounded-2xl bg-card p-5 text-ink md:p-6">
-        <h2 className="text-xl font-bold">When did it happen?</h2>
-        <div className="grid gap-4 sm:grid-cols-2">
-          <Input
-            label="Date"
-            type="date"
-            tone="light"
-            max={getMaxMemoryDate()}
-            {...register("date")}
-            error={errors.date?.message}
-          />
-          <Input
-            label="Time (optional)"
-            type="time"
-            tone="light"
-            {...register("time")}
-            error={errors.time?.message}
-          />
-        </div>
-        <p className="text-sm text-ink-muted">
-          Choose today or an earlier date. Time is optional; if you add one for
-          today, it must already have passed.
-        </p>
-        <Controller
-          control={control}
-          name="type"
-          render={({ field, fieldState }) => (
-            <TaskTypeField
-              value={field.value}
-              onChange={field.onChange}
-              error={fieldState.error?.message}
-            />
+      <div ref={noticeRef} className="flex scroll-mt-6 flex-col empty:hidden">
+        <AnimatePresence initial={false}>
+          {error && (
+            <motion.p
+              role="alert"
+              initial={reduce ? false : { opacity: 0, y: -4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={reduce ? undefined : { opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="rounded-xl bg-danger/10 px-4 py-3 text-sm font-medium text-danger ring-1 ring-danger/25"
+            >
+              {error}
+            </motion.p>
           )}
-        />
-      </section>
-      <section className="rounded-2xl bg-card p-5 text-ink md:p-6">
-        <Textarea
-          label="Notes (optional)"
-          tone="light"
-          rows={4}
-          resize="none"
-          placeholder="Little details you don't want to forget..."
-          maxLength={MEMORY_NOTES_MAX}
-          {...register("notes")}
-          error={errors.notes?.message}
-        />
-      </section>
-      <div className="flex flex-col-reverse gap-3 md:flex-row md:justify-end">
-        <Button
-          type="button"
-          variant="ghost"
-          size="lg"
-          onClick={onCancel}
-          disabled={saving}
-        >
-          Cancel
-        </Button>
-        <Button type="submit" size="lg" loading={saving}>
-          {saving ? "Saving memory..." : submitLabel}
-        </Button>
+        </AnimatePresence>
       </div>
+
+      <MemoryFormFields form={form} disabled={saving} maxDate={maxDate} />
+
+      {onCancel ? (
+        <div className="flex flex-col-reverse gap-3 pt-1 md:flex-row md:justify-end">
+          <Button
+            type="button"
+            variant="ghost"
+            size="lg"
+            className="md:min-w-40"
+            onClick={onCancel}
+            disabled={saving}
+          >
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            size="lg"
+            className="shadow-lime-pill md:min-w-56"
+            loading={saving}
+          >
+            {saving ? savingLabel : submitLabel}
+          </Button>
+        </div>
+      ) : (
+        <div className="pt-1">
+          <Button
+            type="submit"
+            size="lg"
+            className="w-full shadow-lime-pill"
+            loading={saving}
+          >
+            {saving ? savingLabel : submitLabel}
+          </Button>
+        </div>
+      )}
     </form>
   );
 }

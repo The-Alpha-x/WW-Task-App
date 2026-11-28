@@ -1,11 +1,13 @@
 /*
- * DESIGN TOKENS - single source of truth.
- * Derived from the reference mockup (dark mobile task manager).
- * Tailwind (tailwind.config.ts) maps to these variables; components must
- * use Tailwind token classes or var(--token), never raw hex values.
+- DESIGN TOKENS - single source of truth.
+- Derived from the reference mockups (dark mobile task manager & light sage AI assistant).
+- Tailwind (tailwind.config.ts) maps to these variables; components must
+- use Tailwind token classes or var(--token), never raw hex values.
  */
 
-:root {
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
   /* ---- Color (space-separated RGB channels) ---- */
   --color-background: 18 18 18;        /* near-black app background */
   --color-surface: 42 42 42;           /* icon buttons, dark chips on black */
@@ -13,24 +15,38 @@
   --color-glass: 30 30 34;             /* translucent Apple-style dark glass base */
   --color-glass-border: 255 255 255;   /* specular hairline border base */
 
-  --color-lime: 221 243 95;            /* primary accent: planned stat, add button, description */
+  /* Accents (shared + extracted from light mockup) */
+  --color-lime: 221 243 95;            /* primary accent: planned stat, add button */
+  --color-lime-soft: 236 250 144;      /* pastel chartreuse pill & chart bar (from mockup) */
   --color-purple: 178 92 245;          /* secondary accent: completed stat */
-  --color-orange: 242 138 30;          /* due-time badge */        
-  --color-sage: 163 166 151;   
-  --color-blue: 112 167 255;  
-  --color-teal: 99 214 197; 
-  --color-pink: 255 117 181;       /* tertiary accent: subtask checkmark, completed stat */
+  --color-orange: 242 138 30;          /* due-time badge */
+  --color-coral: 214 114 92;           /* warm terracotta mesh wave (from mockup) */
+  --color-sage: 163 166 151;           /* muted olive-grey secondary bar (from mockup) */
+  --color-sage-tint: 217 229 214;      /* soft sage canvas background (from mockup) */
+  --color-blue: 112 167 255;
+  --color-teal: 99 214 197;
+  --color-pink: 255 117 181;           /* tertiary accent: subtask checkmark, completed stat */
 
   --color-danger: 229 72 77;           /* error borders, icons and messages on form fields */
 
+  /* Elevated / Light surfaces inside dark theme */
   --color-card: 230 230 230;           /* white/light task surfaces */
   --color-card-muted: 233 235 240;     /* add-subtask bar, subtle fills on light */
   --color-border: 220 223 230;         /* outlines on light surfaces */
+  --color-field-border: transparent;
 
+  /* Typography colors */
   --color-ink: 21 21 21;               /* dark text on light/lime/purple */
   --color-ink-muted: 107 111 120;      /* completed subtask text, secondary text on light */
   --color-on-dark: 255 255 255;        /* primary text on black */
   --color-on-dark-muted: 189 189 189;  /* secondary text on black */
+  --color-on-accent: 255 255 255;      /* foreground on dark or saturated accents */
+  --color-on-accent-muted: 179 187 174;
+
+  /* ---- Shadow ---- */
+  --shadow-glow: 0 0 24px rgb(var(--color-lime) / 0.35);
+  --shadow-glass: 0 16px 40px rgb(0 0 0 / 0.45), inset 0 1px 0 rgb(255 255 255 / 0.09);
+  --shadow-lime-pill: 0 4px 16px rgb(var(--color-lime) / 0.25);
 
   /* ---- Typography ---- */
   --text-2xs: 0.6875rem;  /* 11px - iOS tab bar labels, sidebar section headers */
@@ -72,11 +88,6 @@
   --radius-2xl: 2.5rem;    /* 40px - description / subtasks sheets, nav bar */
   --radius-full: 9999px;   /* pills, circular buttons, checkboxes */
 
-  /* ---- Shadow ---- */
-  --shadow-glow: 0 0 24px rgb(var(--color-lime) / 0.35);
-  --shadow-glass: 0 16px 40px rgb(0 0 0 / 0.45), inset 0 1px 0 rgb(255 255 255 / 0.09);
-  --shadow-lime-pill: 0 4px 16px rgb(var(--color-lime) / 0.25);
-
   /* ---- Motion ---- */
   --duration-fast: 120ms;
   --duration-base: 220ms;
@@ -106,4 +117,114 @@
 
   /* ---- Homepage (Task 04B) ---- */
   --size-dashboard-column: 28rem; /* 448px: phone-proportioned column for header + statistics from xl */
+}
+
+/*
+ * Light theme overrides.
+ * Activated explicitly via <html data-theme="light">, or automatically via
+ * OS preference when data-theme="dark" is not forced.
+ */
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --color-background: 244 245 247;
+  --color-surface: 255 255 255;
+  --color-surface-raised: 233 236 242;
+  --color-glass: 255 255 255;
+  --color-glass-border: var(--color-border);
+
+  --color-lime: 176 212 24;
+  --color-purple: 156 68 228;
+  --color-orange: 222 112 10;
+  --color-sage: 98 102 88;
+  --color-blue: 37 115 235;
+  --color-teal: 20 168 148;
+  --color-pink: 225 60 140;
+
+  --color-danger: 220 53 69;
+
+  --color-card: 255 255 255;
+  --color-card-muted: 240 242 246;
+  --color-border: 218 222 230;
+  --color-field-border: rgb(var(--color-border));
+
+  --color-ink: 21 21 21;
+  --color-ink-muted: 96 102 114;
+  --color-on-dark: var(--color-ink);
+  --color-on-dark-muted: var(--color-ink-muted);
+
+  --shadow-glow: 0 0 20px rgb(var(--color-lime) / 0.3);
+  --shadow-glass: 0 12px 32px rgb(15 23 42 / 0.08), inset 0 1px 0 rgb(255 255 255 / 0.7);
+  --shadow-lime-pill: 0 4px 14px rgb(var(--color-lime) / 0.25);
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    color-scheme: light;
+
+    --color-background: 244 245 247;
+    --color-surface: 255 255 255;
+    --color-surface-raised: 233 236 242;
+    --color-glass: 255 255 255;
+    --color-glass-border: var(--color-border);
+
+    --color-lime: 176 212 24;
+    --color-purple: 156 68 228;
+    --color-orange: 222 112 10;
+    --color-sage: 98 102 88;
+    --color-blue: 37 115 235;
+    --color-teal: 20 168 148;
+    --color-pink: 225 60 140;
+
+    --color-danger: 220 53 69;
+
+    --color-card: 255 255 255;
+    --color-card-muted: 240 242 246;
+    --color-border: 218 222 230;
+    --color-field-border: rgb(var(--color-border));
+
+    --color-ink: 21 21 21;
+    --color-ink-muted: 96 102 114;
+    --color-on-dark: var(--color-ink);
+    --color-on-dark-muted: var(--color-ink-muted);
+
+    --shadow-glow: 0 0 20px rgb(var(--color-lime) / 0.3);
+    --shadow-glass: 0 12px 32px rgb(15 23 42 / 0.08), inset 0 1px 0 rgb(255 255 255 / 0.7);
+    --shadow-lime-pill: 0 4px 14px rgb(var(--color-lime) / 0.25);
+  }
+}
+
+/* ==========================================================================
+   LIGHT THEME — Derived from the soft sage & chartreuse reference mockup
+   ========================================================================== */
+[data-theme="light"] {
+  color-scheme: light;
+  --color-background: 217 229 214;     /* soft sage app background (#D9E5D6) */
+  --color-surface: 235 242 233;        /* circular icon buttons, subtle light pills (#EBF2E9) */
+  --color-surface-raised: 246 249 245; /* elevated/pressed light controls (#F6F9F5) */
+  --color-glass: 232 239 230;          /* frosted sage-white glass sheet (#E8EFE6) */
+  --color-glass-border: var(--color-border);
+
+  /* Accents tuned to mockup palette */
+  --color-lime: 236 250 144;           /* pastel chartreuse prompt bar & primary chart bar (#ECFA90) */
+  --color-lime-soft: 221 243 95;       /* high-contrast lime highlight */
+  --color-sage: 179 187 174;           /* muted sage-grey comparison bar (#B3BBAE) */
+  --color-coral: 214 114 92;           /* warm terracotta mesh wave & ambient card glow (#D6725C) */
+
+  /* Card & border surfaces */
+  --color-card: 245 248 244;           /* clean off-white/sage card surface (#F5F8F4) */
+  --color-card-muted: 225 233 222;     /* subtle dividers & muted fills (#E1E9DE) */
+  --color-border: 205 216 202;         /* hairline outlines on light sage (#CDD8CA) */
+  --color-field-border: rgb(var(--color-border));
+
+  /* Typography colors */
+  --color-ink: 24 27 24;               /* deep charcoal-ink primary text (#181B18) */
+  --color-ink-muted: 112 120 112;      /* muted sage-grey labels ("age", "Growth", subtitles) (#707870) */
+  --color-on-dark: var(--color-ink);
+  --color-on-dark-muted: var(--color-ink-muted);
+
+  /* Light-mode shadows (softer diffusion, warm/neutral ambient tint) */
+  --shadow-glow: 0 0 24px rgb(var(--color-coral) / 0.22);
+  --shadow-glass: 0 12px 32px rgb(24 27 24 / 0.08), inset 0 1px 0 rgb(255 255 255 / 0.65);
+  --shadow-lime-pill: 0 6px 20px rgb(24 27 24 / 0.07);
 }

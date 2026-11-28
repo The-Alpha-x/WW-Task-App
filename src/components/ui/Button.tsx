@@ -50,7 +50,7 @@ const variantClasses: Record<ButtonVariant, string> = {
     "bg-transparent text-on-dark enabled:hover:bg-surface enabled:active:bg-surface-raised",
   /** Destructive confirmation (e.g. delete). Dark text keeps AA contrast on the red. */
   danger:
-    "bg-danger text-white enabled:hover:brightness-95 enabled:active:brightness-90",
+    "bg-danger text-ink enabled:hover:brightness-95 enabled:active:brightness-90",
   icon: "bg-surface text-on-dark enabled:hover:bg-surface-raised enabled:active:bg-surface-raised",
 };
 

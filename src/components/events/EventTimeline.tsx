@@ -137,11 +137,11 @@ export function EventTimeline({
                   Completed
                 </span>
               ) : isNextUp ? (
-                <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold text-lime ring-1 ring-lime/25">
+                <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold text-lime ring-1 ring-lime/50">
                   {relative ? `Next · ${relative}` : "Next up"}
                 </span>
               ) : relative ? (
-                <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold text-card ring-1 ring-lime/25">
+                <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ring-1 ring-on-dark-muted/25 text-on-dark-muted">
                   {relative}
                 </span>
               ) : (

@@ -10,7 +10,6 @@ import {
   Users,
 } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
 import { toast } from "@/components/ui/Toaster";
@@ -20,7 +19,6 @@ import {
   formatEventTime,
   formatEventTimestamp,
   formatEventWhen,
-  getEventTypeBadgeVariant,
   getEventTypeLabel,
   getRelativeDayLabel,
 } from "@/lib/events/display";
@@ -140,14 +138,13 @@ export function EventDetailsModal({
         ) : undefined
       }
     >
-      <AnimatePresence mode="wait" initial={false}>
+      <AnimatePresence initial={false}>
         {editing ? (
           <motion.div
             key="edit"
-            initial={reduce ? { opacity: 0 } : { opacity: 0, y: 8 }}
+            initial={reduce ? { opacity: 0 } : { opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: reduce ? 0.15 : 0.25, ease: EASE_OUT }}
+            transition={{ duration: reduce ? 0.15 : 0.22, ease: EASE_OUT }}
           >
             <EventForm
               initialValues={eventToFormValues(event)}

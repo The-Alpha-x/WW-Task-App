@@ -79,7 +79,7 @@ export function EventFormFields({
 
       <section
         aria-labelledby="event-schedule-heading"
-        className="flex flex-col gap-4 rounded-xl bg-glass/80 p-4 ring-1 ring-glass-border/10 backdrop-blur-md sm:gap-5 sm:p-5 md:p-6"
+        className="flex min-w-0 flex-col gap-4 overflow-hidden rounded-xl bg-glass/80 p-4 ring-1 ring-glass-border/10 backdrop-blur-md sm:gap-5 sm:p-5 md:p-6"
       >
         <h2
           id="event-schedule-heading"
@@ -88,13 +88,12 @@ export function EventFormFields({
           Schedule
         </h2>
 
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid min-w-0 grid-cols-1 gap-4 sm:grid-cols-2">
           <Input
             label="Date"
             type="date"
             tone="dark"
             min={minDate}
-            style={{ colorScheme: "dark" }}
             {...register("date")}
             error={errors.date?.message}
           />
@@ -102,7 +101,6 @@ export function EventFormFields({
             label="Time"
             type="time"
             tone="dark"
-            style={{ colorScheme: "dark" }}
             {...register("time")}
             error={errors.time?.message}
           />

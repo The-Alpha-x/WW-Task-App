@@ -38,10 +38,13 @@ const config: Config = {
       card: color("card"),
       "card-muted": color("card-muted"),
       border: color("border"),
+      field: "var(--color-field-border)",
       ink: color("ink"),
       "ink-muted": color("ink-muted"),
       "on-dark": color("on-dark"),
       "on-dark-muted": color("on-dark-muted"),
+      "on-accent": color("on-accent"),
+      "on-accent-muted": color("on-accent-muted"),
     },
     fontFamily: {
       sans: ["var(--font-nunito)", "ui-rounded", "system-ui", "sans-serif"],

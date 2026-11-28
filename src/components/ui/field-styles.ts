@@ -11,8 +11,8 @@ const toneClasses: Record<FieldTone, string> = {
 
 /** Border colour per tone. Error replaces it entirely (no conflicting classes). */
 const borderClasses: Record<FieldTone, string> = {
-  dark: "border-transparent focus:border-lime",
-  light: "border-transparent focus:border-ink",
+  dark: "border-field focus:border-lime",
+  light: "border-field focus:border-ink",
 };
 
 const errorBorderClasses = "border-danger focus:border-danger";
@@ -24,7 +24,7 @@ const labelToneClasses: Record<FieldTone, string> = {
 
 export function fieldClasses(tone: FieldTone, invalid: boolean, extra?: string): string {
   return cn(
-    "block w-full rounded-md border-2 px-4 text-base font-medium outline-none transition-colors duration-base ease-standard",
+    "block w-full min-w-0 max-w-full rounded-md border-2 px-4 text-base font-medium outline-none transition-colors duration-base ease-standard",
     "disabled:cursor-not-allowed disabled:opacity-50",
     toneClasses[tone],
     invalid ? errorBorderClasses : borderClasses[tone],
