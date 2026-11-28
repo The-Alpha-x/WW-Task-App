@@ -53,17 +53,18 @@ export function SubtaskListField({ form, showDone = false }: SubtaskListFieldPro
 
   return (
     <div>
-      <div className="mb-4 flex items-center justify-between gap-3">
-        <h2 className="text-xs font-semibold uppercase tracking-wider text-on-dark-muted/70">
-          Sub Tasks
-        </h2>
-        <p className="text-xs font-medium text-on-dark-muted" aria-live="polite">
+      <div className="mb-5 flex items-center justify-between gap-3">
+        <h2 className="form-section__title">Sub Tasks</h2>
+        <p
+          className="rounded-full bg-input px-3 py-1 type-caption font-semibold text-on-dark-muted ring-1 ring-field"
+          aria-live="polite"
+        >
           {filled} added
         </p>
       </div>
 
       {fields.length === 0 && (
-        <p className="mb-3 text-sm font-medium text-on-dark-muted">
+        <p className="type-body mb-4 text-on-dark-muted">
           No subtasks yet. Subtasks are optional.
         </p>
       )}
@@ -83,13 +84,13 @@ export function SubtaskListField({ form, showDone = false }: SubtaskListFieldPro
                 className="overflow-hidden"
               >
                 {/* padding lives inside so the height animation has no margin jump */}
-                <div className="pb-2">
+                <div className="pb-3">
                   <div
                     className={cn(
-                      "flex items-center gap-3 rounded-md bg-background/60 px-4 py-2 ring-1 transition-colors duration-fast",
+                      "flex items-center gap-3 rounded-md border bg-input px-4 py-1 transition-[border-color,box-shadow] duration-fast",
                       error
-                        ? "ring-danger"
-                        : "ring-glass-border/10 focus-within:ring-lime/50",
+                        ? "border-danger ring-1 ring-inset ring-danger"
+                        : "border-field hover:border-on-dark-muted/60 focus-within:border-ring focus-within:ring-1 focus-within:ring-inset focus-within:ring-ring",
                     )}
                   >
                     {showDone ? (
@@ -97,12 +98,12 @@ export function SubtaskListField({ form, showDone = false }: SubtaskListFieldPro
                         type="checkbox"
                         {...register(`subtasks.${index}.done`)}
                         aria-label={`Mark subtask ${index + 1} done`}
-                        className="h-4 w-4 shrink-0 accent-lime"
+                        className="h-5 w-5 shrink-0 cursor-pointer accent-lime"
                       />
                     ) : (
                       <span
                         aria-hidden="true"
-                        className="h-4 w-4 shrink-0 rounded-full border border-on-dark-muted/50"
+                        className="h-5 w-5 shrink-0 rounded-full border-2 border-on-dark-muted/60"
                       />
                     )}
                     <label className="sr-only" htmlFor={inputId}>
@@ -124,13 +125,13 @@ export function SubtaskListField({ form, showDone = false }: SubtaskListFieldPro
                       aria-invalid={error ? true : undefined}
                       aria-describedby={error ? `${inputId}-error` : undefined}
                       placeholder="Add a subtask"
-                      className="h-10 min-w-0 flex-1 bg-transparent text-sm font-medium text-on-dark outline-none placeholder:text-on-dark-muted/60"
+                      className="h-12 min-w-0 flex-1 bg-transparent text-base font-medium text-on-dark outline-none placeholder:text-subtle-text"
                     />
                     <button
                       type="button"
                       aria-label={`Remove subtask ${index + 1}`}
                       onClick={() => remove(index)}
-                      className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-on-dark-muted transition-colors duration-fast hover:bg-danger/15 hover:text-danger"
+                      className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-on-dark-muted transition-colors duration-fast hover:bg-danger/15 hover:text-danger focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring"
                     >
                       <Trash2 aria-hidden="true" size={16} />
                     </button>
@@ -139,7 +140,7 @@ export function SubtaskListField({ form, showDone = false }: SubtaskListFieldPro
                     <p
                       id={`${inputId}-error`}
                       role="alert"
-                      className="mt-1 px-2 text-sm font-medium text-danger"
+                      className="mt-2 px-1 text-sm font-semibold text-danger"
                     >
                       {error}
                     </p>
@@ -152,19 +153,19 @@ export function SubtaskListField({ form, showDone = false }: SubtaskListFieldPro
       </ul>
 
       {listError && (
-        <p role="alert" className="mb-2 text-sm font-medium text-danger">
+        <p role="alert" className="mb-2 text-sm font-semibold text-danger">
           {listError}
         </p>
       )}
 
       <Button
         type="button"
-        variant="ghost"
-        size="sm"
-        leftIcon={<Plus aria-hidden="true" size={16} />}
+        variant="outline"
+        size="md"
+        leftIcon={<Plus aria-hidden="true" size={18} />}
         onClick={handleAdd}
         disabled={atLimit}
-        className="mt-2 w-full rounded-md bg-on-dark/[0.05] text-on-dark ring-1 ring-glass-border/10 hover:bg-on-dark/[0.09]"
+        className="mt-2 w-full"
       >
         {atLimit ? `Limit of ${SUBTASKS_MAX} reached` : "Add subtask"}
       </Button>

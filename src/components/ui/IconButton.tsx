@@ -19,8 +19,8 @@ export interface IconButtonProps
 }
 
 const variantClasses: Record<IconButtonVariant, string> = {
-  dark: "bg-surface text-on-dark enabled:hover:bg-surface-raised enabled:active:bg-surface-raised",
-  light: "bg-card text-ink enabled:hover:bg-card-muted enabled:active:bg-card-muted",
+  dark: "bg-surface text-on-dark ring-1 ring-glass-border/10 enabled:hover:bg-surface-raised enabled:active:bg-surface-raised",
+  light: "bg-card text-ink ring-1 ring-glass-border/10 enabled:hover:bg-card-muted enabled:active:bg-card-muted",
   /** Bare icon on the dark page, e.g. the "..." beside a section heading. */
   ghost: "bg-transparent text-on-dark enabled:hover:bg-surface enabled:active:bg-surface-raised",
 };

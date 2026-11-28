@@ -34,8 +34,10 @@ const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
 type HoldPhase = "idle" | "pressing" | "success";
 
 /**
- * Dark task card with inline tickable subtasks, blurred hold-to-complete
- * progress overlay with 100% success animation, edit link, and delete action.
+ * Task card. Top to bottom: type + actions, title, optional description,
+ * due date, then (only when the task has subtasks) a collapsible subtask
+ * list with a slim progress bar. Hold anywhere on the card to complete or
+ * reopen; edit and delete are quiet icon buttons.
  */
 export function ActiveTaskCard({
   task,
@@ -126,23 +128,13 @@ export function ActiveTaskCard({
       ? Math.round((doneSubtasks / totalSubtasks) * 100)
       : 0;
 
-  const clampedThumb = Math.max(2, Math.min(98, progressPercent));
-  const clampedLabel = Math.max(6, Math.min(94, progressPercent));
-
-  const subtitle =
-    task.description.trim() ||
-    (task.type === "shared" ? "Shared Task" : "Personal Task");
-  const dueBadge = task.time ? (
-    <span className="flex items-center gap-1">
-      <Clock aria-hidden="true" className="text-lime" size={14} />
-      {formatTime(task.time)}
-    </span>
-  ) : task.date ? (
-    <span className="flex items-center gap-1">
-      <Calendar aria-hidden="true" className="text-lime" size={14} />
-      {formatShortDate(task.date)}
-    </span>
-  ) : null;
+  const description = task.description.trim();
+  const typeLabel = task.type === "shared" ? "Shared" : "Personal";
+  const due = task.time
+    ? { Icon: Clock, label: formatTime(task.time) }
+    : task.date
+      ? { Icon: Calendar, label: formatShortDate(task.date) }
+      : null;
 
   const isHoldingOrSuccess = holdPhase !== "idle";
   const ringOffset =
@@ -156,49 +148,56 @@ export function ActiveTaskCard({
       onPointerLeave={resetPress}
       aria-description={`Hold to ${task.completed ? "reopen" : "mark complete"}`}
       className={cn(
-        "relative select-none overflow-hidden rounded-md bg-surface/40 p-4 ring-1 ring-glass-border/10 transition-all duration-fast ease-standard hover:bg-surface/65",
-        holdPhase === "pressing" && "scale-[0.985] ring-lime/60",
-        holdPhase === "success" && "ring-lime shadow-lime-pill",
-        task.completed && holdPhase === "idle" && "opacity-75",
+        "surface-card relative select-none overflow-hidden p-4 transition-all duration-fast ease-standard hover:bg-surface-raised sm:p-5",
+        holdPhase === "pressing" && "scale-[0.985] ring-1 ring-lime/60",
+        holdPhase === "success" && "ring-1 ring-lime",
+        task.completed && holdPhase === "idle" && "opacity-70",
       )}
     >
-      {/* Card content — blurs smoothly during hold & success */}
+      {/* Card content: blurs during hold and success */}
       <div
         className={cn(
-          "transition-all duration-150",
+          "flex flex-col gap-3 transition-all duration-150",
           isHoldingOrSuccess && "scale-[0.98] opacity-40 blur-sm",
         )}
       >
-        <div className="flex items-center justify-between gap-3">
-          <p className="min-w-0 truncate text-xs font-medium text-blue">
-            {subtitle}
-          </p>
+        {/* Type + actions */}
+        <div className="flex min-h-9 items-center justify-between gap-3">
+          <div className="flex min-w-0 items-center gap-2">
+            <ParticipantBadges
+              type={task.type}
+              userDisplayName={userDisplayName}
+            />
+            <span className="truncate text-xs font-semibold uppercase tracking-wider text-on-dark-muted">
+              {typeLabel}
+            </span>
+          </div>
 
           {(onEdit || onDelete) && (
             <div
-              className="relative z-10 flex shrink-0 items-center gap-2"
+              className="relative z-10 flex shrink-0 items-center gap-1"
               onPointerDown={stopCardPress}
             >
               {confirmingDelete && onDelete ? (
-                <div className="flex items-center gap-2">
+                <>
                   <button
                     type="button"
                     onClick={() => {
                       setConfirmingDelete(false);
                       onDelete(task.id);
                     }}
-                    className="rounded-full bg-danger px-4 py-2 text-xs font-bold text-on-dark transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-danger"
+                    className="rounded-full bg-danger px-3 py-2 text-xs font-semibold text-ink transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-danger"
                   >
                     Delete
                   </button>
                   <button
                     type="button"
                     onClick={() => setConfirmingDelete(false)}
-                    className="rounded-full bg-surface-raised px-4 py-2 text-xs font-bold text-on-dark-muted transition-colors hover:text-on-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime"
+                    className="rounded-full px-3 py-2 text-xs font-semibold text-on-dark-muted transition-colors hover:bg-surface-raised hover:text-on-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   >
                     Cancel
                   </button>
-                </div>
+                </>
               ) : (
                 <>
                   {onEdit && (
@@ -206,9 +205,9 @@ export function ActiveTaskCard({
                       type="button"
                       onClick={() => onEdit(task)}
                       aria-label={`Edit ${task.title}`}
-                      className="grid h-9 w-9 p-2 place-items-center rounded-full bg-surface-raised/70 text-on-light-muted transition-colors hover:bg-surface-raised hover:text-on-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime"
+                      className="grid h-9 w-9 place-items-center rounded-full text-on-dark-muted transition-colors hover:bg-surface-raised hover:text-on-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     >
-                      <Pencil aria-hidden="true" size={18} />
+                      <Pencil aria-hidden="true" size={16} />
                     </button>
                   )}
                   {onDelete && (
@@ -216,9 +215,9 @@ export function ActiveTaskCard({
                       type="button"
                       onClick={() => setConfirmingDelete(true)}
                       aria-label={`Delete ${task.title}`}
-                      className="grid h-9 w-9 p-2 place-items-center rounded-full bg-danger/70 text-on-light-muted transition-colors hover:bg-danger/20 hover:text-danger focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-danger"
+                      className="grid h-9 w-9 place-items-center rounded-full text-on-dark-muted transition-colors hover:bg-danger/10 hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-danger"
                     >
-                      <Trash2 aria-hidden="true" size={18} />
+                      <Trash2 aria-hidden="true" size={16} />
                     </button>
                   )}
                 </>
@@ -227,58 +226,76 @@ export function ActiveTaskCard({
           )}
         </div>
 
-        <h3
-          className={cn(
-            "mt-1 truncate text-base font-bold text-on-dark",
-            task.completed && "text-on-dark-muted line-through",
-          )}
-        >
-          {task.title}
-        </h3>
-
-        <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
-          <div className="flex flex-wrap items-center gap-2">
-            <ParticipantBadges
-              type={task.type}
-              userDisplayName={userDisplayName}
-            />
-            <span className="inline-flex items-center rounded-full px-3 py-1 text-xs bg-surface-raised/70 font-medium text-sage">
-              {task.type === "shared" ? "Shared" : "Personal"}
-            </span>
-            {dueBadge && (
-              <span className="inline-flex items-center rounded-full bg-surface-raised/70 px-3 py-1 text-xs font-medium text-on-dark-muted">
-                {dueBadge}
+        {/* Title + description */}
+        <div className="flex flex-col gap-1">
+          <div className="flex items-start gap-2">
+            {task.completed && (
+              <span
+                aria-hidden="true"
+                className="mt-0.5 inline-grid h-5 w-5 shrink-0 place-items-center rounded-full bg-lime text-ink"
+              >
+                <Check size={12} strokeWidth={3} />
               </span>
             )}
+            <h3
+              className={cn(
+                "min-w-0 flex-1 line-clamp-2 text-lg font-semibold leading-snug tracking-tight text-on-dark",
+                task.completed &&
+                  "text-on-dark-muted line-through decoration-on-dark-muted/50",
+              )}
+            >
+              {task.title}
+            </h3>
           </div>
-
-          <span className="text-2xs font-medium text-on-dark-muted/80">
-            {/* {totalSubtasks > 0
-              ? `${doneSubtasks}/${totalSubtasks} sub ${totalSubtasks === 1 ? "task" : "tasks"}`
-              : task.completed
-                ? "Hold to reopen"
-                : "Hold to complete"} */}
-          </span>
+          {description && (
+            <p className="line-clamp-2 text-sm leading-snug text-on-dark-muted">
+              {description}
+            </p>
+          )}
         </div>
 
+        {/* Due date */}
+        {due && (
+          <p className="flex items-center gap-2 text-sm font-medium text-on-dark-muted">
+            <due.Icon aria-hidden="true" size={14} className="shrink-0" />
+            {due.label}
+          </p>
+        )}
+
+        {/* Subtasks: only for tasks that have them */}
         {totalSubtasks > 0 && (
           <div
-            className="relative z-10 mt-3 border-t border-glass-border/10 pt-3"
+            className="relative z-10 border-t border-glass-border/10 pt-3"
             onPointerDown={stopCardPress}
           >
-            {/* Toggle button */}
             <button
               type="button"
               onClick={() => setSubtasksOpen((o) => !o)}
               aria-expanded={subtasksOpen}
-              className="flex w-full items-center justify-between gap-2 rounded-sm py-1 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime"
+              className="flex w-full items-center gap-3 rounded-sm py-1 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
-              <span className="text-xs font-semibold text-on-dark-muted">
-                Subtasks ({doneSubtasks}/{totalSubtasks})
+              <span className="text-sm font-semibold text-on-dark">
+                Subtasks
+              </span>
+              <span className="text-sm font-medium tabular-nums text-on-dark-muted">
+                {doneSubtasks}/{totalSubtasks}
+              </span>
+              <span
+                role="progressbar"
+                aria-label="Subtask progress"
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-valuenow={progressPercent}
+                className="ml-1 h-1 flex-1 overflow-hidden rounded-full bg-on-dark/15"
+              >
+                <span
+                  className="block h-full rounded-full bg-lime transition-[width] duration-base ease-standard"
+                  style={{ width: `${progressPercent}%` }}
+                />
               </span>
               <ChevronDown
                 aria-hidden="true"
-                size={14}
+                size={16}
                 className={cn(
                   "shrink-0 text-on-dark-muted transition-transform duration-200",
                   subtasksOpen && "rotate-180",
@@ -286,7 +303,6 @@ export function ActiveTaskCard({
               />
             </button>
 
-            {/* Animated subtask list */}
             <AnimatePresence initial={false}>
               {subtasksOpen && (
                 <motion.ul
@@ -297,7 +313,7 @@ export function ActiveTaskCard({
                   transition={{ duration: 0.2, ease: "easeInOut" }}
                   style={{ overflow: "hidden" }}
                   aria-label={`Subtasks for ${task.title}`}
-                  className="mt-2 flex flex-col gap-2"
+                  className="mt-1 flex flex-col"
                 >
                   {task.subtasks.map((subtask) => (
                     <li key={subtask.id}>
@@ -308,22 +324,22 @@ export function ActiveTaskCard({
                         onClick={() =>
                           onSubtaskChange(task.id, subtask.id, !subtask.done)
                         }
-                        className="flex w-full items-center gap-3 rounded-sm py-1 text-left transition-colors hover:bg-surface-raised/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime"
+                        className="flex w-full items-center gap-3 rounded-sm px-1 py-2 text-left transition-colors hover:bg-surface-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                       >
                         <span
                           aria-hidden="true"
                           className={cn(
-                            "grid h-4 w-4 shrink-0 place-items-center rounded-full border transition-colors",
+                            "grid h-5 w-5 shrink-0 place-items-center rounded-full border transition-colors",
                             subtask.done
-                              ? "border-blue bg-blue text-ink"
+                              ? "border-lime bg-lime text-ink"
                               : "border-on-dark-muted/50 bg-transparent",
                           )}
                         >
-                          {subtask.done && <Check size={11} strokeWidth={3} />}
+                          {subtask.done && <Check size={12} strokeWidth={3} />}
                         </span>
                         <span
                           className={cn(
-                            "min-w-0 flex-1 truncate text-xs font-medium px-1 py-1 transition-colors",
+                            "min-w-0 flex-1 truncate text-sm font-medium transition-colors",
                             subtask.done
                               ? "text-on-dark-muted line-through"
                               : "text-on-dark",
@@ -339,31 +355,9 @@ export function ActiveTaskCard({
             </AnimatePresence>
           </div>
         )}
-
-        <div className="mt-4">
-          <div className="relative h-4">
-            <span
-              className="absolute bottom-0 -translate-x-1/2 text-[11px] font-medium tabular-nums text-on-dark-muted"
-              style={{ left: `${clampedLabel}%` }}
-            >
-              {progressPercent}%
-            </span>
-          </div>
-          <div className="relative mt-1 h-1 w-full rounded-full bg-on-dark/15">
-            <div
-              className="h-full rounded-full bg-blue transition-all duration-base ease-standard"
-              style={{ width: `${progressPercent}%` }}
-            />
-            <span
-              aria-hidden="true"
-              className="absolute top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue shadow-blue-pill transition-all duration-base ease-standard"
-              style={{ left: `${clampedThumb}%` }}
-            />
-          </div>
-        </div>
       </div>
 
-      {/* Hold-to-complete progress & 100% success animation overlay */}
+      {/* Hold-to-complete progress and success overlay */}
       <AnimatePresence>
         {isHoldingOrSuccess && (
           <motion.div
@@ -406,8 +400,8 @@ export function ActiveTaskCard({
                     {Math.round(holdProgress)}%
                   </span>
                 </div>
-                <p className="text-xs font-bold tracking-wide text-on-dark">
-                  {task.completed ? "Hold to reopen..." : "Hold to complete..."}
+                <p className="text-xs font-semibold tracking-wide text-on-dark">
+                  {task.completed ? "Hold to reopen" : "Hold to complete"}
                 </p>
               </>
             ) : (
@@ -417,11 +411,11 @@ export function ActiveTaskCard({
                 transition={{ type: "spring", stiffness: 420, damping: 22 }}
                 className="flex flex-col items-center gap-2"
               >
-                <span className="grid h-14 w-14 place-items-center rounded-full bg-lime text-ink shadow-glow">
-                  <Check aria-hidden="true" size={28} strokeWidth={3} />
+                <span className="grid h-12 w-12 place-items-center rounded-full bg-lime text-ink">
+                  <Check aria-hidden="true" size={24} strokeWidth={3} />
                 </span>
-                <p className="text-sm font-bold text-lime">
-                  {task.completed ? "Reopened!" : "Completed!"}
+                <p className="text-sm font-semibold text-on-dark">
+                  {task.completed ? "Reopened" : "Completed"}
                 </p>
               </motion.div>
             )}

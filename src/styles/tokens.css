@@ -1,6 +1,7 @@
 /*
 - DESIGN TOKENS - single source of truth.
-- Derived from the reference mockups (dark mobile task manager & light sage AI assistant).
+- Brand: Volt Lime #B9ED00 (primary), Highlighter Blue #30C5FF (secondary), Highlighter Pink #FF2E93 (tertiary).
+- Direction: Nike-inspired energy + Apple-style premium surfaces.
 - Tailwind (tailwind.config.ts) maps to these variables; components must
 - use Tailwind token classes or var(--token), never raw hex values.
  */
@@ -9,64 +10,163 @@
 [data-theme="dark"] {
   color-scheme: dark;
   /* ---- Color (space-separated RGB channels) ---- */
-  --color-background: 18 18 18;        /* near-black app background */
-  --color-surface: 42 42 42;           /* icon buttons, dark chips on black */
-  --color-surface-raised: 58 58 58;    /* pressed / elevated dark controls */
-  --color-glass: 30 30 34;             /* translucent Apple-style dark glass base */
-  --color-glass-border: 255 255 255;   /* specular hairline border base */
+  /* Dark surface ladder: each step is a small, deliberate lift in lightness
+     so layers separate by tone, not by outlines. */
+  --color-background: 16 17 19;        /* #101113 main background */
+  --color-muted-surface: 23 25 28;     /* #17191C secondary background / quiet fills */
+  --color-surface: 32 35 40;           /* #202328 elevated surface: cards, chips, fields */
+  --color-surface-raised: 41 45 50;    /* #292D32 interactive surface: hover / pressed / selected */
+  --color-glass: var(--color-surface); /* translucent glass base (used at ~0.76 alpha) */
+  --color-glass-border: 255 255 255;   /* hairline base, always used with alpha (/10 = ~#30343A on surfaces) */
+  --color-line: 48 52 58;              /* #30343A solid hairline for dark surfaces (use sparingly) */
 
-  /* Accents (shared + extracted from light mockup) */
-  --color-lime: 221 243 95;            /* primary accent: planned stat, add button */
-  --color-lime-soft: 236 250 144;      /* pastel chartreuse pill & chart bar (from mockup) */
-  --color-purple: 178 92 245;          /* secondary accent: completed stat */
-  --color-orange: 242 138 30;          /* due-time badge */
-  --color-coral: 214 114 92;           /* warm terracotta mesh wave (from mockup) */
-  --color-sage: 163 166 151;           /* muted olive-grey secondary bar (from mockup) */
-  --color-sage-tint: 217 229 214;      /* soft sage canvas background (from mockup) */
-  --color-blue: 112 167 255;
+  /* ---- Brand ---- */
+  --color-lime: 185 237 0;             /* PRIMARY - Volt Lime #B9ED00 */
+  --color-blue: 48 197 255;            /* SECONDARY - Highlighter Blue #30C5FF */
+  --color-pink: 255 46 147;            /* TERTIARY - Highlighter Pink #FF2E93 */
+  --color-lime-soft: 214 247 92;        /* lighter volt tint: gradients, pills */
+
+  /* Text-safe brand accents. Lime and blue equal the brand fill; pink is lifted
+     slightly (#FF54A6) so small pink text stays >= 4.5:1 on --color-surface-raised.
+     Fills (bg-pink etc.) always use the exact brand colour. */
+  --color-lime-text: 185 237 0;
+  --color-blue-text: 48 197 255;
+  --color-pink-text: 255 84 166;
+
+  /* Supporting accents (kept from the previous palette) */
+  --color-purple: 178 92 245;
+  --color-orange: 242 138 30;
   --color-teal: 99 214 197;
-  --color-pink: 255 117 181;           /* tertiary accent: subtask checkmark, completed stat */
+  --color-sage: 163 166 151;
 
-  --color-danger: 229 72 77;           /* error borders, icons and messages on form fields */
+  --color-danger: 255 69 58;           /* error borders, icons and messages */
 
   /* Elevated / Light surfaces inside dark theme */
-  --color-card: 230 230 230;           /* white/light task surfaces */
-  --color-card-muted: 233 235 240;     /* add-subtask bar, subtle fills on light */
-  --color-border: 220 223 230;         /* outlines on light surfaces */
-  --color-field-border: transparent;
+  --color-card: 245 246 243;           /* light task surfaces (same warm white as foreground) */
+  --color-card-muted: 233 235 231;     /* add-subtask bar, subtle fills on light */
+  --color-border: 208 211 206;         /* SEMANTIC: outline on LIGHT card surfaces (for dark surfaces use --color-line) */
+  --color-field-border: 88 94 102;      /* #585E66 field outline on dark cards (solid, so Tailwind alpha modifiers work) */
 
   /* Typography colors */
-  --color-ink: 21 21 21;               /* dark text on light/lime/purple */
-  --color-ink-muted: 107 111 120;      /* completed subtask text, secondary text on light */
-  --color-on-dark: 255 255 255;        /* primary text on black */
-  --color-on-dark-muted: 189 189 189;  /* secondary text on black */
+  --color-ink: 16 17 19;               /* dark text on light / lime / blue / pink (= background) */
+  --color-ink-muted: 99 99 106;        /* secondary text on light */
+  --color-foreground: 245 246 243;     /* #F5F6F3 primary text (warm off-white, softer than pure white) */
+  --color-muted-text: 161 165 170;     /* #A1A5AA secondary text */
+  --color-subtle-text: 138 144 151;    /* #8A9097 tertiary text: hints, placeholders, timestamps. >= 4.5:1 on background, surface and fields */
+  --color-on-dark: var(--color-foreground);        /* legacy alias: primary text */
+  --color-on-dark-muted: var(--color-muted-text);  /* legacy alias: secondary text */
   --color-on-accent: 255 255 255;      /* foreground on dark or saturated accents */
   --color-on-accent-muted: 179 187 174;
 
+  /* ==== SEMANTIC ROLES ====================================================
+     Components should prefer these. Raw brand/accent tokens above remain the
+     palette; the roles below say what each colour is FOR.
+     *-foreground = colour for content placed ON that fill.
+     *-text       = the same hue, tuned for use as TEXT/ICON on the page
+                    background (darker in light mode to keep >= 4.5:1).      */
+
+  /* Brand roles */
+  --color-primary: var(--color-lime);
+  --color-primary-foreground: var(--color-ink);
+  --color-secondary: var(--color-blue);
+  --color-secondary-foreground: var(--color-ink);
+  --color-tertiary: var(--color-pink);
+  --color-tertiary-foreground: var(--color-ink);
+
+  /* Surfaces: background / muted-surface / surface / surface-raised / card* /
+     glass* are defined in the ladder above.                              */
+  --color-input: 21 23 26;             /* #15171A form-field fill: a step INSET from the card it sits on */
+
+  /* Focus ring: visible against the page background in both themes */
+  --color-ring: var(--color-lime);
+
+  /* Status */
+  --color-success: 52 199 89;
+  --color-success-foreground: var(--color-ink);
+  --color-success-text: 52 199 89;
+  --color-warning: var(--color-orange);
+  --color-warning-foreground: var(--color-ink);
+  --color-warning-text: var(--color-orange);
+  --color-destructive: var(--color-danger);
+  --color-destructive-foreground: var(--color-ink);
+  --color-destructive-text: 255 95 86;   /* #FF5F56: lifted from danger for >= 4.5:1 on surface-raised */
+
+  /* Illustration neutrals (login / loader artwork only; theme-independent) */
+  --color-white: 255 255 255;
+  --color-black: 0 0 0;
+  --color-neutral-950: 18 19 20;
+  --color-neutral-900: 23 24 26;
+  --color-neutral-850: 26 27 29;
+  --color-neutral-800: 42 44 46;
+  --color-neutral-750: 52 54 58;
+  --color-neutral-700: 58 60 63;
+
   /* ---- Shadow ---- */
-  --shadow-glow: 0 0 24px rgb(var(--color-lime) / 0.35);
-  --shadow-glass: 0 16px 40px rgb(0 0 0 / 0.45), inset 0 1px 0 rgb(255 255 255 / 0.09);
-  --shadow-lime-pill: 0 4px 16px rgb(var(--color-lime) / 0.25);
+  /* Quiet depth: soft, offset downward, low-alpha. Accent shadows are a faint
+     tinted lift under an element, never a halo. */
+  --shadow-glow: 0 8px 24px rgb(var(--color-lime) / 0.14);
+  --shadow-glass: 0 12px 32px rgb(0 0 0 / 0.42), inset 0 1px 0 rgb(255 255 255 / 0.06);
+  --shadow-lime-pill: 0 4px 12px rgb(var(--color-lime) / 0.16);
+  --shadow-blue-pill: 0 3px 10px rgb(var(--color-blue) / 0.22);
+  --shadow-pink-pill: 0 3px 10px rgb(var(--color-pink) / 0.22);
+  --shadow-card: inset 0 1px 0 rgb(255 255 255 / 0.04); /* cards: a hairline top highlight, no drop shadow */
+
+  /* ---- Font families (loaded via next/font in layout.tsx) ---- */
+  --font-ui: var(--font-inter), -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+  --font-display: var(--font-barlow-condensed), "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
 
   /* ---- Typography ---- */
-  --text-2xs: 0.6875rem;  /* 11px - iOS tab bar labels, sidebar section headers */
-  --text-xs: 0.75rem;     /* 12px - badges, hints */
-  --text-sm: 0.875rem;    /* 14px - subtitles, descriptions */
-  --text-base: 1rem;      /* 16px - body, list items */
-  --text-lg: 1.125rem;    /* 18px - section headings, card titles */
-  --text-xl: 1.375rem;    /* 22px - sub-headings */
-  --text-2xl: 1.75rem;    /* 28px - greeting */
-  --text-3xl: 2rem;       /* 32px - task detail title */
-  --text-stat: 4rem;      /* 64px - big stat numbers */
+  /* Fonts: Inter for UI/body (Apple-style clean), Barlow Condensed for display
+     (Nike-style athletic headlines and big numbers). Retained from earlier tasks. */
 
+  /* Scale. Fluid sizes clamp between a mobile floor and a desktop ceiling, so
+     type shrinks smoothly on phones without media queries. Ceilings match the
+     brief: Display XL 56 / LG 44 / H1 36 / H2 30 / H3 24 / Body-L 18 / Body 16 / Caption 13. */
+  --text-display-xl: clamp(2.5rem, 1.9rem + 3vw, 3.5rem);        /* 40 -> 56px */
+  --text-display-lg: clamp(2.125rem, 1.7rem + 2vw, 2.75rem);     /* 34 -> 44px */
+  --text-h1: clamp(1.875rem, 1.65rem + 1vw, 2.25rem);            /* 30 -> 36px */
+  --text-h2: clamp(1.625rem, 1.45rem + 0.8vw, 1.875rem);         /* 26 -> 30px */
+  --text-h3: clamp(1.3125rem, 1.2rem + 0.5vw, 1.5rem);           /* 21 -> 24px */
+  --text-body-lg: clamp(1rem, 0.94rem + 0.3vw, 1.125rem);        /* 16 -> 18px */
+  --text-body: clamp(0.875rem, 0.83rem + 0.22vw, 1rem);          /* 14 -> 16px */
+  --text-caption: clamp(0.75rem, 0.72rem + 0.15vw, 0.8125rem);   /* 12 -> 13px */
+
+  /* Fixed utility sizes (Tailwind text-2xs ... text-3xl) used inside components. */
+  --text-2xs: 0.6875rem;  /* 11px - tab labels, calendar weekdays (uppercase only) */
+  --text-xs: 0.75rem;     /* 12px - badges, hints (Caption floor) */
+  --text-sm: 0.875rem;    /* 14px - secondary text, buttons (Body floor) */
+  --text-base: 1rem;      /* 16px - body, inputs (16px stops iOS focus-zoom) */
+  --text-lg: 1.125rem;    /* 18px - Body Large */
+  --text-xl: 1.375rem;    /* 22px - H3 */
+  --text-2xl: 1.75rem;    /* 28px - H2 */
+  --text-3xl: 2rem;       /* 32px - H1 floor */
+  --text-stat: 4rem;      /* 64px - big stat numbers */
+  --text-display: var(--text-display-xl); /* alias */
+
+  /* Line height: tight for display, comfortable for reading. */
+  --leading-display: 0.95;
+  --leading-h1: 1.05;
+  --leading-h2: 1.15;
+  --leading-h3: 1.25;
   --leading-tight: 1.15;
   --leading-snug: 1.3;
+  --leading-body: 1.5;
   --leading-normal: 1.5;
+
+  /* Letter spacing: tighter as size grows, open for tiny uppercase labels. */
+  --tracking-display: -0.025em;
+  --tracking-h1: -0.015em;
+  --tracking-h2: -0.02em;
+  --tracking-h3: -0.015em;
+  --tracking-body: -0.011em;
+  --tracking-caption: 0em;
+  --tracking-overline: 0.06em;
 
   --weight-regular: 400;
   --weight-medium: 500;
   --weight-semibold: 600;
   --weight-bold: 700;
+  --weight-extrabold: 800;
 
   /* ---- Spacing (4px base) ---- */
   --space-1: 0.25rem;
@@ -81,12 +181,16 @@
   --space-16: 4rem;
 
   /* ---- Radius ---- */
-  --radius-sm: 0.75rem;    /* 12px - small badges */
-  --radius-md: 1.25rem;    /* 20px - subtask rows, inputs */
-  --radius-lg: 1.75rem;    /* 28px - task cards */
-  --radius-xl: 2rem;       /* 32px - stat tiles */
-  --radius-2xl: 2.5rem;    /* 40px - description / subtasks sheets, nav bar */
+  --radius-sm: 0.625rem;   /* 10px - small badges */
+  --radius-md: 1rem;       /* 16px - subtask rows, inputs */
+  --radius-lg: 1.5rem;     /* 24px - task cards */
+  --radius-xl: 1.75rem;    /* 28px - stat tiles */
+  --radius-2xl: 2.25rem;   /* 36px - sheets, nav bar */
   --radius-full: 9999px;   /* pills, circular buttons, checkboxes */
+
+  /* ---- Interaction states (shared by every pressable) ---- */
+  --opacity-disabled: 0.4;      /* disabled controls */
+  --scale-pressed: 0.98;        /* active / pressed feedback */
 
   /* ---- Motion ---- */
   --duration-fast: 120ms;
@@ -120,111 +224,123 @@
 }
 
 /*
- * Light theme overrides.
- * Activated explicitly via <html data-theme="light">, or automatically via
- * OS preference when data-theme="dark" is not forced.
+ * Light theme - defined ONCE here as :root[data-theme="light"]; the
+ * prefers-color-scheme block below repeats the identical declarations because
+ * plain CSS cannot share a rule between a selector and a media query.
+ * KEEP THE TWO BLOCKS IDENTICAL.
  */
 :root[data-theme="light"] {
   color-scheme: light;
 
-  --color-background: 244 245 247;
-  --color-surface: 255 255 255;
-  --color-surface-raised: 233 236 242;
+  /* Surface ladder. Cards and fields are white on a soft lime-tinted canvas and
+     separate by a visible hairline border, not by shadow. */
+  --color-background: 245 247 240;     /* #F5F7F0 main background */
+  --color-muted-surface: 255 255 255;  /* #FFFFFF secondary background */
+  --color-surface: 255 255 255;        /* #FFFFFF elevated surface: cards, chips, fields */
+  --color-surface-raised: 237 240 232; /* #EDF0E8 interactive surface: hover / pressed / selected */
   --color-glass: 255 255 255;
-  --color-glass-border: var(--color-border);
+  --color-glass-border: 23 25 20;      /* ink hairline base, always used with alpha */
+  --color-line: 226 230 218;           /* #E2E6DA */
 
-  --color-lime: 176 212 24;
+  /* Brand fills stay identical across themes; only TEXT uses darker shades
+     (lime/blue/pink at full brightness fail contrast on light surfaces).
+     Dark ink (--color-ink) sits on every lime / blue / pink fill. */
+  --color-lime-soft: 214 247 92;
+  --color-lime-text: 80 110 0;         /* #506E00 - 5.9:1 on white, 5:1 on #EDF0E8 */
+  --color-blue-text: 0 112 165;        /* #0070A5 - 5.3:1 on white */
+  --color-pink-text: 200 20 108;       /* #C8146C - 5.4:1 on white */
+
   --color-purple: 156 68 228;
   --color-orange: 222 112 10;
-  --color-sage: 98 102 88;
-  --color-blue: 37 115 235;
   --color-teal: 20 168 148;
-  --color-pink: 225 60 140;
+  --color-sage: 98 103 94;
 
-  --color-danger: 220 53 69;
+  --color-danger: 255 59 48;
+
+  --color-ring: var(--color-blue-text);  /* lime ring is <2:1 on white; blue is ~5:1 */
+
+  --color-success-text: 22 120 50;       /* #167832 - 5.6:1 on white */
+  --color-warning-text: 160 85 0;        /* #A05500 - 4.8:1 on #F5F7F0 */
+  --color-destructive-text: 200 30 30;   /* #C81E1E - 5.7:1 on white */
 
   --color-card: 255 255 255;
-  --color-card-muted: 240 242 246;
-  --color-border: 218 222 230;
-  --color-field-border: rgb(var(--color-border));
+  --color-card-muted: 237 240 232;       /* #EDF0E8 */
+  --color-border: 226 230 218;           /* #E2E6DA */
+  --color-field-border: 165 171 157;     /* #A5AB9D visible field outline on white cards */
+  --color-input: 247 249 243;            /* #F7F9F3 field fill: faint tint inset from white cards */
 
-  --color-ink: 21 21 21;
-  --color-ink-muted: 96 102 114;
-  --color-on-dark: var(--color-ink);
-  --color-on-dark-muted: var(--color-ink-muted);
+  --color-ink: 23 25 20;                 /* #171914 primary text / text on accents */
+  --color-ink-muted: 98 103 94;          /* #62675E secondary text */
+  --color-foreground: var(--color-ink);
+  --color-muted-text: var(--color-ink-muted);
+  --color-subtle-text: 108 113 103;      /* #6C7167 tertiary text: hints, placeholders, timestamps. >= 4.5:1 on white, fields and background */
+  --color-on-dark: var(--color-foreground);
+  --color-on-dark-muted: var(--color-muted-text);
 
-  --shadow-glow: 0 0 20px rgb(var(--color-lime) / 0.3);
-  --shadow-glass: 0 12px 32px rgb(15 23 42 / 0.08), inset 0 1px 0 rgb(255 255 255 / 0.7);
-  --shadow-lime-pill: 0 4px 14px rgb(var(--color-lime) / 0.25);
+  /* Restrained depth: faint, short, neutral-tinted. */
+  --shadow-glow: 0 4px 14px rgb(var(--color-lime) / 0.3);
+  --shadow-glass: 0 6px 20px rgb(23 25 20 / 0.07);
+  --shadow-lime-pill: 0 2px 8px rgb(var(--color-lime) / 0.28);
+  --shadow-blue-pill: 0 2px 8px rgb(var(--color-blue) / 0.22);
+  --shadow-pink-pill: 0 2px 8px rgb(var(--color-pink) / 0.2);
+  --shadow-card: 0 1px 2px rgb(23 25 20 / 0.06);
 }
 
 @media (prefers-color-scheme: light) {
   :root:not([data-theme="dark"]) {
     color-scheme: light;
 
-    --color-background: 244 245 247;
-    --color-surface: 255 255 255;
-    --color-surface-raised: 233 236 242;
+    /* Surface ladder. Cards and fields are white on a soft lime-tinted canvas and
+       separate by a visible hairline border, not by shadow. */
+    --color-background: 245 247 240;     /* #F5F7F0 main background */
+    --color-muted-surface: 255 255 255;  /* #FFFFFF secondary background */
+    --color-surface: 255 255 255;        /* #FFFFFF elevated surface: cards, chips, fields */
+    --color-surface-raised: 237 240 232; /* #EDF0E8 interactive surface: hover / pressed / selected */
     --color-glass: 255 255 255;
-    --color-glass-border: var(--color-border);
+    --color-glass-border: 23 25 20;      /* ink hairline base, always used with alpha */
+    --color-line: 226 230 218;           /* #E2E6DA */
 
-    --color-lime: 176 212 24;
+    /* Brand fills stay identical across themes; only TEXT uses darker shades
+       (lime/blue/pink at full brightness fail contrast on light surfaces).
+       Dark ink (--color-ink) sits on every lime / blue / pink fill. */
+    --color-lime-soft: 214 247 92;
+    --color-lime-text: 80 110 0;         /* #506E00 - 5.9:1 on white, 5:1 on #EDF0E8 */
+    --color-blue-text: 0 112 165;        /* #0070A5 - 5.3:1 on white */
+    --color-pink-text: 200 20 108;       /* #C8146C - 5.4:1 on white */
+
     --color-purple: 156 68 228;
     --color-orange: 222 112 10;
-    --color-sage: 98 102 88;
-    --color-blue: 37 115 235;
     --color-teal: 20 168 148;
-    --color-pink: 225 60 140;
+    --color-sage: 98 103 94;
 
-    --color-danger: 220 53 69;
+    --color-danger: 255 59 48;
+
+    --color-ring: var(--color-blue-text);  /* lime ring is <2:1 on white; blue is ~5:1 */
+
+    --color-success-text: 22 120 50;       /* #167832 - 5.6:1 on white */
+    --color-warning-text: 160 85 0;        /* #A05500 - 4.8:1 on #F5F7F0 */
+    --color-destructive-text: 200 30 30;   /* #C81E1E - 5.7:1 on white */
 
     --color-card: 255 255 255;
-    --color-card-muted: 240 242 246;
-    --color-border: 218 222 230;
-    --color-field-border: rgb(var(--color-border));
+    --color-card-muted: 237 240 232;       /* #EDF0E8 */
+    --color-border: 226 230 218;           /* #E2E6DA */
+    --color-field-border: 165 171 157;     /* #A5AB9D visible field outline on white cards */
+    --color-input: 247 249 243;            /* #F7F9F3 field fill: faint tint inset from white cards */
 
-    --color-ink: 21 21 21;
-    --color-ink-muted: 96 102 114;
-    --color-on-dark: var(--color-ink);
-    --color-on-dark-muted: var(--color-ink-muted);
+    --color-ink: 23 25 20;                 /* #171914 primary text / text on accents */
+    --color-ink-muted: 98 103 94;          /* #62675E secondary text */
+    --color-foreground: var(--color-ink);
+    --color-muted-text: var(--color-ink-muted);
+    --color-subtle-text: 108 113 103;      /* #6C7167 tertiary text: hints, placeholders, timestamps. >= 4.5:1 on white, fields and background */
+    --color-on-dark: var(--color-foreground);
+    --color-on-dark-muted: var(--color-muted-text);
 
-    --shadow-glow: 0 0 20px rgb(var(--color-lime) / 0.3);
-    --shadow-glass: 0 12px 32px rgb(15 23 42 / 0.08), inset 0 1px 0 rgb(255 255 255 / 0.7);
-    --shadow-lime-pill: 0 4px 14px rgb(var(--color-lime) / 0.25);
+    /* Restrained depth: faint, short, neutral-tinted. */
+    --shadow-glow: 0 4px 14px rgb(var(--color-lime) / 0.3);
+    --shadow-glass: 0 6px 20px rgb(23 25 20 / 0.07);
+    --shadow-lime-pill: 0 2px 8px rgb(var(--color-lime) / 0.28);
+    --shadow-blue-pill: 0 2px 8px rgb(var(--color-blue) / 0.22);
+    --shadow-pink-pill: 0 2px 8px rgb(var(--color-pink) / 0.2);
+    --shadow-card: 0 1px 2px rgb(23 25 20 / 0.06);
   }
-}
-
-/* ==========================================================================
-   LIGHT THEME — Derived from the soft sage & chartreuse reference mockup
-   ========================================================================== */
-[data-theme="light"] {
-  color-scheme: light;
-  --color-background: 217 229 214;     /* soft sage app background (#D9E5D6) */
-  --color-surface: 235 242 233;        /* circular icon buttons, subtle light pills (#EBF2E9) */
-  --color-surface-raised: 246 249 245; /* elevated/pressed light controls (#F6F9F5) */
-  --color-glass: 232 239 230;          /* frosted sage-white glass sheet (#E8EFE6) */
-  --color-glass-border: var(--color-border);
-
-  /* Accents tuned to mockup palette */
-  --color-lime: 236 250 144;           /* pastel chartreuse prompt bar & primary chart bar (#ECFA90) */
-  --color-lime-soft: 221 243 95;       /* high-contrast lime highlight */
-  --color-sage: 179 187 174;           /* muted sage-grey comparison bar (#B3BBAE) */
-  --color-coral: 214 114 92;           /* warm terracotta mesh wave & ambient card glow (#D6725C) */
-
-  /* Card & border surfaces */
-  --color-card: 245 248 244;           /* clean off-white/sage card surface (#F5F8F4) */
-  --color-card-muted: 225 233 222;     /* subtle dividers & muted fills (#E1E9DE) */
-  --color-border: 205 216 202;         /* hairline outlines on light sage (#CDD8CA) */
-  --color-field-border: rgb(var(--color-border));
-
-  /* Typography colors */
-  --color-ink: 24 27 24;               /* deep charcoal-ink primary text (#181B18) */
-  --color-ink-muted: 112 120 112;      /* muted sage-grey labels ("age", "Growth", subtitles) (#707870) */
-  --color-on-dark: var(--color-ink);
-  --color-on-dark-muted: var(--color-ink-muted);
-
-  /* Light-mode shadows (softer diffusion, warm/neutral ambient tint) */
-  --shadow-glow: 0 0 24px rgb(var(--color-coral) / 0.22);
-  --shadow-glass: 0 12px 32px rgb(24 27 24 / 0.08), inset 0 1px 0 rgb(255 255 255 / 0.65);
-  --shadow-lime-pill: 0 6px 20px rgb(24 27 24 / 0.07);
 }

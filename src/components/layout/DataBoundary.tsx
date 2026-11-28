@@ -21,7 +21,7 @@ export function DataBoundary({
   if (error) {
     return (
       <PageContainer>
-        <p role="alert" className="text-sm font-medium text-orange">
+        <p role="alert" className="form-alert">
           {error}
         </p>
       </PageContainer>

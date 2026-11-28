@@ -4,6 +4,7 @@ import { useId } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { TASK_TYPES } from "@/lib/tasks/form";
 import { cn } from "@/lib/cn";
+import { labelClasses, messageClasses } from "@/components/ui/field-styles";
 import type { TaskType } from "@/types/task";
 
 export interface TaskTypeFieldProps {
@@ -22,8 +23,8 @@ export function TaskTypeField({ value, onChange, error }: TaskTypeFieldProps) {
 
   return (
     <fieldset className="flex flex-col gap-2">
-      <legend className="mb-2 text-sm font-semibold text-on-dark">Type</legend>
-      <div className="flex rounded-md bg-background/70 p-1 ring-1 ring-glass-border/10">
+      <legend className={cn("mb-2", labelClasses("dark"))}>Type</legend>
+      <div className="flex gap-1 rounded-md border border-field bg-input p-1">
         {TASK_TYPES.map((option) => {
           const selected = option.value === value;
           return (
@@ -43,7 +44,7 @@ export function TaskTypeField({ value, onChange, error }: TaskTypeFieldProps) {
                 <motion.span
                   layoutId={`task-type-pill-${groupId}`}
                   aria-hidden="true"
-                  className="absolute inset-0 rounded-sm bg-surface-raised ring-1 ring-glass-border/15"
+                  className="absolute inset-0 rounded-sm bg-lime"
                   transition={
                     reduce
                       ? { duration: 0 }
@@ -51,18 +52,18 @@ export function TaskTypeField({ value, onChange, error }: TaskTypeFieldProps) {
                   }
                 />
               )}
-              <span className="absolute inset-0 rounded-sm peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-lime" />
+              <span className="absolute inset-0 rounded-sm peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-ring" />
               <span
                 className={cn(
-                  "relative flex min-h-12 flex-col items-center justify-center px-4 py-2 text-center transition-colors duration-fast ease-standard",
-                  selected ? "text-on-dark" : "text-on-dark-muted hover:text-on-dark",
+                  "relative flex min-h-14 flex-col items-center justify-center px-4 py-2 text-center transition-colors duration-fast ease-standard",
+                  selected ? "text-ink" : "text-on-dark-muted hover:text-on-dark",
                 )}
               >
-                <span className="text-sm font-semibold">{option.label}</span>
+                <span className="text-base font-bold">{option.label}</span>
                 <span
                   className={cn(
                     "text-xs font-medium",
-                    selected ? "text-lime" : "text-on-dark-muted/70",
+                    selected ? "text-ink/75" : "text-on-dark-muted",
                   )}
                 >
                   {option.hint}
@@ -73,7 +74,7 @@ export function TaskTypeField({ value, onChange, error }: TaskTypeFieldProps) {
         })}
       </div>
       {error && (
-        <p role="alert" className="text-sm font-medium text-danger">
+        <p role="alert" className={messageClasses()}>
           {error}
         </p>
       )}

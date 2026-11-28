@@ -60,7 +60,8 @@ function parseMemory(id: string, value: DocumentData): Memory {
     typeof value.createdAt !== "string" ||
     typeof value.createdBy !== "string" ||
     typeof value.updatedAt !== "string" ||
-    typeof value.updatedBy !== "string"
+    typeof value.updatedBy !== "string" ||
+    (value.location != null && typeof value.location !== "string")
   ) {
     throw new Error(`Memory "${id}" has invalid Firestore data.`);
   }
@@ -73,6 +74,7 @@ function parseMemory(id: string, value: DocumentData): Memory {
     time,
     type: value.type,
     notes: value.notes ?? "",
+    location: value.location ?? "",
     createdAt: value.createdAt,
     createdBy: value.createdBy,
     updatedAt: value.updatedAt,
@@ -274,6 +276,7 @@ export function buildNewMemory(
     time: input.time,
     type: input.type,
     notes: input.notes,
+    location: input.location,
     createdAt: instant,
     createdBy: userId,
     updatedAt: instant,
@@ -338,6 +341,7 @@ export async function updateMemory(
     time: updates.time ?? stored.time,
     type: updates.type ?? stored.type,
     notes: updates.notes ?? stored.notes,
+    location: updates.location ?? stored.location,
   });
   if (!result.success) {
     throw new Error(result.error.issues[0]?.message ?? "This memory is not valid.");

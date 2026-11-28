@@ -49,13 +49,13 @@ export function SubtaskRow({
         />
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 rounded-full border-2 border-ink transition-colors duration-base ease-standard peer-checked:border-surface peer-checked:bg-surface peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-ink"
+          className="pointer-events-none absolute inset-0 rounded-full border-2 border-ink transition-colors duration-base ease-standard peer-checked:border-ink peer-checked:bg-ink peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-ink"
         />
         <Check
           aria-hidden="true"
           size={16}
           strokeWidth={3}
-          className="pointer-events-none absolute left-2 top-2 text-on-dark opacity-0 transition-opacity duration-fast ease-standard peer-checked:opacity-100"
+          className="pointer-events-none absolute left-2 top-2 text-[rgb(var(--color-lime))] opacity-0 transition-opacity duration-fast ease-standard peer-checked:opacity-100"
         />
       </span>
       <span

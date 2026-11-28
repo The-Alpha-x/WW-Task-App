@@ -26,7 +26,7 @@ export function AddSelection() {
     <PageContainer className="flex flex-col gap-6">
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div className="flex flex-col gap-2">
-          <h1 className="text-2xl font-bold text-on-dark">Add New</h1>
+          <h1 className="type-display-lg text-on-dark">Add New</h1>
           <p className="max-w-2xl text-sm font-medium text-on-dark-muted">
             Choose what you would like to create.
           </p>

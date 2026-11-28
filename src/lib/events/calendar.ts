@@ -51,11 +51,13 @@ function getMondayOfDate(dateStr: string): string {
  * Generates a contiguous sequence of Monday-first weeks starting from the week
  * containing the 1st of `now`'s month through `futureWeeks` weeks after
  * `now`'s current week. Also returns `currentWeekIndex` so the UI can land
- * on this week immediately.
+ * on this week immediately. `pastWeeks` (default 0) starts the sequence that
+ * many weeks earlier, for pages that need to look back (e.g. Tasks).
  */
 export function getScrollableWeeks(
   now = new Date(),
   futureWeeks = 12,
+  pastWeeks = 0,
 ): { weeks: WeekSlice[]; currentWeekIndex: number } {
   const todayStr = getLocalDate(now);
   const currentMonth = now.getMonth();
@@ -63,7 +65,10 @@ export function getScrollableWeeks(
   const monthFirstStr = getLocalDate(
     new Date(now.getFullYear(), now.getMonth(), 1),
   );
-  const firstMonday = getMondayOfDate(monthFirstStr);
+  const firstMonday = addDaysToDate(
+    getMondayOfDate(monthFirstStr),
+    -7 * Math.max(0, pastWeeks),
+  );
   const currentMonday = getMondayOfDate(todayStr);
 
   const [fmY = 0, fmM = 1, fmD = 1] = firstMonday.split("-").map(Number);

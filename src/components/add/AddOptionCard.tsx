@@ -33,7 +33,7 @@ export function AddOptionCard({ option, index, total }: AddOptionCardProps) {
       variants={variants}
       whileHover={reduce ? undefined : { y: -4 }}
       whileTap={reduce ? undefined : { scale: 0.985 }}
-      className="group relative aspect-[3/2] w-full overflow-hidden rounded-xl bg-surface/80 ring-1 ring-glass-border/10 transition-shadow duration-base ease-standard hover:ring-glass-border/20 sm:aspect-[4/5]"
+      className="group relative aspect-[3/2] w-full overflow-hidden rounded-lg bg-surface ring-1 ring-glass-border/10 transition-shadow duration-base ease-standard hover:ring-glass-border/20 sm:aspect-[4/5]"
     >
       <Image
         src={option.image}
@@ -66,7 +66,7 @@ export function AddOptionCard({ option, index, total }: AddOptionCardProps) {
         </span>
 
         <span className="flex flex-col gap-1">
-          <h2 className="text-xl font-bold text-on-dark">{option.title}</h2>
+          <h2 className="type-h3 text-on-dark">{option.title}</h2>
           <p className="text-xs font-medium text-on-dark-muted">
             {option.description}
           </p>

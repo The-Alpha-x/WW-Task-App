@@ -37,7 +37,7 @@ export function AddPlaceholder({ title, feature, icon: Icon }: AddPlaceholderPro
         >
           <Icon size={30} strokeWidth={1.75} />
         </span>
-        <h2 className="max-w-[16ch] text-3xl font-bold leading-tight text-on-dark">
+        <h2 className="type-h1 max-w-[16ch] text-on-dark">
           {feature} is coming soon
         </h2>
         <p className="max-w-[40ch] text-base text-on-dark-muted">
@@ -46,7 +46,7 @@ export function AddPlaceholder({ title, feature, icon: Icon }: AddPlaceholderPro
         </p>
         <Link
           href={ADD_HREF}
-          className="inline-flex h-12 items-center gap-2 rounded-full bg-lime px-5 text-sm font-bold text-ink transition-colors hover:brightness-95"
+          className="inline-flex h-12 items-center gap-2 rounded-full bg-lime px-5 text-sm font-bold text-ink transition-colors hover:bg-lime-soft"
         >
           Back to add options
         </Link>

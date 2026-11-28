@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import {
   CalendarDays,
   Clock3,
+  MapPin,
   Pencil,
   Trash2,
   User,
@@ -165,20 +166,20 @@ export function EventDetailsModal({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
             transition={{ duration: reduce ? 0.15 : 0.25, ease: EASE_OUT }}
-            className="flex flex-col gap-4 rounded-xl"
+            className="flex flex-col gap-4"
           >
             <div className="flex flex-col gap-1">
-              <h3 className="text-base font-bold text-danger">
+              <h3 className="type-h3 text-danger">
                 Delete this event?
               </h3>
-              <p className="text-sm text-on-dark-muted">
+              <p className="type-body text-on-dark-muted">
                 &ldquo;{event.title}&rdquo; will be permanently removed. This
                 cannot be undone.
               </p>
             </div>
 
             {remove.error && (
-              <p role="alert" className="text-sm font-semibold text-danger">
+              <p role="alert" className="form-alert">
                 {remove.error}
               </p>
             )}
@@ -186,7 +187,7 @@ export function EventDetailsModal({
             <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
               <Button
                 size="sm"
-                variant="secondary"
+                variant="outline"
                 disabled={remove.pending}
                 onClick={() => setConfirmingDelete(false)}
               >
@@ -217,13 +218,13 @@ export function EventDetailsModal({
                   {relative}
                 </span>
               )}
-              <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold text-card ring-1 ring-lime/25">
+              <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold text-on-dark ring-1 ring-glass-border/20">
                 <TypeIcon aria-hidden="true" size={12} />
                 {getEventTypeLabel(event.type)}
               </span>
             </div>
 
-            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 rounded-xl bg-background/45 px-4 py-3 text-sm font-medium text-on-dark-muted ring-1 ring-glass-border/10">
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 rounded-lg bg-background/45 px-4 py-3 text-sm font-medium text-on-dark-muted ring-1 ring-glass-border/10">
               <span className="inline-flex items-center gap-2">
                 <CalendarDays
                   aria-hidden="true"
@@ -240,33 +241,45 @@ export function EventDetailsModal({
                   {formatEventTime(event.time)}
                 </span>
               </span>
+              {event.location && (
+                <span className="inline-flex min-w-0 items-center gap-2">
+                  <MapPin
+                    aria-hidden="true"
+                    size={16}
+                    className="shrink-0 text-lime"
+                  />
+                  <span className="break-words text-on-dark">
+                    {event.location}
+                  </span>
+                </span>
+              )}
             </div>
 
             <section
               aria-label="Description"
-              className="rounded-xl bg-background/45 p-4 ring-1 ring-glass-border/10"
+              className="rounded-lg bg-background/45 p-5 ring-1 ring-glass-border/10"
             >
-              <h3 className="text-xs font-semibold uppercase tracking-wider text-on-dark-muted/70">
+              <h3 className="form-section__title">
                 Description
               </h3>
-              <p className="mt-2 whitespace-pre-line break-words text-sm font-medium leading-relaxed text-on-dark">
+              <p className="mt-3 whitespace-pre-line break-words text-base font-medium leading-relaxed text-on-dark">
                 {event.description || "No description provided."}
               </p>
             </section>
 
             <section
               aria-label="Notes"
-              className="rounded-xl bg-background/45 p-4 ring-1 ring-glass-border/10"
+              className="rounded-lg bg-background/45 p-5 ring-1 ring-glass-border/10"
             >
-              <h3 className="text-xs font-semibold uppercase tracking-wider text-on-dark-muted/70">
+              <h3 className="form-section__title">
                 Notes
               </h3>
-              <p className="mt-2 whitespace-pre-line break-words text-sm font-medium leading-relaxed text-on-dark">
+              <p className="mt-3 whitespace-pre-line break-words text-base font-medium leading-relaxed text-on-dark">
                 {event.notes || "No notes for this event."}
               </p>
             </section>
 
-            <p className="text-xs font-medium text-on-dark-muted">
+            <p className="type-caption text-on-dark-muted">
               Last updated {formatEventTimestamp(event.updatedAt)}
             </p>
           </motion.div>

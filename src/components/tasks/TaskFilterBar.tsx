@@ -38,6 +38,7 @@ export function TaskFilterBar({
             size="sm"
             variant={selected ? "primary" : "ghost"}
             aria-pressed={selected}
+            className={cn(!selected && "ring-1 ring-glass-border/10")}
             onClick={() => onChange(filter.value)}
           >
             {filter.label}

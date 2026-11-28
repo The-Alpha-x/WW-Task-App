@@ -25,7 +25,7 @@ export function DailyProgressWidget({
       initial={reduceMotion ? false : { opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, ease: [0.2, 0, 0, 1] }}
-      className="rounded-xl bg-lime p-6 text-ink shadow-lime-pill sm:p-8"
+      className="rounded-xl bg-lime p-6 text-ink sm:p-8"
     >
       <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:gap-8">
         <div className="h-32 w-32 shrink-0 sm:h-36 sm:w-36">

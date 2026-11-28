@@ -55,8 +55,8 @@ export function MemoriesOverview({
       {/* Header matching the events page */}
       <header className="flex items-center justify-between gap-3">
         <div className="flex min-w-0 flex-col gap-1">
-          <h1 className="text-2xl font-bold text-on-dark">Memories</h1>
-          <p className="text-sm font-medium text-on-dark-muted">
+          <h1 className="type-display-lg text-on-dark">Memories</h1>
+          <p className="type-body text-on-dark-muted">
             {memories.length === 0
               ? "No memories saved yet — start capturing moments"
               : `${memories.length} ${memories.length === 1 ? "memory" : "memories"} down memory lane`}
@@ -64,7 +64,7 @@ export function MemoriesOverview({
         </div>
 
         <div className="flex shrink-0 items-center gap-2">
-          <span className="inline-flex items-center gap-2 rounded-full bg-glass/80 px-4 py-2 text-xs font-semibold text-on-dark ring-1 ring-glass-border/10 backdrop-blur-md sm:text-sm">
+          <span className="inline-flex items-center gap-2 rounded-full bg-surface px-4 py-2 text-xs font-semibold text-on-dark ring-1 ring-glass-border/10 sm:text-sm">
             <BookHeart aria-hidden="true" size={15} className="text-lime" />
             <span>{memories.length}</span>
           </span>
@@ -72,7 +72,7 @@ export function MemoriesOverview({
           <Link
             href={ADD_MEMORY_HREF}
             aria-label="Add memory"
-            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-lime text-ink shadow-glass transition hover:brightness-105 active:brightness-95"
+            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-lime text-ink transition-colors hover:bg-lime-soft active:brightness-95"
           >
             <Plus aria-hidden="true" size={19} strokeWidth={2} />
           </Link>
@@ -88,15 +88,15 @@ export function MemoriesOverview({
           onSelectMemory={(memory) => setModalMemoryId(memory.id)}
         />
       ) : (
-        <div className="flex flex-col items-center gap-5 rounded-2xl bg-surface/50 py-16 text-center ring-1 ring-glass-border/10">
+        <div className="surface-card flex flex-col items-center gap-5 px-6 py-16 text-center">
           <span
             aria-hidden="true"
-            className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-background text-lime"
+            className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-surface-raised text-lime"
           >
             <BookHeart size={30} strokeWidth={1.75} />
           </span>
           <div className="flex flex-col gap-1.5">
-            <h2 className="text-lg font-bold text-on-dark">
+            <h2 className="type-h3 text-on-dark">
               Start your memory lane
             </h2>
             <p className="max-w-[32ch] text-sm font-medium text-on-dark-muted">
@@ -106,7 +106,7 @@ export function MemoriesOverview({
           </div>
           <Link
             href={ADD_MEMORY_HREF}
-            className="inline-flex h-11 items-center gap-2 rounded-full bg-lime px-5 text-sm font-bold text-ink transition-colors hover:brightness-95"
+            className="inline-flex h-11 items-center gap-2 rounded-full bg-lime px-5 text-sm font-bold text-ink transition-colors hover:bg-lime-soft"
           >
             <Plus aria-hidden="true" size={16} strokeWidth={2.5} />
             Add your first memory

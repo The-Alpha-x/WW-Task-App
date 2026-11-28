@@ -11,7 +11,10 @@ import { useUserEvents } from "@/hooks/useUserEvents";
 import { useNow } from "@/hooks/useNow";
 import { getLocalDate } from "@/lib/date-time";
 import { getUserDisplayName } from "@/lib/user-display";
-import { selectTasksForTimeframe } from "@/lib/tasks/filters";
+import {
+  selectTasksForDate,
+  selectTasksForTimeframe,
+} from "@/lib/tasks/filters";
 
 function getTodayLabel(now: Date): string {
   const parts = new Intl.DateTimeFormat("en", {
@@ -55,7 +58,9 @@ export function Dashboard() {
   const todayLabel = getTodayLabel(now);
   const name = getUserDisplayName(user);
 
-  const { pending, completed } = selectTasksForTimeframe(tasks, "today", now);
+  // Only tasks due today (not overdue ones from earlier days), same rule as
+  // the Tasks page's day view.
+  const { pending, completed } = selectTasksForDate(tasks, today, now);
   const week = selectTasksForTimeframe(tasks, "week", now);
   const weekTasksCount = week.pending.length + week.completed.length;
   const todayEvents = events.filter((e) => e.date === today);
@@ -66,8 +71,8 @@ export function Dashboard() {
       error={error}
       loadingMessage="Loading your dashboard"
     >
-      <PageContainer className="flex flex-col gap-6 pb-8 xl:grid xl:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] xl:items-start xl:gap-x-10">
-        <div className="flex flex-col gap-6">
+      <PageContainer className="flex flex-col gap-8 pb-10 xl:grid xl:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] xl:items-start xl:gap-x-14">
+        <div className="flex flex-col gap-8">
           <DashboardGreeting userName={name} />
 
           <DashboardStats
@@ -77,20 +82,26 @@ export function Dashboard() {
             weekTasks={weekTasksCount}
             todayLabel={todayLabel}
           />
-
-          <EventCountdown
-            events={events}
-            now={now}
-            userDisplayName={name}
-          />
         </div>
 
-        <DashboardTasks
-          tasks={pending}
-          userId={user?.uid ?? ""}
-          userDisplayName={name}
-          className="mt-2 xl:mt-0"
-        />
+        {/* Desktop: right column pinned to the viewport. The event widget sits
+            on top and the tasks list below it scrolls on its own. */}
+        <div className="flex flex-col gap-8 xl:sticky xl:top-12 xl:max-h-[calc(100dvh-6rem)] xl:min-h-0">
+          <div className="xl:shrink-0">
+            <EventCountdown
+              events={events}
+              now={now}
+              userDisplayName={name}
+            />
+          </div>
+
+          <DashboardTasks
+            tasks={pending}
+            userId={user?.uid ?? ""}
+            userDisplayName={name}
+            className="mt-2 xl:mt-0 xl:min-h-0 xl:flex-1"
+          />
+        </div>
       </PageContainer>
     </DataBoundary>
   );

@@ -27,7 +27,9 @@ export function TaskSection({
     >
       <SectionHeading title={title} />
       {count === 0 ? (
-        <p className="text-sm font-medium text-on-dark-muted">{emptyMessage}</p>
+        <p className="rounded-lg border border-dashed border-glass-border/25 px-5 py-8 text-center text-base font-medium text-on-dark-muted">
+          {emptyMessage}
+        </p>
       ) : (
         children
       )}

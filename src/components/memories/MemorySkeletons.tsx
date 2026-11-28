@@ -10,7 +10,7 @@ export function MemoryListSkeleton({ count = 4 }: { count?: number }) {
           key={index}
           aria-hidden="true"
           className={cn(
-            "flex animate-pulse gap-4 rounded-xl bg-surface p-5",
+            "flex animate-pulse gap-4 rounded-lg bg-surface p-5",
             index === 0 && "ring-1 ring-glass-border/10",
           )}
         >

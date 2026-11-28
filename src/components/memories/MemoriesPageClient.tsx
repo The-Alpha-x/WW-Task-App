@@ -28,16 +28,16 @@ export function MemoriesPageClient() {
       <PageContainer>
         <section
           role="alert"
-          className="flex flex-col items-start gap-5 rounded-2xl bg-surface p-6 md:p-8"
+          className="surface-card flex flex-col items-start gap-5 p-6 md:p-8"
         >
           <span
             aria-hidden="true"
-            className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-background text-danger"
+            className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-surface-raised text-danger"
           >
             <CloudOff size={30} strokeWidth={1.75} />
           </span>
           <div className="flex flex-col gap-2">
-            <h1 className="text-xl font-bold text-on-dark">
+            <h1 className="type-h2 text-on-dark">
               Could not load your memories
             </h1>
             <p className="max-w-[48ch] text-base text-on-dark-muted">{error}</p>
@@ -51,7 +51,7 @@ export function MemoriesPageClient() {
   if (loading || !user) {
     return (
       <PageContainer className="flex flex-col gap-6">
-        <h1 className="text-2xl font-bold text-on-dark">Memories</h1>
+        <h1 className="type-display-lg text-on-dark">Memories</h1>
         <MemoryListSkeleton />
       </PageContainer>
     );

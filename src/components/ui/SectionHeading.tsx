@@ -37,7 +37,7 @@ export function SectionHeading({
             {count}
           </span>
         )}
-        <Heading className="truncate text-xl font-bold tracking-tight text-on-dark sm:text-2xl">
+        <Heading className="type-h3 truncate text-on-dark sm:text-h2">
           {title}
         </Heading>
       </div>

@@ -14,14 +14,52 @@
     min-height: 100dvh;
     background-color: rgb(var(--color-background));
     color: rgb(var(--color-on-dark));
-    font-family: var(--font-nunito), ui-rounded, system-ui, sans-serif;
+    font-family: var(--font-ui);
+    font-size: var(--text-base);
     font-weight: var(--weight-medium);
+    line-height: var(--leading-body);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    letter-spacing: var(--tracking-body); /* Apple-style tight body tracking */
+  }
+
+  /* Bare headings share the .type-* styles, so unstyled headings still match the system.
+     Classes on the element (type-*, text-*) take precedence over these defaults. */
+  h1 {
+    font-family: var(--font-display);
+    font-size: var(--text-h1);
+    line-height: var(--leading-h1);
+    letter-spacing: var(--tracking-h1);
+    font-weight: var(--weight-bold);
+  }
+
+  h2 {
+    font-size: var(--text-h2);
+    line-height: var(--leading-h2);
+    letter-spacing: var(--tracking-h2);
+    font-weight: var(--weight-semibold);
+  }
+
+  h3,
+  h4 {
+    font-size: var(--text-h3);
+    line-height: var(--leading-h3);
+    letter-spacing: var(--tracking-h3);
+    font-weight: var(--weight-semibold);
+  }
+
+  /* Form controls inherit the UI font instead of the browser default. */
+  button,
+  input,
+  select,
+  textarea {
+    font-family: inherit;
+    letter-spacing: inherit;
   }
 
   :focus-visible {
-    outline: 2px solid rgb(var(--color-lime));
+    outline: 2px solid rgb(var(--color-ring));
     outline-offset: 2px;
   }
 
@@ -35,10 +73,143 @@
   }
 }
 
+/*
+ * TYPOGRAPHY - reusable text styles built on the tokens in src/styles/tokens.css.
+ * Use these classes (or the matching bare elements) instead of combining
+ * size / weight / tracking utilities by hand.
+ *
+ *   Display XL / LG   hero + big numbers   Barlow Condensed, extrabold
+ *   H1                page titles          Barlow Condensed, bold
+ *   H2 / H3           section titles       Inter, semibold
+ *   Body LG / Body    reading text         Inter, medium (body font weight)
+ *   Caption           hints, metadata      Inter, medium
+ *   Overline          small uppercase section labels
+ *   Label             form labels
+ *
+ * Colour is never set here; combine with text-on-dark, text-on-dark-muted, etc.
+ * They live in the components layer, so a Tailwind utility (e.g. text-sm)
+ * on the same element still wins.
+ */
+@layer components {
+  .type-display-xl,
+  .type-display-lg,
+  .type-h1 {
+    font-family: var(--font-display);
+    text-wrap: balance;
+  }
+
+  .type-display-xl {
+    font-size: var(--text-display-xl);
+    line-height: var(--leading-display);
+    letter-spacing: var(--tracking-display);
+    font-weight: var(--weight-extrabold);
+  }
+
+  .type-display-lg {
+    font-size: var(--text-display-lg);
+    line-height: var(--leading-display);
+    letter-spacing: var(--tracking-display);
+    font-weight: var(--weight-extrabold);
+  }
+
+  .type-h1 {
+    font-size: var(--text-h1);
+    line-height: var(--leading-h1);
+    letter-spacing: var(--tracking-h1);
+    font-weight: var(--weight-bold);
+  }
+
+  .type-h2 {
+    font-size: var(--text-h2);
+    line-height: var(--leading-h2);
+    letter-spacing: var(--tracking-h2);
+    font-weight: var(--weight-semibold);
+    text-wrap: balance;
+  }
+
+  .type-h3 {
+    font-size: var(--text-h3);
+    line-height: var(--leading-h3);
+    letter-spacing: var(--tracking-h3);
+    font-weight: var(--weight-semibold);
+  }
+
+  .type-body-lg {
+    font-size: var(--text-body-lg);
+    line-height: var(--leading-body);
+    letter-spacing: var(--tracking-body);
+    font-weight: var(--weight-medium);
+  }
+
+  .type-body {
+    font-size: var(--text-body);
+    line-height: var(--leading-body);
+    letter-spacing: var(--tracking-body);
+    font-weight: var(--weight-medium);
+  }
+
+  .type-caption {
+    font-size: var(--text-caption);
+    line-height: var(--leading-snug);
+    letter-spacing: var(--tracking-caption);
+    font-weight: var(--weight-medium);
+  }
+
+  /* Small uppercase group label ("Details", "Schedule", "Workspace"). */
+  .type-overline {
+    font-size: var(--text-xs);
+    line-height: var(--leading-snug);
+    letter-spacing: var(--tracking-overline);
+    font-weight: var(--weight-semibold);
+    text-transform: uppercase;
+  }
+
+  /* Form field label: body size (14 -> 16px) and semibold so it reads before the value. */
+  .type-label {
+    font-size: var(--text-body);
+    line-height: var(--leading-snug);
+    letter-spacing: var(--tracking-body);
+    font-weight: var(--weight-semibold);
+  }
+
+  /* Navigation item (sidebar / top bar). */
+  .type-nav {
+    font-size: var(--text-base);
+    line-height: var(--leading-snug);
+    letter-spacing: var(--tracking-body);
+    font-weight: var(--weight-semibold);
+  }
+}
+
 /* Shared base for Button and IconButton; variants are Tailwind utilities in the components. */
 @layer components {
+  /*
+   * Interaction-state model shared by Button, IconButton and ButtonLink.
+   *   hover    one step up the surface ladder (or slightly darker on accents)
+   *   active   same colour as hover + a small press scale
+   *   focus    2px --color-ring outline (global :focus-visible rule)
+   *   disabled --opacity-disabled, no pointer feedback, no press scale
+   * Colours per variant live in the components; this block only makes the
+   * timing, press feedback and disabled treatment identical everywhere.
+   */
   .btn {
-    @apply inline-flex items-center justify-center gap-2 font-semibold transition-colors duration-base ease-standard disabled:opacity-50;
+    @apply inline-flex items-center justify-center gap-2 font-semibold ease-standard;
+    letter-spacing: var(--tracking-body);
+    line-height: 1.1;
+    transition-property: color, background-color, border-color, box-shadow, filter, transform, opacity;
+    transition-duration: var(--duration-base);
+  }
+
+  .btn:not(:disabled):not([aria-disabled="true"]):active {
+    transform: scale(var(--scale-pressed));
+    transition-duration: var(--duration-fast);
+  }
+
+  .btn:disabled,
+  .btn[aria-disabled="true"] {
+    opacity: var(--opacity-disabled);
+    cursor: not-allowed;
+    box-shadow: none;
   }
 }
 
@@ -141,6 +312,7 @@
 @layer components {
   .stat-card {
     --stat-bg: var(--color-lime);
+    --stat-fg: var(--color-ink); /* dark text on every lime / pink / blue tile */
     --stat-notch-x: var(--size-stat-notch-x);
     --stat-notch-y: var(--size-stat-notch-y);
     --stat-fillet: var(--radius-stat-fillet);
@@ -177,8 +349,19 @@
 
   /* Big number: the 64px token, scaled down on narrow tiles so it never reaches the arrow. */
   .stat-card__value {
+    font-family: var(--font-display);
+    font-weight: var(--weight-extrabold);
     font-size: min(var(--text-stat), 37cqw);
     line-height: 1;
+    letter-spacing: var(--tracking-display);
+    color: rgb(var(--stat-fg));
+  }
+
+  .stat-card__label {
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    line-height: var(--leading-snug);
+    color: rgb(var(--stat-fg));
   }
 
   @screen md {
@@ -188,7 +371,7 @@
   }
 
   .stat-card--completed {
-    --stat-bg: var(--color-purple);
+    --stat-bg: var(--color-pink);
   }
 
   .stat-card--planned {
@@ -199,10 +382,39 @@
     --stat-bg: var(--color-blue);
   }
 
+  /* Neutral tile: lime is reserved for the key metric, pink/blue for supporting ones. */
   .stat-card--week {
-    --stat-bg: var(--color-teal);
+    --stat-bg: var(--color-surface-raised);
+    --stat-fg: var(--color-on-dark);
   }
 
+  :root[data-theme="light"] .stat-card--week {
+    --stat-bg: var(--color-ink);
+    --stat-fg: 255 255 255;
+  }
+
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) .stat-card--week {
+      --stat-bg: var(--color-ink);
+      --stat-fg: 255 255 255;
+    }
+  }
+
+  /* Hero: the key metric, full width and larger. */
+  .stat-card--hero .stat-card__sizer {
+    aspect-ratio: auto;
+    min-height: 12rem;
+  }
+
+  .stat-card--hero .stat-card__value {
+    font-size: clamp(4.5rem, 3.4rem + 6vw, 6.5rem);
+  }
+
+  .stat-card--hero .stat-card__label {
+    font-size: var(--text-body-lg);
+  }
+
+  /* Wide: full-width, short tile. */
   .stat-card--wide .stat-card__sizer {
     aspect-ratio: auto;
     min-height: 8.5rem;
@@ -210,17 +422,6 @@
 
   .stat-card--wide .stat-card__value {
     font-size: var(--text-stat);
-  }
-
-  @screen md {
-    .stat-card--wide .stat-card__sizer {
-      aspect-ratio: 1 / 1.05;
-      min-height: 0;
-    }
-
-    .stat-card--wide .stat-card__value {
-      font-size: min(var(--text-stat), 37cqw);
-    }
   }
 
   .stat-card::before,
@@ -356,22 +557,30 @@
 }
 
 @layer components {
+  /* Safari notes: no backdrop-filter on this element (it flickers or renders
+     blank while the sheet's transform animates), position is set explicitly
+     instead of relying on the UA's auto margins, and the children shrink
+     (flex: 0 1 auto) rather than flex-grow, which Safari needs to scroll an
+     area inside a container that only has a max-height. */
   .modal {
     --modal-width: var(--size-modal-md);
 
     display: none;
+    position: fixed;
+    inset: auto 0 0 0;
     width: 100%;
     max-width: none;
+    height: auto;
+    max-height: 100vh; /* fallback for browsers without dvh */
     max-height: calc(
       100dvh - max(var(--space-12), env(safe-area-inset-top, 0px) + var(--space-4))
     );
-    margin: auto 0 0;
+    margin: 0;
     padding: 0;
-    border: 1px solid rgb(var(--color-glass-border) / 0.12);
+    overflow: hidden;
+    border: 1px solid rgb(var(--color-glass-border) / 0.14);
     border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
-    background-color: rgb(var(--color-glass) / 0.78);
-    -webkit-backdrop-filter: blur(24px) saturate(180%);
-    backdrop-filter: blur(24px) saturate(180%);
+    background-color: rgb(var(--color-surface));
     color: rgb(var(--color-on-dark));
     overscroll-behavior: contain;
     box-shadow: var(--shadow-glass);
@@ -390,8 +599,9 @@
     --modal-width: var(--size-modal-lg);
   }
 
+  /* Literal colour: older Safari does not pass custom properties to ::backdrop. */
   .modal::backdrop {
-    background-color: rgb(var(--color-background) / 0.72);
+    background-color: rgb(0 0 0 / 0.55);
   }
 
   .modal[data-state="open"] {
@@ -413,7 +623,9 @@
 
   @screen md {
     .modal {
+      inset: 0;
       width: min(calc(100% - var(--space-8)), var(--modal-width));
+      max-height: calc(100vh - var(--space-16));
       max-height: calc(100dvh - var(--space-16));
       margin: auto;
       border-radius: var(--radius-2xl);
@@ -467,5 +679,96 @@
 @keyframes modal-fade-out {
   to {
     opacity: 0;
+  }
+}
+
+/* Light theme: the centred dialog uses a softer shadow than the dark theme's. */
+@layer components {
+  @screen md {
+    :root[data-theme="light"] .modal {
+      box-shadow: 0 16px 48px rgb(23 25 20 / 0.14);
+    }
+  }
+
+  @media (prefers-color-scheme: light) {
+    @screen md {
+      :root:not([data-theme="dark"]) .modal {
+        box-shadow: 0 16px 48px rgb(23 25 20 / 0.14);
+      }
+    }
+  }
+}
+
+/*
+ * CARDS + FORMS. `.surface-card` is the single card recipe; `.form-section`
+ * adds the form layout on top. Fields inside sit INSET from the card
+ * (--color-input), so surfaces read: page > card > field.
+ */
+@layer components {
+  /* One card recipe for every content surface (event / memory cards, calendar,
+     empty + error panels, form sections): flat surface, hairline border, no blur. */
+  .surface-card,
+  .form-section {
+    border-radius: var(--radius-lg);
+    background-color: rgb(var(--color-surface));
+    border: 1px solid rgb(var(--color-glass-border) / 0.08);
+    box-shadow: var(--shadow-card);
+  }
+
+  .form-section {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: var(--space-5);
+    padding: var(--space-5);
+  }
+
+  @screen md {
+    .form-section {
+      gap: var(--space-6);
+      padding: var(--space-6);
+    }
+  }
+
+  /* Small uppercase section heading with a Volt Lime tick. */
+  .form-section__title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-xs);
+    line-height: var(--leading-snug);
+    letter-spacing: var(--tracking-overline);
+    font-weight: var(--weight-bold);
+    text-transform: uppercase;
+    color: rgb(var(--color-muted-text));
+  }
+
+  .form-section__title::before {
+    content: "";
+    flex: none;
+    width: 0.1875rem;
+    height: 0.875rem;
+    border-radius: var(--radius-full);
+    background-color: rgb(var(--color-lime));
+  }
+
+  /* Inside a dialog the card steps BACK from the sheet and fields step forward again. */
+  .modal .form-section {
+    --color-input: var(--color-surface);
+    background-color: rgb(var(--color-background) / 0.55);
+    box-shadow: none;
+  }
+
+  /* Page-level save error shown above a form. */
+  .form-alert {
+    border-radius: var(--radius-md);
+    background-color: rgb(var(--color-danger) / 0.1);
+    padding: var(--space-3) var(--space-4);
+    border: 1px solid rgb(var(--color-danger) / 0.35);
+    border-left-width: 4px;
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    line-height: var(--leading-snug);
+    color: rgb(var(--color-destructive-text));
   }
 }

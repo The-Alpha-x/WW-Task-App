@@ -64,7 +64,7 @@ export function BottomNavigation() {
               aria-label="Add new"
               aria-current={addActive ? "page" : undefined}
               className={cn(
-                "flex items-center justify-center rounded-full bg-lime text-ink shadow-lime-pill transition-transform duration-fast ease-standard hover:brightness-95 active:scale-95",
+                "flex items-center justify-center rounded-full bg-lime text-ink transition-[transform,background-color] duration-fast ease-standard hover:bg-lime-soft active:scale-95",
                 addActive && "ring-2 ring-on-dark/40",
               )}
               style={{
