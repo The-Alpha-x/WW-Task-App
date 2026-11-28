@@ -58,68 +58,6 @@ export function MemoriesPageClient() {
   }
 
   return (
-<<<<<<< HEAD
-    <PageContainer className="flex flex-col gap-6 py-8 md:py-10">
-      <header className="flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-on-dark">Our Memories</h1>
-          <p className="mt-2 text-on-dark-muted">
-            Little moments, kept close forever.
-          </p>
-        </div>
-        <ButtonLink href={ADD_MEMORY_HREF}>Add Memory</ButtonLink>
-      </header>
-      {message && (
-        <p role="status" className="rounded-xl bg-lime p-3 text-sm text-ink">
-          {message}
-        </p>
-      )}
-      {memories.length === 0 ? (
-        <section className="flex flex-col items-center gap-4 rounded-2xl bg-surface p-10 text-center">
-          <BookHeart size={42} className="text-lime" />
-          <h2 className="text-xl font-bold text-on-dark">
-            Your memory book is waiting
-          </h2>
-          <p className="max-w-md text-on-dark-muted">
-            Save a special day, a funny incident, or a little moment you want to
-            remember together.
-          </p>
-          <ButtonLink href={ADD_MEMORY_HREF}>Save your first memory</ButtonLink>
-        </section>
-      ) : (
-        <ul className="grid gap-4 md:grid-cols-2">
-          {memories.map((memory) => (
-            <li key={memory.id}>
-              <Link
-                href={`${MEMORIES_HREF}?memory=${encodeURIComponent(memory.id)}`}
-                className="group flex h-full flex-col gap-3 rounded-2xl bg-card p-5 text-ink transition hover:-translate-y-0.5 hover:bg-card-muted focus-visible:outline focus-visible:outline-2 focus-visible:outline-lime"
-              >
-                <div className="flex items-center justify-between gap-3">
-                  <Badge variant="outline">{dateLabel(memory.date)}</Badge>
-                  <Badge
-                    variant={memory.type === "shared" ? "lime" : "default"}
-                  >
-                    {memory.type === "shared" ? "Shared" : "Individual"}
-                  </Badge>
-                </div>
-                <h2 className="text-xl font-bold group-hover:underline">
-                  {memory.title}
-                </h2>
-                {memory.description && (
-                  <p className="line-clamp-3 text-sm text-ink-muted">
-                    {memory.description}
-                  </p>
-                )}
-                <span className="mt-auto flex items-center gap-2 text-sm text-ink-muted">
-                  <Clock3 size={14} />
-                  {timeLabel(memory.time)}
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      )}
-=======
     <PageContainer>
       <MemoriesOverview
         memories={memories}
@@ -128,7 +66,6 @@ export function MemoriesPageClient() {
         initialMemoryId={requestedMemoryId}
         onClearInitialMemory={() => router.replace(MEMORIES_HREF)}
       />
->>>>>>> 0458a41ce1ecdcdbe6a5667663ed447a1358b48b
     </PageContainer>
   );
 }
