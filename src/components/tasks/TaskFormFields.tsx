@@ -22,7 +22,7 @@ export interface TaskFormFieldsProps {
 }
 
 /**
- * Shared task form fields in dark glassmorphic cards, used by both AddTask
+ * Shared task form fields in `.form-section` cards, used by both AddTask
  * and TaskEditForm so create and edit stay visually identical.
  */
 export function TaskFormFields({
@@ -41,9 +41,9 @@ export function TaskFormFields({
     <>
       <section
         aria-label="Task details"
-        className="flex flex-col gap-4 rounded-xl bg-glass/80 p-4 ring-1 ring-glass-border/10 backdrop-blur-md sm:gap-5 sm:p-5 md:p-6"
+        className="form-section"
       >
-        <h2 className="text-xs font-semibold uppercase tracking-wider text-on-dark-muted/70">
+        <h2 className="form-section__title">
           Details
         </h2>
 
@@ -71,11 +71,11 @@ export function TaskFormFields({
 
       <section
         aria-labelledby="schedule-heading"
-        className="flex min-w-0 flex-col gap-4 overflow-hidden rounded-xl bg-glass/80 p-4 ring-1 ring-glass-border/10 backdrop-blur-md sm:gap-5 sm:p-5 md:p-6"
+        className="form-section overflow-hidden"
       >
         <h2
           id="schedule-heading"
-          className="text-xs font-semibold uppercase tracking-wider text-on-dark-muted/70"
+          className="form-section__title"
         >
           Schedule
         </h2>
@@ -96,7 +96,7 @@ export function TaskFormFields({
                 animate={{ opacity: 1 }}
                 exit={reduce ? undefined : { opacity: 0 }}
                 transition={{ duration: 0.15 }}
-                className="text-xs font-medium text-on-dark-muted"
+                className="type-caption text-on-dark-muted"
               >
                 Pick today or a later day.
               </motion.p>
@@ -119,7 +119,7 @@ export function TaskFormFields({
 
       <section
         aria-label="Sub tasks"
-        className="rounded-xl bg-glass/80 p-4 ring-1 ring-glass-border/10 backdrop-blur-md sm:p-5 md:p-6"
+        className="form-section"
       >
         <SubtaskListField form={form} showDone={editing} />
       </section>

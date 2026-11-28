@@ -79,10 +79,7 @@ export function StatCard({
 
       <div className="stat-card__body">
         <p
-          className={cn(
-            "stat-card__value font-semibold tabular-nums",
-            isCompleted ? "text-on-accent" : "text-ink",
-          )}
+          className="stat-card__value tabular-nums"
         >
           {animateValue ? <AnimatedCounter value={value} /> : value}
         </p>
@@ -90,7 +87,7 @@ export function StatCard({
         {isCompleted ? (
           /* Reference: the label sits bottom-left, level with the check badge. */
           <div className="flex flex-wrap items-end justify-between gap-2">
-            <p className="text-sm font-semibold text-ink">{label}</p>
+            <p className="stat-card__label">{label}</p>
             <span
               aria-hidden="true"
               className="ml-auto inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-surface text-on-dark"
@@ -100,14 +97,14 @@ export function StatCard({
           </div>
         ) : (
           <div className="flex flex-col gap-3">
-            <p className="text-sm font-semibold text-ink">{label}</p>
+            <p className="stat-card__label">{label}</p>
             {date && (
               <Button
                 variant="dark"
                 size="sm"
                 disabled={!onDateClick}
                 onClick={onDateClick}
-                className="w-full max-sm:px-2 disabled:cursor-default disabled:opacity-100"
+                className="w-full max-sm:px-2 [.stat-card--hero_&]:w-auto [.stat-card--hero_&]:self-start disabled:cursor-default disabled:opacity-100"
               >
                 {date}
               </Button>

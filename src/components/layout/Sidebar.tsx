@@ -28,7 +28,7 @@ export function Sidebar() {
     <aside className="app-sidebar hidden flex-col lg:flex" aria-label="Sidebar">
       {/* Primary Workspace Navigation */}
       <nav aria-label="Primary" className="flex-1 overflow-y-auto">
-        <p className="mb-3 px-4 text-xs font-semibold uppercase tracking-wider text-on-dark-muted/60">
+        <p className="mb-3 px-4 type-overline text-on-dark-muted">
           Workspace
         </p>
         <ul className="flex flex-col gap-2">
@@ -76,7 +76,7 @@ export function Sidebar() {
               <span>Notifications</span>
               <span
                 aria-hidden="true"
-                className="ml-auto h-3 w-3 rounded-full bg-lime shadow-lime-pill"
+                className="ml-auto h-3 w-3 rounded-full bg-lime"
               />
               <span className="sr-only">Unread notifications</span>
             </button>
@@ -93,7 +93,7 @@ export function Sidebar() {
               {userName}
             </p>
             {user?.email && (
-              <p className="truncate text-xs text-on-dark-muted/75">
+              <p className="truncate text-xs text-on-dark-muted">
                 {user.email}
               </p>
             )}

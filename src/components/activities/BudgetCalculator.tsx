@@ -122,7 +122,7 @@ function ExpenseCard({
   };
 
   return (
-    <motion.div layout className="rounded-xl bg-surface p-3">
+    <motion.div layout className="surface-card p-3">
       {isEditing ? (
         <form onSubmit={handleSave} noValidate className="flex flex-col gap-3">
           <div className="grid gap-3 sm:grid-cols-2">
@@ -149,7 +149,7 @@ function ExpenseCard({
           <div className="flex justify-end gap-2">
             <Button
               type="button"
-              variant="ghost"
+              variant="outline"
               size="sm"
               onClick={() => setIsEditing(false)}
             >
@@ -400,7 +400,7 @@ export function BudgetCalculator() {
             tabIndex={month === activeMonth ? 0 : -1}
             onClick={() => selectMonth(month)}
             onKeyDown={(event) => handleMonthTabKeyDown(event, month)}
-            className={`inline-flex shrink-0 items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime ${
+            className={`inline-flex shrink-0 items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring ${
               month === activeMonth
                 ? "bg-lime text-ink"
                 : "bg-surface text-on-dark-muted hover:bg-surface-raised"
@@ -425,12 +425,12 @@ export function BudgetCalculator() {
       >
       <section
         aria-labelledby="current-total-heading"
-        className="rounded-2xl bg-transparent py-6 text-ink md:py-8"
+        className="py-6 text-on-dark md:py-8"
       >
         <motion.span className="mt-2 block text-3xl font-semibold tracking-tight text-lime">
           {formattedTotal}
         </motion.span>
-        <p className="mt-2 font-medium text-ink-muted">
+        <p className="mt-2 font-medium text-on-dark-muted">
           Pending expenses for {activeMonth ? formatMonth(activeMonth) : "this month"}
         </p>
       </section>
@@ -438,7 +438,7 @@ export function BudgetCalculator() {
       {dataError && (
         <p
           role="alert"
-          className="rounded-xl border border-red-400/40 bg-red-500/10 p-4 text-sm font-medium text-on-dark"
+          className="form-alert"
         >
           {dataError}
         </p>
@@ -449,7 +449,7 @@ export function BudgetCalculator() {
         className="flex flex-col gap-4"
       >
         <div className="flex items-center justify-between gap-4">
-          <h2 id="expenses-heading" className="text-xl font-bold text-on-dark">
+          <h2 id="expenses-heading" className="type-h3 text-on-dark">
             Expenses
           </h2>
 
@@ -463,7 +463,7 @@ export function BudgetCalculator() {
         </span>
 
         {monthExpenses.length === 0 ? (
-          <p className="rounded-xl bg-surface p-5 text-sm font-medium text-on-dark-muted">
+          <p className="surface-card type-body p-5 text-on-dark-muted">
             No expenses for {activeMonth ? formatMonth(activeMonth) : "this month"}.
             Add one below to get started.
           </p>
@@ -498,12 +498,12 @@ export function BudgetCalculator() {
 
       <section
         aria-labelledby="add-expense-heading"
-        className="rounded-2xl bg-ink p-5 text-on-accent md:p-6"
+        className="form-section"
       >
-        <h2 id="add-expense-heading" className="text-xl font-bold">
+        <h2 id="add-expense-heading" className="type-h3 text-on-dark">
           Add an expense to {activeMonth ? formatMonth(activeMonth) : "this month"}
         </h2>
-        <form onSubmit={handleAddExpense} noValidate className="mt-4 flex flex-col gap-4 ">
+        <form onSubmit={handleAddExpense} noValidate className="flex flex-col gap-5">
           <Input
             label="Title"
             tone="dark"
@@ -550,7 +550,7 @@ export function BudgetCalculator() {
         footer={
           <>
             <Button
-              variant="ghost"
+              variant="outline"
               size="sm"
               onClick={() => setExpenseToDelete(null)}
             >
@@ -558,6 +558,7 @@ export function BudgetCalculator() {
             </Button>
             <Button
               size="sm"
+              variant="danger"
               onClick={deleteExpense}
               disabled={!expenseToDelete || expenseToDelete.completed}
             >

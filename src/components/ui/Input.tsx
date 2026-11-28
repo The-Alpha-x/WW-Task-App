@@ -1,7 +1,8 @@
 import { forwardRef, useId } from "react";
 import type { InputHTMLAttributes } from "react";
 import { cn } from "@/lib/cn";
-import { fieldClasses, labelClasses, messageClasses } from "./field-styles";
+import { FieldLabel } from "./FieldLabel";
+import { fieldClasses, messageClasses } from "./field-styles";
 import type { FieldTone } from "./field-styles";
 
 export interface InputProps
@@ -25,16 +26,16 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 
   return (
     <div className={cn("flex min-w-0 max-w-full flex-col gap-2 overflow-hidden", className)}>
-      <label htmlFor={inputId} className={labelClasses(tone)}>
+      <FieldLabel htmlFor={inputId} tone={tone}>
         {label}
-      </label>
+      </FieldLabel>
       <input
         ref={ref}
         id={inputId}
         type={type}
         aria-invalid={error ? true : undefined}
         aria-describedby={error ? errorId : undefined}
-        className={fieldClasses(tone, Boolean(error), "h-12")}
+        className={fieldClasses(tone, Boolean(error), "h-[3.5rem]")}
         {...rest}
       />
       {error && (

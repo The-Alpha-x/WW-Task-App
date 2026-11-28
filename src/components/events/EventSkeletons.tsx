@@ -33,8 +33,8 @@ export function EventDetailsSkeleton() {
       <span className="sr-only">Loading this event</span>
       <div aria-hidden="true" className="h-10 w-3/4 rounded-full bg-surface" />
       <div aria-hidden="true" className="h-5 w-1/2 rounded-full bg-surface" />
-      <div aria-hidden="true" className="h-40 rounded-2xl bg-surface" />
-      <div aria-hidden="true" className="h-32 rounded-2xl bg-surface" />
+      <div aria-hidden="true" className="h-40 rounded-lg bg-surface" />
+      <div aria-hidden="true" className="h-32 rounded-lg bg-surface" />
     </div>
   );
 }

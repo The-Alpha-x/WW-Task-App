@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Button } from "@/components/ui/Button";
+import { FormActions } from "@/components/ui/FormActions";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { toast } from "@/components/ui/Toaster";
@@ -54,18 +54,16 @@ export function AddTask() {
   });
 
   return (
-    <PageContainer className="flex flex-col gap-5 sm:gap-6">
-      <header className="mx-auto flex w-full max-w-2xl items-center gap-4 lg:max-w-none">
-        <div className="flex flex-col gap-1">
-          <h1 className="text-2xl font-bold text-on-dark">Add Task</h1>
-          <p className="text-sm font-medium text-on-dark-muted">
-            Plan what needs to get done and break it into steps.
-          </p>
-        </div>
+    <PageContainer className="flex flex-col gap-6 sm:gap-8">
+      <header className="mx-auto flex w-full max-w-2xl flex-col gap-2 lg:max-w-none">
+        <h1 className="type-display-lg text-on-dark">Add Task</h1>
+        <p className="type-body text-on-dark-muted">
+          Plan what needs to get done and break it into steps.
+        </p>
       </header>
 
       <form
-        className="mx-auto flex w-full max-w-2xl flex-col gap-4 sm:gap-5 lg:max-w-none"
+        className="mx-auto flex w-full max-w-2xl flex-col gap-5 md:gap-6 lg:max-w-none"
         onSubmit={handleSubmit}
         noValidate
       >
@@ -77,7 +75,7 @@ export function AddTask() {
               animate={{ opacity: 1, y: 0 }}
               exit={reduce ? undefined : { opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="rounded-xl bg-danger/10 px-4 py-3 text-sm font-medium text-danger ring-1 ring-danger/25"
+              className="form-alert"
             >
               {saveError}
             </motion.p>
@@ -86,16 +84,11 @@ export function AddTask() {
 
         <TaskFormFields form={form} />
 
-        <div className="pt-1">
-          <Button
-            type="submit"
-            size="lg"
-            className="w-full shadow-lime-pill"
-            loading={isSaving}
-          >
-            {isSaving ? "Saving task..." : "Add Task"}
-          </Button>
-        </div>
+        <FormActions
+          saving={isSaving}
+          submitLabel="Add Task"
+          savingLabel="Saving task..."
+        />
       </form>
     </PageContainer>
   );

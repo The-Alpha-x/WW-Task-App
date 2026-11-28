@@ -68,7 +68,11 @@ export function Modal({
 
   const finishClose = useCallback(() => {
     const dialog = dialogRef.current;
-    if (dialog?.open) dialog.close();
+    if (dialog?.open) {
+      // Very old Safari (< 15.4) has no <dialog> API: just drop the attribute.
+      if (typeof dialog.close === "function") dialog.close();
+      else dialog.removeAttribute("open");
+    }
     setPhase("closed");
   }, []);
 
@@ -77,7 +81,10 @@ export function Modal({
     if (!dialog) return;
 
     if (phase === "open") {
-      if (!dialog.open) dialog.showModal();
+      if (!dialog.open) {
+        if (typeof dialog.showModal === "function") dialog.showModal();
+        else dialog.setAttribute("open", "");
+      }
       return;
     }
 
@@ -126,23 +133,23 @@ export function Modal({
     >
       <div
         className={cn(
-          "flex min-h-0 flex-1 flex-col px-5 pb-[calc(1.5rem+env(safe-area-inset-bottom,0px))] pt-3 md:p-6",
+          "flex min-h-0 flex-initial flex-col px-5 pb-[calc(1.5rem+env(safe-area-inset-bottom,0px))] pt-3 md:p-6",
           className,
         )}
       >
         {/* Grab handle — mobile bottom sheet */}
         <span
           aria-hidden="true"
-          className="mx-auto mb-3 h-1 w-10 shrink-0 rounded-full bg-glass-border/20 md:hidden"
+          className="mx-auto mb-3 h-1 w-10 shrink-0 rounded-full bg-glass-border/30 md:hidden"
         />
 
-        <div className="flex shrink-0 items-start justify-between gap-4 border-b border-glass-border/10 pb-4">
+        <div className="flex shrink-0 items-start justify-between gap-4 border-b border-glass-border/10 pb-5">
           <div className="min-w-0">
-            <h2 id={titleId} className="text-xl font-bold text-on-dark">
+            <h2 id={titleId} className="type-h3 break-words text-on-dark">
               {title}
             </h2>
             {description && (
-              <p id={descriptionId} className="mt-1 text-sm text-on-dark-muted">
+              <p id={descriptionId} className="type-body mt-1 text-on-dark-muted">
                 {description}
               </p>
             )}
@@ -157,13 +164,13 @@ export function Modal({
         </div>
 
         {children && (
-          <div className="-mx-1 mt-5 min-h-0 flex-1 overflow-y-auto overscroll-contain px-1 py-1">
+          <div className="-mx-1 mt-6 min-h-0 flex-initial overflow-y-auto overscroll-contain px-1 py-1 [-webkit-overflow-scrolling:touch]">
             {children}
           </div>
         )}
 
         {footer && (
-          <div className="mt-6 flex shrink-0 flex-wrap justify-end gap-3 border-t border-glass-border/10 pt-5">
+          <div className="mt-6 flex shrink-0 flex-col-reverse gap-3 border-t border-glass-border/10 pt-5 sm:flex-row sm:flex-wrap sm:justify-end [&>*]:w-full sm:[&>*]:w-auto">
             {footer}
           </div>
         )}

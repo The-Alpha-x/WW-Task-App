@@ -27,26 +27,15 @@ export function DashboardStats({
   const reduce = useReducedMotion();
 
   return (
-    <section aria-label="Daily overview" className="grid grid-cols-2 gap-3">
+    <section
+      aria-label="Daily overview"
+      className="grid max-w-[36rem] grid-cols-2 gap-4"
+    >
       <motion.div
         initial={reduce ? false : { opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 0.06, ease: "easeOut" }}
-      >
-        <StatCard
-          variant="completed"
-          value={completedTasks}
-          label="Tasks Completed"
-          animateValue
-          onAction={() => router.push("/tasks")}
-          actionLabel="View completed tasks"
-        />
-      </motion.div>
-
-      <motion.div
-        initial={reduce ? false : { opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.12, ease: "easeOut" }}
+        className="col-span-2"
       >
         <StatCard
           variant="planned"
@@ -56,6 +45,22 @@ export function DashboardStats({
           animateValue
           onAction={() => router.push("/tasks")}
           actionLabel="View remaining tasks"
+          className="stat-card--hero"
+        />
+      </motion.div>
+
+      <motion.div
+        initial={reduce ? false : { opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.12, ease: "easeOut" }}
+      >
+        <StatCard
+          variant="completed"
+          value={completedTasks}
+          label="Tasks Completed"
+          animateValue
+          onAction={() => router.push("/tasks")}
+          actionLabel="View completed tasks"
         />
       </motion.div>
 
@@ -78,6 +83,7 @@ export function DashboardStats({
         initial={reduce ? false : { opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 0.24, ease: "easeOut" }}
+        className="col-span-2"
       >
         <StatCard
           variant="week"
@@ -86,6 +92,7 @@ export function DashboardStats({
           animateValue
           onAction={() => router.push("/tasks")}
           actionLabel="View this week's tasks"
+          className="stat-card--wide"
         />
       </motion.div>
     </section>

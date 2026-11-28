@@ -105,10 +105,10 @@ export function LoginScreen({ onSubmit, onSuccess }: Props) {
             animate="show"
             className="-mt-1 flex flex-col items-center gap-3 text-center"
           >
-            <motion.h1 variants={rise} className="flex items-center gap-3 text-[34px] font-semibold tracking-tight">
+            <motion.h1 variants={rise} className="flex items-center gap-3 type-h1">
               <svg width="42" height="42" viewBox="0 0 42 42" fill="none" aria-hidden="true">
-                <path d="M33 21a12 12 0 11-6.5-10.6" stroke="#D9F55B" strokeWidth="3.5" strokeLinecap="round" />
-                <path d="M14 22l5.5 5.5L33 12" stroke="#D9F55B" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M33 21a12 12 0 11-6.5-10.6" stroke="rgb(var(--color-lime))" strokeWidth="3.5" strokeLinecap="round" />
+                <path d="M14 22l5.5 5.5L33 12" stroke="rgb(var(--color-lime))" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
               Witch-Woofie
             </motion.h1>
@@ -191,7 +191,7 @@ export function LoginScreen({ onSubmit, onSuccess }: Props) {
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
-                  className="overflow-hidden px-2 text-sm text-orange"
+                  className="overflow-hidden px-2 text-sm font-semibold text-destructive"
                 >
                   {error}
                 </motion.p>
@@ -203,7 +203,7 @@ export function LoginScreen({ onSubmit, onSuccess }: Props) {
                 type="submit"
                 disabled={status !== "idle"}
                 whileTap={reduce ? undefined : { scale: 0.98 }}
-                className="flex h-[62px] w-full items-center justify-center rounded-full bg-gradient-to-b from-[#E6FB7C] to-[#CBE94A] text-lg font-semibold text-[#121212] shadow-glow transition-shadow hover:shadow-[0_12px_36px_rgba(217,245,91,0.34)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-on-dark focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-default"
+                className="flex h-[62px] w-full items-center justify-center rounded-full bg-gradient-to-b from-lime-soft to-lime text-lg font-bold text-ink shadow-glow transition-shadow hover:shadow-[0_10px_28px_rgb(var(--color-lime)_/_0.22)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-on-dark focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-default"
               >
                 <AnimatePresence mode="wait" initial={false}>
                   <motion.span
@@ -272,8 +272,8 @@ function Field({ icon, trailing, invalid, ...input }: FieldProps) {
         trailing ? "pr-[7px]" : "pr-[22px]"
       } ${
         invalid
-          ? "border-orange"
-          : "border-surface-raised focus-within:border-lime focus-within:shadow-[0_0_0_4px_rgba(217,245,91,0.12)]"
+          ? "border-danger"
+          : "border-surface-raised focus-within:border-lime focus-within:shadow-[0_0_0_4px_rgb(var(--color-lime)_/_0.12)]"
       }`}
     >
       <span className="text-on-dark-muted transition-colors group-focus-within:text-lime">{icon}</span>
@@ -295,7 +295,7 @@ function Backdrop({ reduce }: { reduce: boolean }) {
         aria-hidden="true"
         animate={reduce ? undefined : { opacity: [0.75, 1, 0.75] }}
         transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-        className="pointer-events-none absolute left-1/2 top-[14%] -z-10 size-[460px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(217,245,91,0.16),transparent_70%)] lg:left-[27%] lg:top-1/2 lg:-translate-y-1/2"
+        className="pointer-events-none absolute left-1/2 top-[14%] -z-10 size-[460px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgb(var(--color-lime)_/_0.07),transparent_70%)] lg:left-[27%] lg:top-1/2 lg:-translate-y-1/2"
       />
       <svg
         aria-hidden="true"
@@ -306,12 +306,12 @@ function Backdrop({ reduce }: { reduce: boolean }) {
       >
         <defs>
           <linearGradient id="ww-curve-a" x1="390" y1="0" x2="250" y2="180" gradientUnits="userSpaceOnUse">
-            <stop offset="0" stopColor="#D9F55B" stopOpacity="0.55" />
-            <stop offset="1" stopColor="#D9F55B" stopOpacity="0" />
+            <stop offset="0" stopColor="rgb(var(--color-lime))" stopOpacity="0.55" />
+            <stop offset="1" stopColor="rgb(var(--color-lime))" stopOpacity="0" />
           </linearGradient>
           <linearGradient id="ww-curve-b" x1="0" y1="844" x2="390" y2="690" gradientUnits="userSpaceOnUse">
-            <stop offset="0" stopColor="#D9F55B" stopOpacity="0" />
-            <stop offset="1" stopColor="#D9F55B" stopOpacity="0.5" />
+            <stop offset="0" stopColor="rgb(var(--color-lime))" stopOpacity="0" />
+            <stop offset="1" stopColor="rgb(var(--color-lime))" stopOpacity="0.5" />
           </linearGradient>
         </defs>
         <path d="M345 0 C 340 90, 300 150, 220 185" stroke="url(#ww-curve-a)" strokeWidth="1.5" />

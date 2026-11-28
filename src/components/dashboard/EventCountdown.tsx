@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
-import { CalendarClock, Clock } from "lucide-react";
+import { CalendarClock, Clock, MapPin } from "lucide-react";
 import { ParticipantBadges } from "@/components/ui/ParticipantBadges";
 import { formatCompactDate, formatTime, getLocalDate } from "@/lib/date-time";
 import { selectUpcomingEvents } from "@/services/events";
@@ -60,13 +60,13 @@ function CountdownDigits({ parts }: { parts: CountdownParts }) {
           {i > 0 && (
             <span
               aria-hidden="true"
-              className="text-center text-2xl font-bold text-on-dark-muted/40 sm:text-3xl"
+              className="text-center font-display text-3xl font-bold text-on-dark-muted sm:text-4xl"
             >
               :
             </span>
           )}
           <div className="flex flex-col items-center">
-            <span className="text-[2rem] font-bold leading-none tabular-nums text-on-dark sm:text-[2.75rem] md:text-stat">
+            <span className="font-display text-[2.5rem] font-extrabold leading-none tabular-nums text-on-dark sm:text-[3.25rem] md:text-stat">
               {seg.value}
             </span>
             <span className="mt-2 text-2xs font-semibold uppercase tracking-wider text-on-dark-muted">
@@ -101,12 +101,13 @@ export function EventCountdown({
 
   if (!primaryEvent) {
     return (
+
       <motion.section
         initial={reduce ? false : { opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.45, delay: 0.3 }}
         aria-label="No upcoming events"
-        className="rounded-lg bg-surface/40 p-5 ring-1 ring-glass-border/10 backdrop-blur-sm"
+        className="rounded-lg bg-surface/60 p-6 shadow-card ring-1 ring-glass-border/10"
       >
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
@@ -115,13 +116,13 @@ export function EventCountdown({
               size={20}
               className="shrink-0 text-on-dark-muted"
             />
-            <p className="text-sm font-medium text-on-dark-muted">
+            <p className="text-base font-medium text-on-dark-muted">
               No upcoming events scheduled
             </p>
           </div>
           <Link
             href="/events"
-            className="shrink-0 text-xs font-semibold text-lime hover:text-lime/80"
+            className="shrink-0 text-sm font-semibold text-lime hover:text-on-dark"
           >
             Events
           </Link>
@@ -142,21 +143,24 @@ export function EventCountdown({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.45, delay: 0.3 }}
       aria-label="Next event countdown"
-      className="flex flex-col gap-3"
+      className="flex flex-col gap-4"
     >
+      <h2 className="type-h2 text-on-dark">
+        Upcoming Events
+      </h2>
       {/* Primary upcoming event with DD:HH:MM:SS countdown */}
       <Link
         href={`/events?event=${encodeURIComponent(primaryEvent.id)}`}
-        className="group block rounded-lg bg-surface/40 p-5 ring-1 ring-glass-border/10 backdrop-blur-sm transition-colors hover:bg-surface/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime"
+        className="group block rounded-lg bg-surface/80 p-6 shadow-card ring-1 ring-glass-border/10 transition-colors hover:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:p-7"
       >
-        <div className="mb-4 flex items-center justify-between gap-2">
+        <div className="mb-5 flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <Clock aria-hidden="true" size={15} className="text-lime" />
             <span className="text-2xs font-semibold uppercase tracking-wider text-lime">
               Next Event In
             </span>
           </div>
-          <span className="rounded-full bg-surface-raised/70 px-3 py-1 text-xs font-semibold tabular-nums text-on-dark-muted">
+          <span className="rounded-full bg-surface-raised px-3 py-1 text-xs font-semibold tabular-nums text-on-dark-muted">
             {isToday
               ? `Today at ${formatTime(primaryEvent.time)}`
               : `${formatCompactDate(primaryEvent.date)} at ${formatTime(primaryEvent.time)}`}
@@ -165,11 +169,21 @@ export function EventCountdown({
 
         <CountdownDigits parts={countdown} />
 
-        <div className="mt-4 flex items-end justify-between gap-3 border-t border-glass-border/10 pt-3">
+        <div className="mt-6 flex items-end justify-between gap-3 border-t border-glass-border/10 pt-4">
           <div className="min-w-0 flex-1">
-            <h3 className="truncate text-lg font-bold text-on-dark transition-colors group-hover:text-lime">
+            <h3 className="type-h3 truncate text-on-dark transition-colors group-hover:text-lime">
               {primaryEvent.title}
             </h3>
+            {primaryEvent.location && (
+              <p className="mt-1.5 flex items-center gap-1.5 truncate text-sm font-medium text-on-dark-muted">
+                <MapPin
+                  aria-hidden="true"
+                  size={14}
+                  className="shrink-0 text-blue"
+                />
+                <span className="truncate">{primaryEvent.location}</span>
+              </p>
+            )}
             {primaryEvent.description && (
               <p className="mt-2 truncate text-sm text-on-dark-muted">
                 {primaryEvent.description}
@@ -188,13 +202,13 @@ export function EventCountdown({
       {nextUpEvent && (
         <Link
           href={`/events?event=${encodeURIComponent(nextUpEvent.id)}`}
-          className="flex items-center justify-between gap-4 rounded-md bg-surface/25 px-5 py-4 ring-1 ring-glass-border/10 backdrop-blur-sm transition-colors hover:bg-surface/45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime"
+          className="flex items-center justify-between gap-4 rounded-lg bg-surface/60 px-5 py-4 shadow-card ring-1 ring-glass-border/10 transition-colors hover:bg-surface/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           <div className="flex min-w-0 items-center gap-3">
             <span className="shrink-0 text-2xs font-semibold uppercase tracking-wider text-on-dark-muted">
               Next Up
             </span>
-            <h4 className="truncate text-sm font-bold text-on-dark">
+            <h4 className="truncate text-base font-semibold text-on-dark">
               {nextUpEvent.title}
             </h4>
           </div>
@@ -203,7 +217,7 @@ export function EventCountdown({
               type={nextUpEvent.type}
               userDisplayName={userDisplayName}
             />
-            <span className="rounded-full bg-surface-raised/60 px-3 py-1 text-xs font-semibold tabular-nums text-on-dark-muted">
+            <span className="rounded-full bg-surface-raised px-3 py-1 text-xs font-semibold tabular-nums text-on-dark-muted">
               {nextUpEvent.date === today
                 ? `at ${formatTime(nextUpEvent.time)}`
                 : `${formatCompactDate(nextUpEvent.date)} at ${formatTime(nextUpEvent.time)}`}

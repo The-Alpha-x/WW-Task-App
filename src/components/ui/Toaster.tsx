@@ -128,7 +128,7 @@ export function Toaster() {
                 backdropFilter: "blur(24px) saturate(180%)",
               }}
               className={cn(
-                "pointer-events-auto flex w-full items-center gap-3 rounded-2xl bg-glass/75 px-3 py-3 text-on-dark shadow-glass",
+                "pointer-events-auto flex w-full items-center gap-3 rounded-2xl bg-glass/90 px-3 py-3 text-on-dark shadow-glass",
                 isError
                   ? "border border-danger/35"
                   : "border border-glass-border/10",
@@ -153,7 +153,7 @@ export function Toaster() {
                   {item.title}
                 </p>
                 {item.description && (
-                  <p className="truncate text-2xs font-medium text-on-dark-muted">
+                  <p className="truncate text-xs font-medium text-on-dark-muted">
                     {item.description}
                   </p>
                 )}

@@ -16,6 +16,7 @@ import {
 export const EVENT_TITLE_MAX = 100;
 export const EVENT_DESCRIPTION_MAX = 1000;
 export const EVENT_NOTES_MAX = 2000;
+export const EVENT_LOCATION_MAX = 200;
 
 export const EVENT_TYPE_VALUES: readonly EventType[] = ["individual", "shared"];
 
@@ -28,6 +29,8 @@ export interface EventFormValues {
   time: string;
   type: EventType;
   notes: string;
+  /** Optional place where the event happens. */
+  location: string;
 }
 
 export type EventFormSubmission = EventFormValues;
@@ -80,6 +83,11 @@ export function createEventFormSchema(context: EventFormContext = {}) {
         .string()
         .trim()
         .max(EVENT_NOTES_MAX, `Keep the notes to ${EVENT_NOTES_MAX} characters or fewer.`),
+      location: z
+        .string()
+        .trim()
+        .max(EVENT_LOCATION_MAX, `Keep the location to ${EVENT_LOCATION_MAX} characters or fewer.`)
+        .default(""),
     })
     .superRefine((data, ctx) => {
       const original = context.original;
@@ -109,7 +117,7 @@ export function getMinEventDate(now = new Date()): string {
 }
 
 export function createEmptyEventForm(): EventFormValues {
-  return { title: "", description: "", date: getLocalDate(), time: "", type: "individual", notes: "" };
+  return { title: "", description: "", date: getLocalDate(), time: "", type: "individual", notes: "", location: "" };
 }
 
 export function eventToFormValues(event: Event): EventFormValues {
@@ -120,5 +128,6 @@ export function eventToFormValues(event: Event): EventFormValues {
     time: event.time,
     type: event.type,
     notes: event.notes,
+    location: event.location,
   };
 }

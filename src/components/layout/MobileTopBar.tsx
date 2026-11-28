@@ -81,7 +81,7 @@ export function MobileTopBar() {
           aria-label={`${userName} account menu`}
           aria-haspopup="menu"
           aria-expanded={menuOpen}
-          className="inline-flex h-10 w-10 shrink-0 select-none items-center justify-center overflow-hidden rounded-full bg-surface-raised ring-1 ring-glass-border/15 transition-transform duration-fast ease-standard hover:ring-lime/50 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime"
+          className="inline-flex h-10 w-10 shrink-0 select-none items-center justify-center overflow-hidden rounded-full bg-surface-raised ring-1 ring-glass-border/15 transition-transform duration-fast ease-standard hover:ring-glass-border/30 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           <Avatar src={user?.photoURL} name={userName} size="sm" />
         </button>
@@ -107,10 +107,10 @@ export function MobileTopBar() {
                   ? { duration: 0.1 }
                   : { type: "spring", stiffness: 460, damping: 32, mass: 0.7 }
               }
-              className="absolute right-0 mt-3 w-48 origin-top-right overflow-hidden rounded-none bg-glass/80 p-2 shadow-glass ring-1 ring-glass-border/15 backdrop-blur-2xl saturate-150"
+              className="absolute right-0 mt-3 w-48 origin-top-right overflow-hidden rounded-md bg-surface p-2 shadow-glass ring-1 ring-glass-border/15"
             >
               <div className="px-3 py-2">
-                <p className="truncate text-[13px] font-semibold tracking-tight text-on-dark">
+                <p className="truncate text-sm font-semibold text-on-dark">
                   {userName}
                 </p>
               </div>
@@ -125,7 +125,7 @@ export function MobileTopBar() {
                 role="menuitem"
                 disabled={signingOut}
                 onClick={() => void handleSignOut()}
-                className="mt-1 flex w-full items-center justify-between rounded-none px-3 py-2 text-left text-[13px] font-semibold text-danger transition-all duration-fast ease-standard hover:bg-danger/15 active:scale-[0.98] disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-danger"
+                className="mt-1 flex w-full items-center justify-between rounded-sm px-3 py-3 text-left text-sm font-semibold text-danger transition-all duration-fast ease-standard hover:bg-danger/15 active:scale-[0.98] disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-danger"
               >
                 <span>{signingOut ? "Logging out…" : "Log out"}</span>
                 <LogOut aria-hidden="true" size={15} strokeWidth={2} />

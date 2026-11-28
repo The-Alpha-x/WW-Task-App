@@ -239,10 +239,10 @@ export function EventsOverview({
   return (
     <div className="flex w-full flex-col gap-6 pb-6">
       {/* Header matching the reference and other pages' full width */}
-      <header className="flex items-center justify-between gap-3">
+      <header className="flex flex-wrap items-center justify-between gap-x-3 gap-y-4">
         <div className="flex min-w-0 flex-col gap-1">
-          <h1 className="text-2xl font-bold text-on-dark">Events</h1>
-          <p className="text-sm font-medium text-on-dark-muted">
+          <h1 className="type-display-lg text-on-dark">Events</h1>
+          <p className="type-body text-on-dark-muted">
             {currentMonthOnwards.length === 0
               ? "Nothing planned from this month onwards"
               : `${currentMonthOnwards.length} ${currentMonthOnwards.length === 1 ? "event" : "events"} from this month onwards`}
@@ -250,7 +250,7 @@ export function EventsOverview({
         </div>
 
         <div className="flex shrink-0 items-center gap-2">
-          <span className="inline-flex items-center gap-2 rounded-full bg-glass/80 px-4 py-2 text-xs font-semibold text-on-dark ring-1 ring-glass-border/10 backdrop-blur-md sm:text-sm">
+          <span className="inline-flex items-center gap-2 rounded-full bg-surface px-4 py-2 text-xs font-semibold text-on-dark ring-1 ring-glass-border/10 sm:text-sm">
             <Calendar aria-hidden="true" size={15} className="text-lime" />
             <span>{headerMonthLabel}</span>
           </span>
@@ -258,7 +258,7 @@ export function EventsOverview({
           <Link
             href={ADD_EVENT_HREF}
             aria-label="Add event"
-            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-lime text-ink shadow-glass transition hover:brightness-105 active:brightness-95"
+            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-lime text-ink transition-colors hover:bg-lime-soft active:brightness-95"
           >
             <CalendarPlus aria-hidden="true" size={19} strokeWidth={2} />
           </Link>
@@ -278,7 +278,7 @@ export function EventsOverview({
         <div
           role="tablist"
           aria-label="Calendar view"
-          className="inline-flex rounded-full bg-glass/80 p-1 ring-1 ring-glass-border/10 backdrop-blur-md"
+          className="inline-flex rounded-full bg-surface p-1 ring-1 ring-glass-border/10"
         >
           {(
             [
@@ -295,7 +295,7 @@ export function EventsOverview({
                 aria-selected={selected}
                 onClick={() => handleTabChange(tab.value)}
                 className={cn(
-                  "rounded-full px-4 py-2 text-sm font-bold transition-colors duration-base ease-standard",
+                  "rounded-full px-5 py-2 text-sm font-semibold transition-colors duration-base ease-standard focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
                   selected
                     ? "bg-lime text-ink"
                     : "text-on-dark-muted hover:text-on-dark",
@@ -317,7 +317,7 @@ export function EventsOverview({
             "rounded-full px-4 py-2 text-xs font-semibold ring-1 transition-colors duration-base ease-standard",
             activeSelectedDate === null
               ? "bg-lime/10 text-lime ring-lime/40"
-              : "bg-glass/80 text-on-dark-muted ring-glass-border/10 hover:bg-surface-raised hover:text-on-dark",
+              : "bg-surface text-on-dark-muted ring-glass-border/10 hover:bg-surface-raised hover:text-on-dark",
           )}
         >
           {view === "week"
@@ -342,7 +342,7 @@ export function EventsOverview({
                     scrollToWeek(currentWeekIndex);
                     setSelectedDate(today);
                   }}
-                  className="rounded-full bg-lime/10 px-3 py-1 text-2xs font-semibold text-lime ring-1 ring-lime/30 transition-colors hover:bg-lime/25"
+                  className="rounded-full bg-lime/10 px-3 py-1 text-xs font-semibold text-lime ring-1 ring-lime/30 transition-colors hover:bg-lime/25"
                 >
                   This week
                 </button>
@@ -395,15 +395,15 @@ export function EventsOverview({
                         "flex flex-col items-center justify-center gap-1 rounded-2xl px-1 py-3 transition-all duration-base ease-standard sm:rounded-full sm:py-3",
                         isBeforeCurrentMonth && "cursor-not-allowed opacity-35",
                         isSelected
-                          ? "bg-lime text-ink shadow-glass"
+                          ? "bg-lime text-ink"
                           : day.isToday
-                            ? "bg-surface-raised/80 text-on-dark ring-1 ring-lime/65"
-                            : "bg-glass/80 text-on-dark ring-1 ring-glass-border/10 hover:bg-surface-raised",
+                            ? "bg-surface-raised text-on-dark ring-1 ring-ring"
+                            : "bg-surface text-on-dark ring-1 ring-glass-border/10 hover:bg-surface-raised",
                       )}
                     >
                       <span
                         className={cn(
-                          "text-2xs font-semibold",
+                          "text-xs font-semibold",
                           isSelected ? "text-ink/80" : "text-on-dark-muted",
                         )}
                       >
@@ -422,10 +422,10 @@ export function EventsOverview({
       ) : (
         <section
           aria-label={`${monthGrid.monthLabel} calendar`}
-          className="rounded-xl bg-glass/75 p-3 shadow-glass ring-1 ring-glass-border/10 backdrop-blur-xl sm:p-4"
+          className="surface-card p-3 sm:p-4"
         >
           <div className="mb-3 flex items-center justify-between gap-2">
-            <h2 className="text-sm font-bold text-on-dark sm:text-base">
+            <h2 className="text-base font-semibold text-on-dark">
               {monthGrid.monthLabel}
             </h2>
             <div className="flex items-center gap-2">
@@ -433,7 +433,7 @@ export function EventsOverview({
                 <button
                   type="button"
                   onClick={() => handleMonthChange(0)}
-                  className="rounded-full bg-lime/15 px-3 py-1 text-2xs font-semibold text-lime ring-1 ring-lime/30 transition-colors hover:bg-lime/25"
+                  className="rounded-full bg-lime/10 px-3 py-1 text-xs font-semibold text-lime ring-1 ring-lime/30 transition-colors hover:bg-lime/25"
                 >
                   This month
                 </button>
@@ -443,7 +443,7 @@ export function EventsOverview({
                 aria-label="Previous month"
                 disabled={monthOffset <= 0}
                 onClick={() => handleMonthChange(monthOffset - 1)}
-                className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-background/50 text-on-dark transition-colors hover:bg-surface-raised disabled:cursor-not-allowed disabled:opacity-40"
+                className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-surface-raised text-on-dark transition-colors hover:bg-line disabled:cursor-not-allowed disabled:opacity-40"
               >
                 <ChevronLeft aria-hidden="true" size={16} />
               </button>
@@ -451,7 +451,7 @@ export function EventsOverview({
                 type="button"
                 aria-label="Next month"
                 onClick={() => handleMonthChange(monthOffset + 1)}
-                className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-background/50 text-on-dark transition-colors hover:bg-surface-raised"
+                className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-surface-raised text-on-dark transition-colors hover:bg-line"
               >
                 <ChevronRight aria-hidden="true" size={16} />
               </button>
@@ -488,9 +488,9 @@ export function EventsOverview({
                   className={cn(
                     "flex min-h-[46px] flex-col items-center justify-center gap-1 rounded-md py-2 transition-colors duration-base ease-standard sm:min-h-[54px]",
                     isSelected
-                      ? "bg-lime text-ink shadow-glass"
+                      ? "bg-lime text-ink"
                       : day.isToday
-                        ? "bg-surface-raised/80 text-on-dark ring-1 ring-lime/65"
+                        ? "bg-surface-raised text-on-dark ring-1 ring-ring"
                         : "bg-background/40 text-on-dark hover:bg-surface-raised",
                   )}
                 >
@@ -510,7 +510,7 @@ export function EventsOverview({
                         {count > 1 && (
                           <span
                             className={cn(
-                              "text-2xs font-bold leading-none",
+                              "text-xs font-bold leading-none",
                               isSelected ? "text-ink" : "text-lime",
                             )}
                           >
@@ -529,7 +529,7 @@ export function EventsOverview({
 
       {/* Active day / period heading */}
       <div className="flex items-center justify-between gap-2 pt-1">
-        <h2 className="text-base font-bold text-on-dark">
+        <h2 className="text-base font-semibold text-on-dark">
           {activeSelectedDate
             ? formatCompactDate(activeSelectedDate)
             : view === "week"
@@ -569,10 +569,10 @@ export function EventsOverview({
             duration: reduce ? 0.15 : 0.35,
             ease: [0.22, 1, 0.36, 1],
           }}
-          className="flex flex-col items-start gap-4 rounded-xl bg-glass/75 p-6 shadow-glass ring-1 ring-glass-border/10 backdrop-blur-xl"
+          className="surface-card flex flex-col items-start gap-4 p-6"
         >
           <div className="flex flex-col gap-2">
-            <h3 className="text-lg font-bold text-on-dark">
+            <h3 className="text-lg font-semibold text-on-dark">
               {activeSelectedDate
                 ? `No events on ${formatCompactDate(activeSelectedDate)}`
                 : view === "week"

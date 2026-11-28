@@ -225,6 +225,41 @@ export function selectTasksForTimeframe(
   return { pending, completed };
 }
 
+/**
+ * Partitions tasks into pending and completed for an inclusive
+ * `YYYY-MM-DD` range (used by "All this week"). Matches the rules of
+ * `selectTasksForDate`: pending tasks need a due date inside the range (or a
+ * legacy undated task with a time, shown on today), completed tasks use their
+ * due date, falling back to the date they were last updated.
+ */
+export function selectTasksForRange(
+  tasks: readonly Task[],
+  start: string,
+  end: string,
+  now = new Date(),
+): TimeframeTasks {
+  const today = getLocalDate(now);
+  const includesToday = today >= start && today <= end;
+  const pending: Task[] = [];
+  const completed: Task[] = [];
+
+  for (const task of tasks) {
+    if (task.completed) {
+      const ref = task.date ?? task.updatedDate;
+      if (ref >= start && ref <= end) completed.push(task);
+    } else if (task.date !== null) {
+      if (task.date >= start && task.date <= end) pending.push(task);
+    } else if (includesToday && Boolean(task.time)) {
+      pending.push(task);
+    }
+  }
+
+  pending.sort(comparePendingTasks);
+  completed.sort(compareCompletedTasks);
+
+  return { pending, completed };
+}
+
 /** Number of tasks visible in each timeframe tab. */
 export function countTasksByFilter(
   tasks: readonly Task[],

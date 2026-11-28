@@ -74,7 +74,7 @@ export function ActivitiesCarousel({
             variants={cardVariants}
             whileHover={reduce ? undefined : { y: -4 }}
             whileTap={reduce ? undefined : { scale: 0.985 }}
-            className="group relative aspect-[3/2] w-full overflow-hidden rounded-xl bg-surface/80 ring-1 ring-glass-border/10 transition-shadow duration-base ease-standard hover:ring-glass-border/20 sm:aspect-[4/5]"
+            className="group relative aspect-[3/2] w-full overflow-hidden rounded-lg bg-surface ring-1 ring-glass-border/10 transition-shadow duration-base ease-standard hover:ring-glass-border/20 sm:aspect-[4/5]"
           >
             <Image
               src={item.url}
@@ -95,7 +95,7 @@ export function ActivitiesCarousel({
                 aria-label="Open Budget Calculator"
                 className="absolute inset-0 z-20 flex items-end p-5"
               >
-                <h2 className="text-xl font-bold text-on-dark">{item.title}</h2>
+                <h2 className="type-h3 text-on-dark">{item.title}</h2>
               </Link>
             ) : item.title === "Memory Lane" ? (
               <Link
@@ -103,7 +103,7 @@ export function ActivitiesCarousel({
                 aria-label="Open Memories"
                 className="absolute inset-0 z-20 flex items-end p-5"
               >
-                <h2 className="text-xl font-bold text-on-dark">{item.title}</h2>
+                <h2 className="type-h3 text-on-dark">{item.title}</h2>
               </Link>
             ) : item.title === "Watch Movies" && moviesDomain ? (
               <a
@@ -115,18 +115,18 @@ export function ActivitiesCarousel({
                   setConfirmMoviesNavigation(true);
                 }}
               >
-                <h2 className="text-xl font-bold text-on-dark">{item.title}</h2>
+                <h2 className="type-h3 text-on-dark">{item.title}</h2>
               </a>
             ) : item.title === "Watch Movies" ? (
               <div className="absolute inset-x-5 bottom-5 z-20">
-                <h2 className="text-xl font-bold text-on-dark">{item.title}</h2>
+                <h2 className="type-h3 text-on-dark">{item.title}</h2>
                 <p className="mt-1 text-xs text-on-dark-muted">
                   Link unavailable
                 </p>
               </div>
             ) : (
               <div className="absolute inset-x-5 bottom-5 z-20">
-                <h2 className="text-xl font-bold text-on-dark">{item.title}</h2>
+                <h2 className="type-h3 text-on-dark">{item.title}</h2>
               </div>
             )}
           </motion.article>

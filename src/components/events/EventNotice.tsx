@@ -40,7 +40,7 @@ export function EventNotice({
         "flex items-start gap-3 rounded-md px-4 py-3 text-sm font-semibold",
         success
           ? "bg-lime text-ink"
-          : "border-2 border-danger bg-surface text-on-dark",
+          : "border border-danger/40 bg-danger/10 text-on-dark",
         className,
       )}
     >

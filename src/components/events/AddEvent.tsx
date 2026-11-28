@@ -38,10 +38,10 @@ export function AddEvent() {
   };
 
   return (
-    <PageContainer className="flex flex-col gap-5 sm:gap-6">
-      <header className="mx-auto flex w-full max-w-2xl flex-col gap-1 lg:max-w-none">
-        <h1 className="text-2xl font-bold text-on-dark">Add Event</h1>
-        <p className="text-sm font-medium text-on-dark-muted">
+    <PageContainer className="flex flex-col gap-6 sm:gap-8">
+      <header className="mx-auto flex w-full max-w-2xl flex-col gap-2 lg:max-w-none">
+        <h1 className="type-display-lg text-on-dark">Add Event</h1>
+        <p className="type-body text-on-dark-muted">
           Plan dinners, trips, and special dates so you always know what is next.
         </p>
       </header>

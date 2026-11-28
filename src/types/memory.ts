@@ -25,6 +25,8 @@ export interface Memory {
   type: MemoryType;
   /** Optional; `""` when not given. */
   notes: string;
+  /** Optional place where the memory happened; `""` when not given. */
+  location: string;
   /** When the document was created: ISO-8601 UTC instant. */
   createdAt: string;
   /** ID of the user who created the memory. */

@@ -19,7 +19,7 @@ export function DashboardHeader({
   return (
     <header className="flex flex-col gap-6">
       <div className="flex flex-col gap-1">
-        <h1 className="text-2xl font-bold text-on-dark">Hello, {firstName}</h1>
+        <h1 className="type-h1 text-on-dark">Hello, {firstName}</h1>
         <p className="text-sm font-medium text-on-dark-muted">
           You have {plannedCount} {taskWord} planned for today
         </p>

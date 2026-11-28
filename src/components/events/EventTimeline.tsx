@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronRight, User, Users } from "lucide-react";
+import { ChevronRight, MapPin, User, Users } from "lucide-react";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { cn } from "@/lib/cn";
 import { formatCompactDate, getLocalDate, getLocalTime } from "@/lib/date-time";
@@ -92,27 +92,23 @@ export function EventTimeline({
         </div>
 
         <article
-          style={{
-            WebkitBackdropFilter: "blur(20px) saturate(180%)",
-            backdropFilter: "blur(20px) saturate(180%)",
-          }}
           className={cn(
-            "group relative flex min-w-0 flex-1 flex-col gap-3 rounded-xl bg-glass/75 p-4 shadow-glass ring-1 transition-all duration-base ease-standard has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-on-dark sm:p-5",
+            "group relative flex min-w-0 flex-1 flex-col gap-3 surface-card p-4 transition-colors duration-base ease-standard has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-ring sm:p-5",
             activeHighlight
-              ? "ring-glass-border/25 hover:bg-surface/75 hover:ring-glass-border/35"
-              : "ring-glass-border/10 hover:bg-surface/75 hover:ring-glass-border/20",
+              ? "border-glass-border/25 hover:bg-surface-raised hover:border-glass-border/35"
+              : "hover:bg-surface-raised hover:border-glass-border/20",
             past && "opacity-65",
           )}
         >
           <div className="flex items-start gap-4">
             <div className="min-w-0 flex-1">
               <div className="flex items-start justify-between gap-2">
-                <h3 className="text-base font-bold leading-snug tracking-tight text-on-dark sm:text-lg">
+                <h3 className="text-base font-semibold leading-snug tracking-tight text-on-dark sm:text-lg">
                   <button
                     type="button"
                     onClick={() => onSelectEvent(event)}
                     aria-label={getEventAriaLabel(event)}
-                    className="line-clamp-2 text-left after:absolute after:inset-0 after:rounded-xl focus-visible:outline-none"
+                    className="line-clamp-2 text-left after:absolute after:inset-0 after:rounded-lg focus-visible:outline-none"
                   >
                     {event.title}
                   </button>
@@ -127,13 +123,24 @@ export function EventTimeline({
               <p className="mt-1 line-clamp-1 text-sm font-medium text-on-dark-muted">
                 {subtitle}
               </p>
+
+              {event.location && (
+                <p className="mt-1.5 flex items-center gap-1.5 truncate text-xs font-medium text-on-dark-muted">
+                  <MapPin
+                    aria-hidden="true"
+                    size={12}
+                    className="shrink-0 text-lime"
+                  />
+                  <span className="truncate">{event.location}</span>
+                </p>
+              )}
             </div>
           </div>
 
           <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
             <div className="flex flex-wrap items-center gap-2">
               {past ? (
-                <span className="inline-flex items-center rounded-full bg-surface px-3 py-1 text-2xs font-semibold text-on-dark-muted">
+                <span className="inline-flex items-center rounded-full bg-surface px-3 py-1 text-xs font-semibold text-on-dark-muted">
                   Completed
                 </span>
               ) : isNextUp ? (
@@ -145,7 +152,7 @@ export function EventTimeline({
                   {relative}
                 </span>
               ) : (
-                <span className="inline-flex items-center rounded-full bg-surface px-3 py-1 text-2xs font-semibold text-on-dark-muted">
+                <span className="inline-flex items-center rounded-full bg-surface px-3 py-1 text-xs font-semibold text-on-dark-muted">
                   Scheduled
                 </span>
               )}
@@ -221,7 +228,7 @@ export function EventTimeline({
         return (
           <section key={date} className="flex flex-col gap-3">
             <div className="flex items-center justify-between gap-2 border-b border-glass-border/10 pb-2">
-              <h3 className="text-sm font-bold text-on-dark">
+              <h3 className="text-sm font-semibold text-on-dark">
                 {formatCompactDate(date)}
                 {relative && (
                   <span className="ml-2 text-xs font-semibold text-on-dark-muted">

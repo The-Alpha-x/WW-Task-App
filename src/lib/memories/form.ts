@@ -16,6 +16,7 @@ import {
 export const MEMORY_TITLE_MAX = 100;
 export const MEMORY_DESCRIPTION_MAX = 1000;
 export const MEMORY_NOTES_MAX = 2000;
+export const MEMORY_LOCATION_MAX = 200;
 
 export const MEMORY_TYPE_VALUES: readonly MemoryType[] = [
   "individual",
@@ -38,6 +39,8 @@ export interface MemoryFormValues {
   time: string;
   type: MemoryType;
   notes: string;
+  /** Optional place where the memory happened. */
+  location: string;
 }
 
 export interface MemoryFormSubmission {
@@ -48,6 +51,8 @@ export interface MemoryFormSubmission {
   time: string | null;
   type: MemoryType;
   notes: string;
+  /** Optional place where the memory happened. */
+  location: string;
 }
 
 export interface MemoryFormContext {
@@ -104,6 +109,14 @@ export function createMemoryFormSchema(context: MemoryFormContext = {}) {
           MEMORY_NOTES_MAX,
           `Keep the notes to ${MEMORY_NOTES_MAX} characters or fewer.`,
         ),
+      location: z
+        .string()
+        .trim()
+        .max(
+          MEMORY_LOCATION_MAX,
+          `Keep the location to ${MEMORY_LOCATION_MAX} characters or fewer.`,
+        )
+        .default(""),
     })
     .superRefine((data, ctx) => {
       const original = context.original;
@@ -156,6 +169,7 @@ export function createEmptyMemoryForm(): MemoryFormValues {
     time: "",
     type: "shared",
     notes: "",
+    location: "",
   };
 }
 
@@ -167,5 +181,6 @@ export function memoryToFormValues(memory: Memory): MemoryFormValues {
     time: memory.time ?? "",
     type: memory.type,
     notes: memory.notes,
+    location: memory.location,
   };
 }

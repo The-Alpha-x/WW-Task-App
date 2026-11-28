@@ -26,13 +26,16 @@ export function DashboardGreeting({ userName }: DashboardGreetingProps) {
       initial={reduce ? false : { opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className="flex flex-col gap-1"
+      className="flex flex-col gap-2"
     >
-      <h1 className="text-3xl font-bold tracking-tight text-on-dark md:text-[2.5rem] md:leading-tight">
+      <h1 className="type-display-xl text-on-dark">
         {getGreeting()},
       </h1>
-      <p className="text-2xl font-bold text-lime md:text-3xl">
-        {firstName}
+      {/* Volt highlighter: dark text on lime, identical in both themes. */}
+      <p className="type-display-xl max-w-full">
+        <span className="inline-block max-w-full break-words rounded-md bg-lime px-3 py-0.5 text-ink">
+          {firstName}
+        </span>
       </p>
     </motion.header>
   );

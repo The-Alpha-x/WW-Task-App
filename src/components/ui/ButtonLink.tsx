@@ -22,16 +22,18 @@ export interface ButtonLinkProps
  * the hover states are repeated here with plain `hover:`.
  */
 const variantClasses: Record<LinkVariant, string> = {
-  primary: "bg-lime text-ink hover:brightness-95 active:brightness-90",
-  secondary: "bg-card text-ink hover:bg-card-muted active:bg-card-muted",
-  dark: "bg-background text-on-dark hover:bg-surface active:bg-surface-raised",
+  primary: "bg-lime font-bold text-ink hover:bg-lime-soft active:brightness-[0.9]",
+  secondary: "bg-blue text-ink hover:brightness-95 active:brightness-[0.88]",
+  outline:
+    "bg-transparent text-on-dark ring-1 ring-glass-border/25 hover:bg-surface-raised hover:ring-glass-border/40 active:bg-surface-raised",
+  dark: "bg-background text-on-dark ring-1 ring-glass-border/10 hover:bg-surface active:bg-surface-raised",
   ghost: "bg-transparent text-on-dark hover:bg-surface active:bg-surface-raised",
 };
 
 const sizeClasses: Record<ButtonSize, string> = {
-  sm: "h-10 px-4 text-sm",
-  md: "h-12 px-6 text-base",
-  lg: "h-16 px-8 text-lg",
+  sm: "h-10 px-5 text-sm",
+  md: "h-12 px-7 text-base",
+  lg: "h-16 px-10 text-lg",
 };
 
 export function ButtonLink({

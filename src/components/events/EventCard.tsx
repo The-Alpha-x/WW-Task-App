@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Clock3, User, Users } from "lucide-react";
+import { Clock3, MapPin, User, Users } from "lucide-react";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { Badge } from "@/components/ui/Badge";
 import { ParticipantBadges } from "@/components/ui/ParticipantBadges";
@@ -132,6 +132,18 @@ export function EventCard({
               <Badge variant="outline">{relative}</Badge>
             )}
           </div>
+
+          {event.location && (
+            <p
+              className={cn(
+                "flex items-center gap-1.5 truncate text-xs font-medium",
+                featured ? "text-ink" : "text-ink-muted",
+              )}
+            >
+              <MapPin aria-hidden="true" size={13} className="shrink-0" />
+              <span className="truncate">{event.location}</span>
+            </p>
+          )}
 
           {event.description && (
             <p

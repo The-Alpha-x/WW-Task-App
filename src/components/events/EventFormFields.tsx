@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/Textarea";
 import { TaskTypeField } from "@/components/tasks/TaskTypeField";
 import {
   EVENT_DESCRIPTION_MAX,
+  EVENT_LOCATION_MAX,
   EVENT_NOTES_MAX,
   EVENT_TITLE_MAX,
   getMinEventDate,
@@ -45,13 +46,13 @@ export function EventFormFields({
   return (
     <fieldset
       disabled={disabled}
-      className="m-0 flex min-w-0 flex-col gap-4 border-0 p-0 sm:gap-5"
+      className="m-0 flex min-w-0 flex-col gap-5 border-0 p-0 md:gap-6"
     >
       <section
         aria-label="Event details"
-        className="flex flex-col gap-4 rounded-xl bg-glass/80 p-4 ring-1 ring-glass-border/10 backdrop-blur-md sm:gap-5 sm:p-5 md:p-6"
+        className="form-section"
       >
-        <h2 className="text-xs font-semibold uppercase tracking-wider text-on-dark-muted/70">
+        <h2 className="form-section__title">
           Details
         </h2>
 
@@ -79,11 +80,11 @@ export function EventFormFields({
 
       <section
         aria-labelledby="event-schedule-heading"
-        className="flex min-w-0 flex-col gap-4 overflow-hidden rounded-xl bg-glass/80 p-4 ring-1 ring-glass-border/10 backdrop-blur-md sm:gap-5 sm:p-5 md:p-6"
+        className="form-section overflow-hidden"
       >
         <h2
           id="event-schedule-heading"
-          className="text-xs font-semibold uppercase tracking-wider text-on-dark-muted/70"
+          className="form-section__title"
         >
           Schedule
         </h2>
@@ -113,7 +114,7 @@ export function EventFormFields({
               animate={{ opacity: 1 }}
               exit={reduce ? undefined : { opacity: 0 }}
               transition={{ duration: 0.15 }}
-              className="-mt-1 text-xs font-medium text-on-dark-muted"
+              className="-mt-1 type-caption text-on-dark-muted"
             >
               Pick today or a later day. Today needs a time that has not passed.
             </motion.p>
@@ -134,10 +135,29 @@ export function EventFormFields({
       </section>
 
       <section
-        aria-label="Event notes"
-        className="flex flex-col gap-4 rounded-xl bg-glass/80 p-4 ring-1 ring-glass-border/10 backdrop-blur-md sm:gap-5 sm:p-5 md:p-6"
+        aria-label="Event location"
+        className="form-section"
       >
-        <h2 className="text-xs font-semibold uppercase tracking-wider text-on-dark-muted/70">
+        <h2 className="form-section__title">
+          Location
+        </h2>
+
+        <Input
+          label="Location (optional)"
+          tone="dark"
+          {...register("location")}
+          error={errors.location?.message}
+          maxLength={EVENT_LOCATION_MAX}
+          placeholder="e.g. The Harbour Restaurant, 123 Beach Rd"
+          autoComplete="off"
+        />
+      </section>
+
+      <section
+        aria-label="Event notes"
+        className="form-section"
+      >
+        <h2 className="form-section__title">
           Notes
         </h2>
 
