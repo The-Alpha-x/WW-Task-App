@@ -30,6 +30,26 @@ Events are implemented at **`users/{uid}/events/{eventId}`** (not the `couples/.
 
 Events remain at `users/{uid}/events/{eventId}`. Individual events are stored only in the current user's collection. Shared events are mirrored to each other registered user collection (plus any configured `NEXT_PUBLIC_PARTNER_UID`) on create/update/delete. Switching a shared event to individual removes the mirrored copies. `firestore.rules` now has an explicit `/events/{eventId}` match following the existing shared-task authorization pattern. Deploy the current `firestore.rules` before testing shared events. This pattern intentionally mirrors the existing Tasks implementation and has the same broad shared-write trust model.
 
+## 0f. Item Lists: top-level `List` collection
+
+Lists (grocery lists etc.) are stored in the top-level collection **`List`**, one document per list (`List/{listId}`, id = client-generated UUID, written with `setDoc`). All access goes through `src/services/lists.ts`.
+
+| Field | Type | Notes |
+|---|---|---|
+| `title` | string | trimmed, 1-100 chars |
+| `type` | `"shared"` \| `"individual"` | shared = both partners, individual = creator only |
+| `items` | `{ id: string; name: string; quantity: number; checked: boolean }[]` | 1-100 items; name 1-100 chars; quantity whole number 1-999; `checked` = purchased (missing on older docs → false) |
+| `notes` | string | `""` when empty, max 2000 chars |
+| `createdAt` | string | ISO-8601 UTC. Lists are sorted by this, newest first |
+| `createdBy` | string | uid of the creator, never changes |
+| `updatedAt` | string | ISO-8601 UTC of the last edit (equals `createdAt` until edited) |
+
+**Rules** (`match /List/{listId}` in `firestore.rules`, deploy before use): signed-in users can read shared lists and their own lists; create requires `createdBy == auth.uid`; update/delete need a shared list or ownership, `createdBy`/`createdAt` cannot change and only the creator can change `type`.
+
+**Queries / indexes**: the rules depend on the document, so the collection is never read whole. `watchLists` runs `where("type", "==", "shared")` and `where("createdBy", "==", uid)` and merges them. Both are single-field filters (no composite index); ordering is done in memory.
+
+---
+
 ## 0c. Update after Task 05A (memory services) - read with sections 0 and 0b
 
 Memories are implemented at **`users/{uid}/memories/{memoryId}`** (not the `couples/...` path of section 3.4), for the same reasons as events; the existing owner-only rule covers them and `firestore.rules` is unchanged. Fields as in section 3.4 **except**: no `visibleTo`, `description`/`notes` are always written (`""` when empty), `time` is always written (`null` when not given), and `type` stays editable for now. `date`/`time` = when it happened (local strings); `createdAt`/`updatedAt` = when it was saved (ISO-8601 UTC). No index needed. See `MEMORY_SERVICE_REFERENCE.md`.

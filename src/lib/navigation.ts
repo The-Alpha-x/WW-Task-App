@@ -42,6 +42,8 @@ export const ADD_EVENT_HREF = "/events/add";
 export const ADD_MEMORY_HREF = "/memories/add";
 export const EVENTS_HREF = "/events";
 export const MEMORIES_HREF = "/memories";
+export const LISTS_HREF = "/activities/lists";
+export const ADD_LIST_HREF = "/activities/lists/add";
 
 /** Selection page plus every creation route, so the Add button reads as active on all of them. */
 const ADD_PATHS = [

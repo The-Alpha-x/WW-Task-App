@@ -3,9 +3,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
+import { ListChecks } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
+import { LISTS_HREF } from "@/lib/navigation";
 
 const EASE_OUT = [0.22, 1, 0.36, 1] as const;
 
@@ -29,6 +31,11 @@ const activityItems = [
     id: 4,
     url: "/images/randomizer-card.webp",
     title: "Randomizer",
+  },
+  {
+    id: 5,
+    url: null,
+    title: "Item Lists",
   },
 ] as const;
 
@@ -76,15 +83,28 @@ export function ActivitiesCarousel({
             whileTap={reduce ? undefined : { scale: 0.985 }}
             className="group relative aspect-[3/2] w-full overflow-hidden rounded-lg bg-surface ring-1 ring-glass-border/10 transition-shadow duration-base ease-standard hover:ring-glass-border/20 sm:aspect-[4/5]"
           >
-            <Image
-              src={item.url}
-              alt={item.title}
-              fill
-              draggable={false}
-              priority={index === 0}
-              sizes="(min-width: 1024px) 33vw, (min-width: 480px) 50vw, 100vw"
-              className="pointer-events-none z-0 object-cover transition-transform duration-slow ease-standard group-hover:scale-[1.03]"
-            />
+            {item.url ? (
+              <Image
+                src={item.url}
+                alt={item.title}
+                fill
+                draggable={false}
+                priority={index === 0}
+                sizes="(min-width: 1024px) 33vw, (min-width: 480px) 50vw, 100vw"
+                className="pointer-events-none z-0 object-cover transition-transform duration-slow ease-standard group-hover:scale-[1.03]"
+              />
+            ) : (
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 z-0 grid place-items-center bg-surface-raised"
+              >
+                <ListChecks
+                  size={88}
+                  strokeWidth={1.25}
+                  className="mb-10 text-lime transition-transform duration-slow ease-standard group-hover:scale-[1.04]"
+                />
+              </div>
+            )}
             <div
               aria-hidden="true"
               className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-t from-background via-background/55 to-transparent"
@@ -93,6 +113,14 @@ export function ActivitiesCarousel({
               <Link
                 href="/activities/budget-calculator"
                 aria-label="Open Budget Calculator"
+                className="absolute inset-0 z-20 flex items-end p-5"
+              >
+                <h2 className="type-h3 text-on-dark">{item.title}</h2>
+              </Link>
+            ) : item.title === "Item Lists" ? (
+              <Link
+                href={LISTS_HREF}
+                aria-label="Open Item Lists"
                 className="absolute inset-0 z-20 flex items-end p-5"
               >
                 <h2 className="type-h3 text-on-dark">{item.title}</h2>
