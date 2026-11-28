@@ -95,10 +95,8 @@ export function MemoriesOverview({
           >
             <BookHeart size={30} strokeWidth={1.75} />
           </span>
-          <div className="flex flex-col gap-1.5">
-            <h2 className="type-h3 text-on-dark">
-              Start your memory lane
-            </h2>
+          <div className="flex flex-col gap-2">
+            <h2 className="type-h3 text-on-dark">Start your memory lane</h2>
             <p className="max-w-[32ch] text-sm font-medium text-on-dark-muted">
               Add your first memory — a birthday, a trip, a quiet moment worth
               remembering.

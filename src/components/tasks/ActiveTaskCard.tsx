@@ -232,7 +232,7 @@ export function ActiveTaskCard({
             {task.completed && (
               <span
                 aria-hidden="true"
-                className="mt-0.5 inline-grid h-5 w-5 shrink-0 place-items-center rounded-full bg-lime text-ink"
+                className="mt-1 inline-grid h-5 w-5 shrink-0 place-items-center rounded-full bg-lime text-ink"
               >
                 <Check size={12} strokeWidth={3} />
               </span>

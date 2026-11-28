@@ -66,7 +66,7 @@ function CountdownDigits({ parts }: { parts: CountdownParts }) {
             </span>
           )}
           <div className="flex flex-col items-center">
-            <span className="font-display text-[2.5rem] font-extrabold leading-none tabular-nums text-on-dark sm:text-[3.25rem] md:text-stat">
+            <span className="font-display text-[3rem] font-extrabold leading-none tabular-nums text-on-dark sm:text-[3.25rem] md:text-stat">
               {seg.value}
             </span>
             <span className="mt-2 text-2xs font-semibold uppercase tracking-wider text-on-dark-muted">
@@ -101,7 +101,6 @@ export function EventCountdown({
 
   if (!primaryEvent) {
     return (
-
       <motion.section
         initial={reduce ? false : { opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
@@ -145,9 +144,7 @@ export function EventCountdown({
       aria-label="Next event countdown"
       className="flex flex-col gap-4"
     >
-      <h2 className="type-h2 text-on-dark">
-        Upcoming Events
-      </h2>
+      <h2 className="type-h2 text-on-dark">Upcoming Events</h2>
       {/* Primary upcoming event with DD:HH:MM:SS countdown */}
       <Link
         href={`/events?event=${encodeURIComponent(primaryEvent.id)}`}
@@ -175,7 +172,7 @@ export function EventCountdown({
               {primaryEvent.title}
             </h3>
             {primaryEvent.location && (
-              <p className="mt-1.5 flex items-center gap-1.5 truncate text-sm font-medium text-on-dark-muted">
+              <p className="mt-2 flex items-center gap-2 truncate text-sm font-medium text-on-dark-muted">
                 <MapPin
                   aria-hidden="true"
                   size={14}

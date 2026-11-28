@@ -43,6 +43,37 @@ service cloud.firestore {
         && (resource.data.type == "shared" || resource.data.createdBy == request.auth.uid);
     }
 
+    // Lists (grocery lists etc.) live in the top-level `List` collection.
+    // Shared lists can be read and edited by either signed-in partner;
+    // individual lists only by their creator. createdBy / createdAt can never
+    // change, and only the creator can change a list's type.
+    match /List/{listId} {
+      allow read: if request.auth != null
+        && (resource.data.type == "shared" || resource.data.createdBy == request.auth.uid);
+      allow create: if request.auth != null
+        && request.resource.data.createdBy == request.auth.uid
+        && request.resource.data.type in ["shared", "individual"]
+        && request.resource.data.title is string
+        && request.resource.data.title.size() > 0
+        && request.resource.data.title.size() <= 100
+        && request.resource.data.items is list
+        && request.resource.data.items.size() <= 100;
+      allow update: if request.auth != null
+        && (resource.data.type == "shared" || resource.data.createdBy == request.auth.uid)
+        && request.resource.data.createdBy == resource.data.createdBy
+        && request.resource.data.createdAt == resource.data.createdAt
+        && request.resource.data.type in ["shared", "individual"]
+        && (request.resource.data.type == resource.data.type
+            || resource.data.createdBy == request.auth.uid)
+        && request.resource.data.title is string
+        && request.resource.data.title.size() > 0
+        && request.resource.data.title.size() <= 100
+        && request.resource.data.items is list
+        && request.resource.data.items.size() <= 100;
+      allow delete: if request.auth != null
+        && (resource.data.type == "shared" || resource.data.createdBy == request.auth.uid);
+    }
+
     match /budgets/{budgetId} {
       allow read, delete: if request.auth != null && resource.data.userId == request.auth.uid;
       allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;

@@ -89,11 +89,15 @@ export function EventCard({
             featured ? "h-24 w-20 md:h-28 md:w-24" : "h-20 w-16",
           )}
         >
-          <span className="text-xs font-semibold text-on-accent-muted">{parts.weekday}</span>
+          <span className="text-xs font-semibold text-on-accent-muted">
+            {parts.weekday}
+          </span>
           <span
             className={cn(
               "font-bold leading-none",
-              featured ? "text-3xl text-lime md:text-[2.5rem]" : "text-2xl text-lime",
+              featured
+                ? "text-3xl text-lime md:text-[3rem]"
+                : "text-2xl text-lime",
             )}
           >
             {parts.day}
@@ -103,9 +107,16 @@ export function EventCard({
 
         <div className="flex min-w-0 flex-1 flex-col gap-2">
           {featured && !past && (
-            <p className="text-sm font-bold">{relative ? `Next up: ${relative}` : "Next up"}</p>
+            <p className="text-sm font-bold">
+              {relative ? `Next up: ${relative}` : "Next up"}
+            </p>
           )}
-          <h3 className={cn("min-w-0 font-semibold", featured ? "text-2xl" : "text-xl")}>
+          <h3
+            className={cn(
+              "min-w-0 font-semibold",
+              featured ? "text-2xl" : "text-xl",
+            )}
+          >
             <Link
               href={getEventHref(event.id)}
               aria-label={getEventAriaLabel(event)}
@@ -121,7 +132,7 @@ export function EventCard({
               <Clock3 aria-hidden="true" size={14} />
               {formatEventTime(event.time)}
             </Badge>
-            <span className="inline-flex items-center rounded-full bg-ink px-1.5 py-0.5">
+            <span className="inline-flex items-center rounded-full bg-ink px-2 py-1">
               <ParticipantBadges
                 type={event.type}
                 userDisplayName={userDisplayName}
@@ -136,7 +147,7 @@ export function EventCard({
           {event.location && (
             <p
               className={cn(
-                "flex items-center gap-1.5 truncate text-xs font-medium",
+                "flex items-center gap-2 truncate text-xs font-medium",
                 featured ? "text-ink" : "text-ink-muted",
               )}
             >
