@@ -157,7 +157,7 @@ export function ListDetailsModal({
                   >
                     {item.name}
                   </span>
-                  <span className="shrink-0 rounded-full bg-surface-raised px-2.5 py-0.5 text-xs font-semibold tabular-nums text-on-dark-muted">
+                  <span className="shrink-0 rounded-full bg-surface-raised px-3 py-1 text-xs font-semibold tabular-nums text-on-dark-muted">
                     <span aria-hidden="true">×</span>
                     <span className="sr-only">quantity </span>
                     {item.quantity}

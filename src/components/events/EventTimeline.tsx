@@ -125,7 +125,7 @@ export function EventTimeline({
               </p>
 
               {event.location && (
-                <p className="mt-1.5 flex items-center gap-1.5 truncate text-xs font-medium text-on-dark-muted">
+                <p className="mt-2 flex items-center gap-2 truncate text-xs font-medium text-on-dark-muted">
                   <MapPin
                     aria-hidden="true"
                     size={12}

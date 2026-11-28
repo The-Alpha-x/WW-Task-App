@@ -66,7 +66,9 @@ export function MemoryTimeline({
           <section key={monthKey} className="flex flex-col gap-4">
             {/* Month heading */}
             <div className="flex items-center gap-3">
-              <h3 className="text-sm font-semibold text-on-dark">{monthLabel}</h3>
+              <h3 className="text-sm font-semibold text-on-dark">
+                {monthLabel}
+              </h3>
               <div className="h-px flex-1 bg-glass-border/15" />
               <span className="rounded-full bg-surface-raised/60 px-3 py-1 text-xs font-bold tabular-nums text-lime/80">
                 {monthMemories.length}
@@ -139,9 +141,7 @@ function MemoryCard({
       </div>
 
       {/* Card */}
-      <article
-        className="group relative flex min-w-0 flex-1 flex-col gap-3 surface-card p-4 transition-colors duration-base ease-standard hover:bg-surface-raised hover:border-glass-border/20 has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-ring sm:p-5"
-      >
+      <article className="group relative flex min-w-0 flex-1 flex-col gap-3 surface-card p-4 transition-colors duration-base ease-standard hover:bg-surface-raised hover:border-glass-border/20 has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-ring sm:p-5">
         <div className="flex items-start gap-4">
           <div className="min-w-0 flex-1">
             <div className="flex items-start justify-between gap-2">
@@ -167,7 +167,7 @@ function MemoryCard({
             </p>
 
             {memory.location && (
-              <p className="mt-1.5 flex items-center gap-1.5 truncate text-xs font-medium text-on-dark-muted">
+              <p className="mt-2 flex items-center gap-2 truncate text-xs font-medium text-on-dark-muted">
                 <MapPin
                   aria-hidden="true"
                   size={12}
