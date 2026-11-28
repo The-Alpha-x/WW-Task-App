@@ -24,18 +24,18 @@ const activityItems = [
   },
   {
     id: 3,
+    url: "/images/list-card.webp",
+    title: "Item Lists",
+  },
+  {
+    id: 4,
     url: "/images/movies-card.webp",
     title: "Watch Movies",
   },
   {
-    id: 4,
+    id: 5,
     url: "/images/randomizer-card.webp",
     title: "Randomizer",
-  },
-  {
-    id: 5,
-    url: null,
-    title: "Item Lists",
   },
 ] as const;
 
